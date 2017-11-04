@@ -231,6 +231,7 @@ h1, h2, h3, h4, h5, h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /* Nav Menu Essentials */
+
 .nav-menu, .nav-menu * {
   margin: 0;
   padding: 0;
@@ -338,6 +339,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-menu ul ul {
   margin: 0;
+}
+
+.row-label {
+    position: relative;
+    width: 400px;
+    height: 200px;
+    border: 3px solid #73AD21;
+}
+
+.row-value {
+    padding-left: 10px;
+    
 }
 
 /* Mobile Nav Toggle */
@@ -478,13 +491,22 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 /* Get Started Section
 --------------------------------*/
+
 #about {
   background: #fff;
   padding: 80px 0;
 }
 
+#about tuaregman {
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("../img/tuaregman-bg.jpg") fixed center center;
+}
+
 #about .about-container {
   background: url(../img/tuaregcontenido-bg.jpg) left top no-repeat;
+}
+
+#about .about-user {
+  background: url(../img/unknown_user.gif) left top no-repeat;
 }
 
 #about .about-content {
@@ -844,6 +866,15 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #contact .form button[type="submit"]:hover {
   background: #8A5C2A;
+}
+
+#menu {
+  float: left;
+  width: 150px;
+}
+#contenido {
+  float: left;
+  width: 550px;
 }
 
 /*--------------------------------------------------------------
