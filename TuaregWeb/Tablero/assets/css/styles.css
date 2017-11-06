@@ -209,7 +209,7 @@ div.row.tableroJugador2{
   height:168px;
   position:relative;
   left:70.3em;
-  top:-31.7em;
+  top:-23.7em;
 }
 
 div.col-md-2.tj1_1{
@@ -236,13 +236,13 @@ html{
 }
 
 div.encabezado{
-  width:1341px;
+  width:1355px;
   height:30px;
   display:block;
 }
 
 div.row.encabezado{
-  margin-left:0em;
+  margin-left:-0.5em;
 }
 
 img#reglas{
@@ -270,8 +270,14 @@ div#turnoDe.jugadorTurno{
   width:400px;
   height:30px;
   position:absolute;
+}
+
+div.row.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
   top:0em;
-  left:19em;
+  left:14em;
 }
 
 span.label.label-default.jugadorTurnoLabel{
@@ -310,5 +316,47 @@ button.btn.btn-default.formatoBotones{
   color:#555555;
   background-color:#f9d616;
   border-color:#f9e27f;
+}
+
+div.row.jugadores{
+  height:292px;
+}
+
+div.cartaMano{
+  width:150px;
+  height:100px;
+  position:relative;
+  left:1em;
+}
+
+div#nombreJT.mostrarNombreJT{
+  width:200px;
+  height:30px;
+  position:relative;
+  left:15em;
+}
+
+span#mostrarNombreTurno.label.label-default.jugadorTurnoLabel{
+  width:200px;
+  position:relative;
+  top:0.25em;
+  left:-0em;
+}
+
+div#imgCartaManoJ1.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#imgCartaManoJ2.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#pantallaGde.pantallaGde{
+  width:23px;
+  position:absolute;
+  left:63em;
+  top:0.4em;
 }
 
