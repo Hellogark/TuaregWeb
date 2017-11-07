@@ -505,10 +505,6 @@ body.mobile-nav-active #mobile-nav-toggle {
   background: url(../img/tuaregcontenido-bg.jpg) left top no-repeat;
 }
 
-#about .about-user {
-  background: url(../img/unknown_user.gif) left top no-repeat;
-}
-
 #about .about-content {
   background: #fff;
 }
