@@ -115,10 +115,15 @@
         <div class="col-md-9">
           <div class="quote">
             <p>Registrado: <span class="fechaRegistro">03/11/2017</span></p>
-            <p>País: <span class="pais">México</span></p>
+            <form action="" method="post" role="form" class="registro">
+            <p>Usuario: <input type="text" name="username" class="form-control" id="username" placeholder="Usuario" data-rule="minlen:4" data-msg="Please enter at least 4 chars" /></p>
+            <p>País: <input type="text" name="pais" class="form-control" id="pais" placeholder="México" data-rule="minlen:4" data-msg="Please enter at least 4 chars" /></p>
             <p>ELO: <span class="elo">1000</span></p>
             <p>Victorias: <span class="victorias">0</span></p>
             <p>Derrotas: <span class="derrotas">0</span></p>
+              
+            <div class="text-center"><button type="submit">Guardar</button></div>
+            </form>
           </div>
         </div>
       </div>

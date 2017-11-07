@@ -689,6 +689,19 @@ body.mobile-nav-active #mobile-nav-toggle {
   background: #f6f6f6;
   padding: 80px 0;
 }
+/*Boton Guardar*/
+#testimonials .quote button[type="submit"] {
+  background: #8A6D3B;
+  border: 0;
+  padding: 10px 24px;
+  color: #fff;
+  transition: 0.4s;
+  margin: 0 0 20px;
+}
+
+#testimonials .quote button[type="submit"]:hover {
+  background: #8A5C2A;
+}
 
 #testimonials .profile {
   text-align: center;
