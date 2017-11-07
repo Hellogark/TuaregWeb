@@ -200,7 +200,7 @@ div.row.tableroJugador1{
   width:347px;
   height:168px;
   position:relative;
-  left:70em;
+  left:70.3em;
   top:-33em;
 }
 
@@ -358,5 +358,15 @@ div#pantallaGde.pantallaGde{
   position:absolute;
   left:63em;
   top:0.4em;
+}
+
+div.panel-body{
+  background-color:#f5dba3;
+}
+
+.panel-default > .panel-heading{
+  color:#555555;
+  background-color:#c9a764;
+  border-color:#dddddd;
 }
 
