@@ -302,19 +302,19 @@ button.btn.btn-default.formatoBotones{
 
 .btn-default{
   color:#dd7500;
-  background-color:#aa8e0a;
+  background-color:#a79336;
   border-color:#e0aa0f;
 }
 
 .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default{
   color:#555555;
-  background-color:#a38205;
+  background-color:#c2a845;
   border-color:#f4ed47;
 }
 
 .btn-default:active:hover, .btn-default.active:hover, .open > .dropdown-toggle.btn-default:hover, .btn-default:active:focus, .btn-default.active:focus, .open > .dropdown-toggle.btn-default:focus, .btn-default:active.focus, .btn-default.active.focus, .open > .dropdown-toggle.btn-default.focus{
   color:#555555;
-  background-color:#f9d616;
+  background-color:#cda43b;
   border-color:#f9e27f;
 }
 
@@ -368,5 +368,48 @@ div.panel-body{
   color:#555555;
   background-color:#c9a764;
   border-color:#dddddd;
+}
+
+div.row.asaltante{
+  width:38px;
+  height:66px;
+  position:relative;
+  left:16em;
+  bottom:34em;
+  display:block;
+}
+
+div#asaltante.asaltante{
+  width:38px;
+  height:66px;
+  position:relative;
+}
+
+img#tuaregasaltante.asaltante{
+  position:relative;
+  left:6em;
+  bottom:20em;
+}
+
+button#descarta.btn.btn-default.descarta{
+  position:relative;
+}
+
+div.colDescartarJ1{
+  width:70px;
+  height:40px;
+  bottom:5em;
+  position:relative;
+  left:13em;
+  display:none;
+}
+
+div.colDescartarJ2{
+  width:43px;
+  height:40px;
+  bottom:5em;
+  position:relative;
+  left:13em;
+  display:none;
 }
 
