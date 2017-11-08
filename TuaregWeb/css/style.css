@@ -432,11 +432,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #mobile-nav ul .menu-has-children i.fa-chevron-up {
-  color: #03C4EB;
+  color: #8A6D3B;
 }
 
 #mobile-nav ul .menu-item-active {
-  color: #03C4EB;
+  color: #8A6D3B;
 }
 
 #mobile-body-overly {
@@ -828,8 +828,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .form #sendmessage {
-  color: #03C4EB;
-  border: 1px solid #03C4EB;
+  color: #8A6D3B;
+  border: 1px solid #8A6D3B;
   display: none;
   text-align: center;
   padding: 15px;
