@@ -98,7 +98,7 @@
     <div class="container wow fadeInUp">
       <div class="row">
         <div class="col-md-12">
-          <h3 class="section-title">Información de Usuario</h3>
+          <h3 class="section-title">Modificar Información de Usuario</h3>
           <div class="section-title-divider"></div>
           <p class="section-description"></p>
         </div>
@@ -117,7 +117,7 @@
             <p>Registrado: <span class="fechaRegistro">03/11/2017</span></p>
             <form action="" method="post" role="form" class="registro">
             <p>Usuario: <input type="text" name="username" class="form-control" id="username" placeholder="Usuario" data-rule="minlen:4" data-msg="Please enter at least 4 chars" /></p>
-            <p><select>
+            <div class="form-group">País: <select>
 	<option value="AF">Afghanistan</option>
 	<option value="AX">Åland Islands</option>
 	<option value="AL">Albania</option>
@@ -367,11 +367,16 @@
 	<option value="YE">Yemen</option>
 	<option value="ZM">Zambia</option>
 	<option value="ZW">Zimbabwe</option>
-</select><p>
-            <p>ELO: <span class="elo">1000</span></p>
-            <p>Victorias: <span class="victorias">0</span></p>
-            <p>Derrotas: <span class="derrotas">0</span></p>
-              
+                </select></div>
+            <br>
+              <div class="form-group">Cambiar contraseña: 
+                  <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña" data-rule="email" data-msg="Please enter a valid email" />
+                  <div class="validation"></div>
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="verificacion" id="verificacion" placeholder="Verificación" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                  <div class="validation"></div>
+                </div>
             <div class="text-center"><a href="profile.html"><button type="submit">Guardar</button></a></div>
             </form>
           </div>
