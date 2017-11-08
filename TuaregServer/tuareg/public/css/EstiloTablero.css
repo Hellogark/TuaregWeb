@@ -1,0 +1,43 @@
+.wrapperTablero{
+display: grid;
+grid-template-columns: repeat(5,0.18fr);
+grid-template-rows: repeat(5,0.18fr);
+grid-column-gap: 0.1em;
+grid-row-gap: 0.1em;
+grid-auto-flow: row; 
+width: 49.75em;
+height: 33em;
+}
+
+.wrapperTablero > div{
+background: #eee;
+width: 135px;
+height: 80px;
+border-width: 1px;
+float: left;
+
+}
+
+
+
+.barraAcciones{
+	display: grid;
+
+}
+#borde1{
+	top: 10%;
+
+height: auto;
+border-radius: 1em 1em 1em 1em
+
+}
+.marcadores{
+ display:all;
+ position: relative;
+
+
+}
+li{
+
+	list-style-type: none;
+}

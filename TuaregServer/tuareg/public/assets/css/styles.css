@@ -1,0 +1,66 @@
+div.container{
+  width:50em;
+  float:left;
+  margin-left:-2em;
+}
+
+div.col-md-2{
+  width:137px;
+  height:75px;
+  float:left;
+  padding:0 0 0 0;
+}
+
+img{
+  width:100%;
+  left:8em;
+  border-radius:0.5em 0.5em 0.5em 0.5em;
+}
+
+div.row.show{
+  height:6.5em;
+}
+
+div.container-fluid{
+  width:21em;
+  height:41em;
+  margin-left:63em;
+}
+
+div.col-md-12{
+  height:23em;
+}
+
+span.text-muted{
+  font-size:medium;
+}
+
+img.barajaMercancia{
+  width:141px;
+  transform:rotateZ(-90deg);
+  height:94px;
+  margin-top:5em;
+  margin-left:-0.5em;
+}
+
+div.container.contenedorMercancia{
+  width:11em;
+  height:9em;
+  margin-top:0em;
+}
+
+div.col-lg-2{
+  width:12em;
+  height:9em;
+}
+
+div.container.Tribu{
+  width:12em;
+  transform:rotateZ(-90deg);
+  margin-top:7.5em;
+}
+
+img.barajaTribu{
+  margin-top:-1em;
+}
+
