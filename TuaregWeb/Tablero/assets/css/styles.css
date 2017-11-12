@@ -383,14 +383,14 @@ div#asaltante.fichasTuareg{
   width:38px;
   height:66px;
   position:relative;
-  left:11em;
-  top:0em;
+  left:13em;
+  bottom:33em;
 }
 
 img#tuaregasaltante.asaltante{
-  position:relative;
-  left:6em;
-  bottom:20em;
+  position:absolute;
+  left:0em;
+  bottom:0em;
 }
 
 button#descarta.btn.btn-default.descarta{
