@@ -13,11 +13,11 @@ class Tuareg extends Room{
 		this.setState({
 			jugadores:{},
 			tableroPrincipal:[
-				["#asalto4","#Nobles","#datil1Borde","#sal1borde","#asalto2"],
+				["#asalto4","#Nobles","#datil1Borde","#sal1borde","#asalto1"],
 				["#sal2borde",56, 56, 56,"#comerciante"],
 				["#ampTribu",56, 56, 56,"#pimineta1Borde"],
 				["#caravana",56, 56, 56,"#datil2Borde"],
-				["#EII","#pimienta2Borde","#orfebre","#Espejismo","#asalto3"]
+				["#asalto3","#pimienta2Borde","#orfebre","#Espejismo","#asalto2"]
 			],
 			tablero_jugador1:[[0],[0],[0]],
 			tablero_jugador2:[[0],[0],[0]],
