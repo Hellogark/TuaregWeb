@@ -1,8 +1,6 @@
 var mongo= require("mongoose");
 
-mongo.connect('mongodb://localhost/Tuareg',function(error,db){
-	
-});
+exports.db=mongo.connect('mongodb://localhost/Tuareg');
 var bcrypt = require("bcrypt");
 var Schema = mongo.Schema;
 var usuarioSchema = new mongo.Schema({
@@ -98,7 +96,10 @@ var listaAmigosSchema = new mongo.Schema({
 	}]
 });
 
+
+
 exports.Usuario =mongo.model("usuario",usuarioSchema);
 exports.Estadisticas=  mongo.model("estadisticas_usuario",estadisticasSchema);
 exports.ListaAmigos= mongo.model("list_amigos",listaAmigosSchema);
-
+exports.CartasTribu= mongo.model("cartas_tribu",new Schema({ any: Schema.Types.Mixed }));
+//exports.CartarMerca=mongo.model("Cartas_mercancia",);

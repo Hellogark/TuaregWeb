@@ -21,7 +21,7 @@ app.use(express.static("./public/"));
 app.use(session({
   secret: '123zdsauqjbz89',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());

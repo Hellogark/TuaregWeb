@@ -1,12 +1,19 @@
+.tribuc{
+
+  background-image:url(/assets/img/tribu.gif);
+}
+.mercac{
+  background-image:url(/assets/img/mercancias.gif);
+}
 div.container{
-  width:50em;
+  width:48em;
   float:left;
-  margin-left:-2em;
+  margin-left:1em;
 }
 
 div.col-md-2{
   width:137px;
-  height:75px;
+  height:92px;
   float:left;
   padding:0 0 0 0;
 }
@@ -21,14 +28,8 @@ div.row.show{
   height:6.5em;
 }
 
-div.container-fluid{
-  width:21em;
-  height:41em;
-  margin-left:63em;
-}
-
 div.col-md-12{
-  height:23em;
+  height:13em;
 }
 
 span.text-muted{
@@ -37,16 +38,10 @@ span.text-muted{
 
 img.barajaMercancia{
   width:141px;
-  transform:rotateZ(-90deg);
+  transform:rotateZ(0deg);
   height:94px;
   margin-top:5em;
   margin-left:-0.5em;
-}
-
-div.container.contenedorMercancia{
-  width:11em;
-  height:9em;
-  margin-top:0em;
 }
 
 div.col-lg-2{
@@ -54,13 +49,331 @@ div.col-lg-2{
   height:9em;
 }
 
-div.container.Tribu{
-  width:12em;
-  transform:rotateZ(-90deg);
-  margin-top:7.5em;
+img.barajaTribu{
+  margin-top:-6em;
 }
 
-img.barajaTribu{
-  margin-top:-1em;
+div.container-fluid.jugadores{
+  width:18em;
+  height:23em;
+}
+
+div.container.jugadores{
+  width:17em;
+  display:block;
+  height:35em;
+  float:right;
+  right:10.6em;
+  position:relative;
+}
+
+div.col-lg-2.tribu{
+  width:5em;
+  position:relative;
+}
+
+div.container.tablero{
+  width:713px;
+  display:block;
+  height:459px;
+  left:4em;
+  float:left;
+  position:relative;
+}
+
+div.wrapper{
+  width:1130px;
+  height:461px;
+  display:block;
+  clear:both;
+  margin:0 auto;
+  position:absolute;
+  left:3em;
+  top:7em;
+}
+
+img.fichas{
+  width:33px;
+  margin-left:-15px;
+  white-space:nowrap;
+}
+
+div.col-md-1.otrasFichas{
+  width:33px;
+  height:33px;
+  margin-left:5px;
+  left:-2px;
+  display:inline-block;
+  position:relative;
+}
+
+div.row.fichas{
+  width:191px;
+  height:36px;
+  vertical-align:top;
+  display:inline-block;
+  margin-top:0.5em;
+}
+
+div.row.cantidad{
+  width:179px;
+  height:22px;
+  vertical-align:top;
+  display:block;
+  margin-top:0.5em;
+  white-space:nowrap;
+  position:relative;
+  float:left;
+  vertical-align:top;
+}
+
+div.col-md-1.cantidades{
+  width:35px;
+  height:20px;
+  margin-left:0.2em;
+  display:inline-block;
+  position:relative;
+}
+
+div.col-md-1.masUno{
+  width:60px;
+  height:20px;
+  display:inline-block;
+}
+
+span.spans{
+  position:relative;
+  display:inline-block;
+  vertical-align:top;
+}
+
+div.row.mazo{
+  width:20em;
+  display:block;
+  position:absolute;
+  right:3em;
+  top:-5em;
+}
+
+div.container.cartas{
+  width:20em;
+  transform:rotateZ(-90deg);
+  display:block;
+  position:relative;
+  right:5em;
+  top:14em;
+}
+
+div.col-lg-offset-0.wrapper{
+  position:relative;
+  top:3em;
+  left:-6em;
+}
+
+img#c1J1.cartasTableroJ1{
+  width:83px;
+}
+
+div.container.mazo{
+  width:150px;
+  height:251px;
+  position:absolute;
+  display:block;
+  top:9em;
+  left:-6em;
+  float:left;
+}
+
+div.col-md-2.mazoWrapper{
+  width:150px;
+  height:200px;
+  display:inline-block;
+  top:2em;
+}
+
+div.col-md-2.tribu{
+  transform:rotateZ(-90deg);
+  white-space:nowrap;
+  margin-top:5em;
+  display:inline-block;
+}
+
+div.col-md-2.merca{
+  transform:rotateZ(-90deg);
+  display:inline-block;
+}
+
+div.row.tableroJugador1{
+  width:347px;
+  height:168px;
+  position:relative;
+  left:70.3em;
+  top:-33em;
+}
+
+div.row.tableroJugador2{
+  width:347px;
+  height:168px;
+  position:relative;
+  left:70.3em;
+  top:-23.7em;
+}
+
+div.col-md-2.tj1_1{
+  width:85px;
+  height:55px;
+}
+
+body{
+  height:100%;
+  background-color:rgb(214,179,120);
+}
+
+#footer{
+  margin-bottom:0px;
+}
+
+div.row.opcionesTurno{
+  position:relative;
+  width:1073px;
+  height:58px;
+}
+
+html{
+}
+
+div.encabezado{
+  width:1355px;
+  height:30px;
+  display:block;
+}
+
+div.row.encabezado{
+  margin-left:-0.5em;
+}
+
+img#reglas{
+  width:32px;
+  position:absolute;
+  left:0;
+}
+
+span.label.label-info.label-Instrucciones{
+  position:absolute;
+  left:2em;
+  top:0.01em;
+  background-color:#969615;
+  font-size:large;
+}
+
+div.reglas{
+  width:131px;
+  height:30px;
+  position:absolute;
+  left:66em;
+}
+
+div#turnoDe.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
+}
+
+div.row.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
+  top:0em;
+  left:14em;
+}
+
+span.label.label-default.jugadorTurnoLabel{
+  background-color:#b7a319;
+  font-size:large;
+  left:0em;
+  position:absolute;
+  font-size:large;
+}
+
+div.contenedorBotones{
+  width:423px;
+  position:absolute;
+  top:4em;
+  left:20em;
+}
+
+button.btn.btn-default.formatoBotones{
+  margin:0px 16px 0px 3px;
+  color:#897719;
+}
+
+.btn-default{
+  color:#dd7500;
+  background-color:#aa8e0a;
+  border-color:#e0aa0f;
+}
+
+.btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default{
+  color:#555555;
+  background-color:#a38205;
+  border-color:#f4ed47;
+}
+
+.btn-default:active:hover, .btn-default.active:hover, .open > .dropdown-toggle.btn-default:hover, .btn-default:active:focus, .btn-default.active:focus, .open > .dropdown-toggle.btn-default:focus, .btn-default:active.focus, .btn-default.active.focus, .open > .dropdown-toggle.btn-default.focus{
+  color:#555555;
+  background-color:#f9d616;
+  border-color:#f9e27f;
+}
+
+div.row.jugadores{
+  height:292px;
+}
+
+div.cartaMano{
+  width:150px;
+  height:100px;
+  position:relative;
+  left:1em;
+}
+
+div#nombreJT.mostrarNombreJT{
+  width:200px;
+  height:30px;
+  position:relative;
+  left:15em;
+}
+
+span#mostrarNombreTurno.label.label-default.jugadorTurnoLabel{
+  width:200px;
+  position:relative;
+  top:0.25em;
+  left:-0em;
+}
+
+div#imgCartaManoJ1.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#imgCartaManoJ2.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#pantallaGde.pantallaGde{
+  width:23px;
+  position:absolute;
+  left:63em;
+  top:0.4em;
+}
+
+div.panel-body{
+  background-color:#f5dba3;
+}
+
+.panel-default > .panel-heading{
+  color:#555555;
+  background-color:#c9a764;
+  border-color:#dddddd;
 }
 
