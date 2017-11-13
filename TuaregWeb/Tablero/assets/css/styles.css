@@ -370,12 +370,19 @@ div.panel-body{
   border-color:#dddddd;
 }
 
+div.fichasTuareg{
+  width:750px;
+  height:450px;
+  position:relative;
+  display:block;
+}
+
 div.row.fichasTuareg{
   width:750px;
   height:450px;
   position:relative;
-  left:-2em;
-  bottom:34em;
+  left:2em;
+  bottom:23em;
   display:block;
 }
 
@@ -413,5 +420,81 @@ div.colDescartarJ2{
   position:relative;
   left:13em;
   display:none;
+}
+
+div#muestraOfebre.row.orfebre{
+  width:660px;
+  height:318px;
+  position:absolute;
+  left:13em;
+  bottom:0em;
+  visibility:hidden;
+}
+
+img.orfebreFicha{
+  box-shadow:-5px 5px 50px 5px;
+}
+
+img.1pv{
+  width:180px;
+  height:50px;
+  position:absolute;
+}
+
+div.1pvOf{
+  width:194px;
+  height:80px;
+  position:absolute;
+}
+
+img#onepv.onePv{
+  width:59px;
+  position:absolute;
+  z-index:4;
+  left:19.4em;
+  top:0.7em;
+  visibility:hidden;
+}
+
+img#twopv.Dospv{
+  width:76px;
+  position:absolute;
+  z-index:4;
+  top:1em;
+  left:37em;
+  visibility:hidden;
+}
+
+img#threePv.tresPv{
+  width:98px;
+  position:absolute;
+  z-index:4;
+  top:7.4em;
+  left:19.6em;
+  visibility:hidden;
+}
+
+img#fourpv.cuatropv{
+  width:116px;
+  position:absolute;
+  z-index:4;
+  top:7em;
+  left:37em;
+  visibility:hidden;
+}
+
+div.muestraCartaObt{
+  position:absolute;
+  z-index:5;
+  width:250px;
+  height:130px;
+  bottom:11em;
+  left:23em;
+}
+
+img#cartaMostrada.cartaMostrar{
+  width:240px;
+  height:145px;
+  visibility:hidden;
 }
 
