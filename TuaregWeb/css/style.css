@@ -173,8 +173,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .btn-services:hover {
-  background: rgba(183, 163, 25, 1);;
-  border: 2px solid rgba(183, 163, 25, 1);;
+  background: rgba(183, 163, 25, 1);
+  border: 2px solid rgba(183, 163, 25, 1);
 }
 
 /*--------------------------------------------------------------
@@ -869,7 +869,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .form button[type="submit"] {
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   border: 0;
   padding: 10px 24px;
   color: #fff;
@@ -878,7 +878,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .form button[type="submit"]:hover {
-  background: #8A5C2A;
+  background: rgba(183, 163, 25, 1);
 }
 
 #menu {
