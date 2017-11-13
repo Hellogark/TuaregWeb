@@ -71,6 +71,16 @@ class Tuareg extends Room{
 			
 	}
 	onMessage(client,data){
+
+		if (client.id == this.state.turno_act){
+			//Comprobar  que es lo que actualmente se esta haciendo:
+			//1)poniendo fichas tuareg
+			//2)utilizando/comprando cartas
+			console.log(client);
+			console.log(data);
+			this.state.jugadores[client.id].datiles++;
+		}
+		
 	
 	}
 	

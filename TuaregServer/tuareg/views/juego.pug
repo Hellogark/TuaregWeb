@@ -26,9 +26,7 @@ html
           img(src='assets/img/header.gif', alt='encabezado')
     .row.jugadorTurno
       #turnoDe.jugadorTurno
-        span#turnoJugadorLabel.label.label-default.jugadorTurnoLabel Es el turno del jugador: 
-      #nombreJT.mostrarNombreJT
-        span#mostrarNombreTurno.label.label-default.jugadorTurnoLabel  
+        span#turnoJugadorLabel.label.label-default.jugadorTurnoLabel Es el turno del jugador:   
     .col-lg-offset-0.wrapper
       .container.mazo
         .col-md-2.merca
@@ -41,8 +39,8 @@ html
             img(src='assets/img/bordes_1.gif')
           #Nobles.col-md-2
             img(src='assets/img/bordes_2.gif')
-          .col-md-2
-            img#datil1Borde(src='assets/img/bordes_3.gif')
+          #datil1Borde.col-md-2
+            img(src='assets/img/bordes_3.gif')
           #sal1borde.col-md-2
             img(src='assets/img/bordes_4.gif')
           #asalto1.col-md-2
@@ -61,8 +59,8 @@ html
           #carta4.col-md-2
           #carta5.col-md-2
           #carta6.col-md-2
-          .col-md-2
-            img#pimienta1Borde(src='assets/img/bordes_7.gif')
+          #pimienta1Borde.col-md-2
+            img(src='assets/img/bordes_7.gif')
         .row.show
           #caravana.col-md-2
             img(src='assets/img/bordes_14.gif')
@@ -106,15 +104,15 @@ html
                     #fichaTurno.col-md-1.otrasFichas
                       img.hidden.fichas(src='assets/img/Turno.png')
                   #cantidades.row.cantidad
-                    #cDatilp1.col-md-1.cantidades
-                      span.spans 4 
-                    #cSalP1.col-md-1.cantidades
-                      span.spans 4 
-                    #cPimP1.col-md-1.cantidades
-                      span.spans 4 
-                    #cOroyMas1.col-md-1.masUno
-                      span.spans 3 
-                      span.spans +1 
+                    .col-md-1.cantidades
+                      span#cDatilP1.spans 4 
+                    .col-md-1.cantidades
+                      span#cSalP1.spans 4 
+                    .col-md-1.cantidades
+                      span#cPimP1.spans 4 
+                    .col-md-1.masUno
+                      span#cOroyMas1P1.spans 3 
+                      span#cOroyMas2P1.spans  
             #cartaManoJ1.cartaMano
               #imgCartaManoJ1.cartaMano
               img(src='assets/img/cartaMano.png')
@@ -140,15 +138,15 @@ html
                     #fichaTurno.col-md-1.otrasFichas
                       img.hidden.fichas(src='assets/img/Turno.png')
                   #cantidades.row.cantidad
-                    #cDatilp2.col-md-1.cantidades
-                      span.spans 4 
-                    #cSalP2.col-md-1.cantidades
-                      span.spans 4 
-                    #cPimP2.col-md-1.cantidades
-                      span.spans 4 
-                    #cOroyMas2.col-md-1.masUno
-                      span.spans 3 
-                      span.spans +1 
+                    .col-md-1.cantidades
+                      span#cDatilP2.spans 4 
+                    .col-md-1.cantidades
+                      span#cSalP2.spans 4 
+                    .col-md-1.cantidades
+                      span#cPimP2.spans 4 
+                    .col-md-1.masUno
+                      span#cOroyMas1P2.spans 3 
+                      span#cOroyMas2P2.spans 
             #cartaManoJ2.cartaMano
               #imgCartaManoJ2.cartaMano
               img(src='assets/img/cartaMano.png')
