@@ -88,6 +88,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   background: url(../img/tuareg-bg.jpg) top center fixed;
   background-size: cover;
+  
 }
 
 #hero .hero-logo {
