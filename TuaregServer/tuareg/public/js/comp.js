@@ -1,11 +1,14 @@
 var host = window.location.hostname;
-var client= new Colyseus.Client("ws://"+host+":3000");
+var protocolo = (location.protocol==="https"? "wss":"ws" );
+var client= new Colyseus.Client(protocolo+"://"+host+(location.port ? ':'+location.port : ''));
 var room = client.join("tuareg");
 var cartas=[] ;
 
 var t=0,q=0;
+///////////////////////////////////////////////////////////////////
 $(document).ready(function(){
 	console.log(cartas);	
+	
 	$(".col-md-2").click(function(){
 		clicked=this;
 		cartas.forEach(function(el,ino){
@@ -51,8 +54,8 @@ $(document).ready(function(){
 		}
 	}	
 });
+////////////////////////////////////////////////////////
 
-console.log("iniciado");
 room.onJoin.add(function(){
 	console.log("Bienvenido a tuareg");
 });
@@ -65,14 +68,14 @@ room.onUpdate.add(function(state,patch){
 	console.log(state);
 });
 
-//room.on('update', onUpdate.bind(this))
 
-room.listen("tableroPrincipal/:filas/:columnas", function(change){
+room.listen("tableroCartas/:filas/:columnas", function(change){
     if(change.operation=="replace"){
 		$(cartas[change.path.filas][change.path.columnas]).animateSprite("frame",change.value._id-1);
 	}
 	console.log(change);
 });
+
 room.listen("jugadores/:id/:merca",function(change){
 	switch(change.path.merca)
 	{
@@ -110,6 +113,7 @@ room.listen("jugadores/:id/:merca",function(change){
 		break;	
 	}
 });
+
 room.listen("turno_act",function(change){
 	console.log(change);
 	console.log(client.id);
@@ -124,6 +128,21 @@ room.listen("turno_act",function(change){
 		}
 		
 	}
+});
+
+room.listen("tableroAsaltante/:fila/:columna",function(change){
+	if(change.value=="A"){
+		$("#Asaltante").remove();
+		$(cartas[change.path.fila][change.path.columna]).append("<img id='Asaltante' class='asaltante' src='/assets/img/Asaltante.png'></img>");
+	}
+	console.log(change);
+});
+
+room.listen("tableroTuareg/:fila/:columna",function(change){
+		if(change.operation=="replace"){
+			$(cartas[change.path.fila][change.path.columna]).append("<img id='Tuareg' class='asaltante' src='/assets/img/"+change.value+".png'></img>");
+		}	
+	console.log(change);
 });
 
 function onUpdate(state,patch){

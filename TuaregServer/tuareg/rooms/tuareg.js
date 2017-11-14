@@ -3,7 +3,14 @@ var cartaTrib=require("../Model/modelousuario.js").CartasTribu;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/Tuareg";
 var shuffle = require("array-shuffle");
+/*
+	Cosas que se deben resetear cuando se mueva el asaltante:
+		this.state.jugadores[id].c_In
+		this.state.jugadores[id].f_In
+		this.state.tableroInter
+		this.state.estado
 
+*/
 const PATCH_RATE=20;
 
 class Tuareg extends Room{
@@ -12,12 +19,33 @@ class Tuareg extends Room{
 		
 		this.setState({
 			jugadores:{},
-			tableroPrincipal:[
+			tableroCartas:[   //para mostrar las cartas 
 				["#asalto4","#Nobles","#datil1Borde","#sal1borde","#asalto1"],
 				["#sal2borde",56, 56, 56,"#comerciante"],
 				["#ampTribu",56, 56, 56,"#pimineta1Borde"],
 				["#caravana",56, 56, 56,"#datil2Borde"],
 				["#asalto3","#pimienta2Borde","#orfebre","#Espejismo","#asalto2"]
+			],
+			tableroAsaltante:[  //para manejar las intersecciones y posicion del asaltante
+				[16,"A",2,3,4],
+				[15,0,0,0,5],
+				[14,0,0,0,6],
+				[13,0,0,0,7],
+				[12,11,10,9,8]
+			],
+			tableroTuareg:[ // para manejar la ubicacion de los tuareg y los marcadores en el front-end
+				[16,1,2,3,4],
+				[15,0,0,0,5],
+				[14,0,0,0,6],
+				[13,0,0,0,7],
+				[12,11,10,9,8]			
+			],
+			tableroInter:[ //para identificar a que usuario pertenece cada marcador
+				[16,1,2,3,4],
+				[15,0,0,0,5],
+				[14,0,0,0,6],
+				[13,0,0,0,7],
+				[12,11,10,9,8]
 			],
 			tablero_jugador1:[[0],[0],[0]],
 			tablero_jugador2:[[0],[0],[0]],
@@ -26,8 +54,11 @@ class Tuareg extends Room{
 			cartas_tribu_recicla:[0],   // cartas desechadas
 			cartas_mercancia_recicla:[0], //cartas desechadas
 			turno_act:0,
+			asaltante_pos:1,
 			empate:null,
-			ganador:null
+			ganador:null,
+			estado:1,
+			players:null, // player 0 es azul player 1 es gris
 		});
 		
 		
@@ -54,15 +85,22 @@ class Tuareg extends Room{
 			pimineta:2,
 			sal:2,
 			fichas_victoria:[1,1,0] , //[0]= fichas 1 punto , [1]=fichas 3 puntos , [2]=fichas 5 puntos 			
-			playerIndex:client.playerIndex
+			playerIndex:client.playerIndex,
+			fichasT:3,
+			colorT:null,
+			colorM:null,
+			f_In:[],
+			c_In:[]
 		};			
 			
-		
-
+		this.state.jugadores[client.id].colorT=((this.state.jugadores[client.id].playerIndex==0)? "targiAzul":"targiGris");
+		this.state.jugadores[client.id].colorM=((this.state.jugadores[client.id].playerIndex==0)? "marcadorAzul":"marcadorGris");
 			
 		if(this.clients.length == 2 ){
-			this.state.turno_act = client.id;
+			this.state.turno_act = this.clients[Math.floor(Math.random()*1)].id;
+			console.log(this.state.turno_act);
 			this.lock();
+			 this.state.players=Object.keys(this.state.jugadores);
 			this.barajear(this.roomId);
 		}
 		else{
@@ -76,9 +114,15 @@ class Tuareg extends Room{
 			//Comprobar  que es lo que actualmente se esta haciendo:
 			//1)poniendo fichas tuareg
 			//2)utilizando/comprando cartas
-			console.log(client);
-			console.log(data);
-			this.state.jugadores[client.id].datiles++;
+			switch(this.state.estado){
+				case 1:
+					this.ponerFichas(data,this.state,client);
+				break;
+				case 3:
+					
+				break;
+				
+			}
 		}
 		
 	
@@ -90,6 +134,84 @@ class Tuareg extends Room{
 			this.state.ganador= this.clients[0];
 		}	
 	}
+	
+	moverAsaltante(){
+		if(this.state.asaltante_pos==16){
+			return -1;
+		}
+		var act_pos=this.state.asaltante_pos;
+		var estado=this.state
+		this.state.asaltante_pos++;
+		this.state.tableroAsaltante.forEach(function(el,indf){
+			el.forEach(function(el2,indc){
+				if(el2==="A"){
+					estado.tableroAsaltante[indf][indc]=act_pos
+				}
+				if(el2=== estado.asaltante_pos){
+					estado.tableroAsaltante[indf][indc]= "A";
+					return 1;
+				}
+			});
+		})
+				
+	}
+	
+	cambiarTurno(){
+		this.state.turno_act=((this.state.jugadores[this.state.turno_act].playerIndex==0)? this.clients[1].id :this.clients[0].id );
+	}
+	
+
+	applicarIntersec(estado,cliente){	// Genera la intersección y ubica la marca en dos arreglos distintos: tableroInter y tableroTuareg
+		console.log("intercepcion");
+		if(estado.jugadores[cliente].c_In.length < estado.jugadores[cliente].f_In.length){
+			estado.jugadores[cliente].f_In.forEach(function(el,ind){
+				estado.tableroInter[el][estado.jugadores[cliente].c_In[0]]=cliente;
+				estado.tableroTuareg[el][estado.jugadores[cliente].c_In[0]]=estado.jugadores[cliente].colorM;
+				console.log(estado.tableroInter[el][estado.jugadores[cliente].c_In[0]]);
+			});
+		}
+		if(estado.jugadores[cliente].c_In.length > estado.jugadores[cliente].f_In.length){
+			estado.jugadores[cliente].c_In.forEach(function(el,ind){
+				estado.tableroInter[ estado.jugadores[cliente].f_In[0] ][ el ]=cliente;
+				estado.tableroTuareg[ estado.jugadores[cliente].f_In[0] ][ el ]=estado.jugadores[cliente].colorM;
+				console.log(estado.tableroInter[estado.jugadores[cliente].f_In[0]][el]);
+			});
+		}
+	}
+	
+	frenteVacio(data,estado,cliente){  // Auxiliar de la función ponerFichas()
+		if(data.fila ==0 || data.fila==4){
+			return typeof(estado.tableroTuareg[((data.fila==0)?4:0)][data.columna])=="number" ;
+		}
+		if(data.fila!=0 && data.fila!=4){
+			return typeof(estado.tableroTuareg[data.fila][((data.columna==0)?4:0)])=="number";
+		}
+	}
+	
+	ponerFichas(data,estado,cliente){
+		if(data.action=="select" && typeof(estado.tableroCartas[data.fila][data.columna])!="object" && !estado.tableroCartas[data.fila][data.columna].includes("asalto")  && estado.jugadores[cliente.id].fichasT > 0 &&estado.tableroAsaltante[data.fila][data.columna]!="A"){
+			if(this.frenteVacio(data,estado,cliente)){
+				if(data.fila ==0 || data.fila==4){
+					estado.jugadores[cliente.id].c_In.push(data.columna);
+				}
+				if(data.fila!=0 && data.fila!=4){
+					estado.jugadores[cliente.id].f_In.push(data.fila);
+				}
+				estado.tableroTuareg[data.fila][data.columna]= estado.jugadores[cliente.id].colorT// jugador que inicia la sala es el colorT azul
+				estado.jugadores[cliente.id].fichasT--;
+				this.cambiarTurno();
+				console.log(data);				
+			}			
+		}
+		if(estado.jugadores[estado.players[0]].fichasT <=0 && estado.jugadores[estado.players[1]].fichasT <=0 ){
+			estado.estado++;
+			this.applicarIntersec(estado,estado.players[0]); // intersección para jugador 1
+			this.applicarIntersec(estado,estado.players[1]); // intersección para jugador 2
+			estado.estado++;
+		}
+		
+	}
+	
 	barajear(sala){
 		
 		var estado=this.state;
@@ -116,16 +238,16 @@ class Tuareg extends Room{
 				for(var i=1;i<4;i++){
 					for(var j=1;j<4;j++){
 						if(Act_carta){
-							estado.tableroPrincipal[i][j]=estado.cartas_tribu_baraja.pop();
+							estado.tableroCartas[i][j]=estado.cartas_tribu_baraja.pop();
 							Act_carta=false;
 						}
 						else{
-							estado.tableroPrincipal[i][j]=estado.cartas_mercancia_baraja.pop();
+							estado.tableroCartas[i][j]=estado.cartas_mercancia_baraja.pop();
 							Act_carta=true;
 						}
 					}
 				}
-				/*estado.tableroPrincipal.forEach(function(fila,indexf){
+				/*estado.tableroCartas.forEach(function(fila,indexf){
 					fila.forEach(function(carta,indexc,arreglo){
 						if(Act_carta){
 							arreglo[indexc]=estado.cartas_tribu_baraja.pop();
@@ -149,5 +271,4 @@ class Tuareg extends Room{
 	}
 }
 
-var a=10;
 module.exports= Tuareg;

@@ -5,6 +5,13 @@
 .mercac{
   background-image:url(/assets/img/mercancias.gif);
 }
+.asaltante{
+  width: 20%;
+  position: absolute;
+  top:-10%;
+  left:50%;
+  transform: translateX(-50%);
+}
 div.container{
   width:48em;
   float:left;
@@ -12,7 +19,7 @@ div.container{
 }
 
 div.col-md-2{
-  width:137px;
+  width:138px;
   height:92px;
   float:left;
   padding:0 0 0 0;
