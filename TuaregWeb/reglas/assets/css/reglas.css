@@ -6,19 +6,24 @@ html{
 }
 
 div.container.reglas{
-  width:720px;
+  width:900px;
   height:6447px;
   position:relative;
+  left:7em;
+  align-self:center;
 }
 
 div.imagenHeader{
-  width:700px;
+  width:1200px;
   clear:both;
   z-index:1;
+  float:left;
+  right:11em;
+  position:relative;
 }
 
 img.imagenHeader{
-  width:700px;
+  width:1350px;
   height:30px;
   position:relative;
 }

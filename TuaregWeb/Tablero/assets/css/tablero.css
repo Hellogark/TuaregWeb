@@ -291,7 +291,7 @@ div.reglas{
   width:131px;
   height:30px;
   position:absolute;
-  left:66em;
+  left:56em;
 }
 
 div#turnoDe.jugadorTurno{
@@ -524,5 +524,16 @@ img#cartaMostrada.cartaMostrar{
   width:240px;
   height:145px;
   visibility:hidden;
+}
+
+a.rules{
+  width:100px;
+  height:30px;
+}
+
+span.label.label-default.jugadorTurnoLabel.rules{
+  position:absolute;
+  left:2em;
+  top:0.2em;
 }
 
