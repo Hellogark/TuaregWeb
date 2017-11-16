@@ -1,6 +1,6 @@
 var mongo= require("mongoose");
 
-exports.db=mongo.connect('mongodb://localhost/Tuareg');
+exports.db=mongo.connect('mongodb://192.168.0.8/Tuareg');
 var bcrypt = require("bcrypt");
 var Schema = mongo.Schema;
 var usuarioSchema = new mongo.Schema({
@@ -14,7 +14,7 @@ var usuarioSchema = new mongo.Schema({
 		required:[true,"No se introdujo contraseña"],
 		validate:{
 			validator:function(valor){
-					return valor === this.verfcontra; 
+					return valor === this.verfcontra;
 			},
 			message: "Passwords distintas"
 		}
@@ -23,20 +23,20 @@ var usuarioSchema = new mongo.Schema({
 		type: String
 	},
 	estadisticas:{
-		type:Schema.ObjectId , 
-		ref:"estadisticas_usuario"			
+		type:Schema.ObjectId ,
+		ref:"estadisticas_usuario"
 	},
 	lista_amigos:{
 		type:Schema.ObjectId,
 		ref:"list_amigos"
 	}
-	
+
 });
 
 /// Encriptación
 usuarioSchema.pre("save",function(cb){
 	var usrSch = this;
-		
+
 	console.log(usrSch.contra);
 	if(!this.isModified("contra")) {
 
@@ -50,9 +50,9 @@ usuarioSchema.pre("save",function(cb){
 			usrSch.contra=hash;
 			cb();
 		});
-		
 
-	
+
+
 });
 usuarioSchema.virtual("verfcontra").get(function(){
 	return this._verfcontra;
@@ -78,7 +78,7 @@ var estadisticasSchema = new mongo.Schema({
 	partidas_ganadas:{
 		type:Number,
 		default:0,
-	},	
+	},
 	partidas_perdidas:{
 		type:Number,
 		default:0,

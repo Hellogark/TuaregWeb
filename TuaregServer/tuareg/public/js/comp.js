@@ -1,14 +1,27 @@
 var host = window.location.hostname;
 var protocolo = (location.protocol==="https"? "wss":"ws" );
-var client= new Colyseus.Client(protocolo+"://"+host+(location.port ? ':'+location.port : ''));
+var client= new Colyseus.Client("ws://"+host+":3000");
 var room = client.join("tuareg");
 var cartas=[] ;
+var cartasM=[];
+var cartasT=[];
 
 var t=0,q=0;
 ///////////////////////////////////////////////////////////////////
 $(document).ready(function(){
-	console.log(cartas);	
-	
+	console.log(cartas);
+
+	for(var i=0; i<6; i++ ){
+		for(var j=0;j<9;j++){
+			cartasT.push(j*-138+"px "+i*-92+"px");
+		}
+	}
+	for(var i=0; i<4; i++ ){
+		for(var j=0;j<6;j++){
+			cartasM.push(j*-138+"px "+i*-92+"px");
+		}
+	}
+
 	$(".col-md-2").click(function(){
 		clicked=this;
 		cartas.forEach(function(el,ino){
@@ -22,47 +35,61 @@ $(document).ready(function(){
 					});
 				}
 			});
-		});	
+		});
 	});
-	
+
 	var arreglo= $(".container.tablero").children().children();
 	for (var i=0;i<5;i++){
 		cartas[i]=arreglo.splice(0,5);
 	}
 	console.log(cartas[0][0].id);
-	// NOTA: se cambió el height de col-md-2 de 75px a 92px	
+	// NOTA: se cambió el height de col-md-2 de 75px a 92px
 	for (var i=1;i<10;i++){
-		if(i%2==0){		
-			$("#carta"+i).addClass("tribuc").animateSprite({
-				fps:0,
-				loop:false,
-				columns:9,
-				animations:{
-					sprite:[45]
-				}
-			});		
+		if(i%2==0){
+			$("#carta"+i).addClass("tribuc").css("background-position",cartasT[45]);
 		}
 		else{
-			$("#carta"+i).addClass("mercac").animateSprite({
-				fps:0,
-				loop:false,
-				columns:6,
-				animations:{
-					sprite:[19]
-				}
-			});		
+			$("#carta"+i).addClass("mercac").css("background-position",cartasM[19]);
 		}
-	}	
-});
+	}
+	});
 ////////////////////////////////////////////////////////
 
 room.onJoin.add(function(){
 	console.log("Bienvenido a tuareg");
 });
-
+function escoger(opcion,fila,columna){
+	$("#chose").remove();
+	room.send({action:"chose",otorga:opcion,fila:fila,columna:columna});
+}
 room.onData.add(function(mensaje){
-	console.log(mensaje.message);
-});	
+	console.log(mensaje);
+	if(mensaje.action=="chose"){
+		$("#chose").remove();
+		$("body").append(
+			"<div id='chose' style='position:absolute'>"+
+				"<button onclick='escoger(1,"+mensaje.fila+","+mensaje.columna+")'>datiles</button>"+
+				"<button onclick='escoger(2,"+mensaje.fila+","+mensaje.columna+")'>sal</button>"+
+				"<button onclick='escoger(3,"+mensaje.fila+","+mensaje.columna+")'>pimienta</button>"+
+			"</div>"
+			);
+	}
+
+	if(mensaje.action=="refresh"){
+		if(cartas[mensaje.fila][mensaje.columna].className.includes("mercac")){
+			$(cartas[mensaje.fila][mensaje.columna]).removeClass("mercac");
+			$(cartas[mensaje.fila][mensaje.columna]).addClass("tribuc");
+			$(cartas[mensaje.fila][mensaje.columna]).css("background-position",cartasT[45]);
+		}
+		else if(cartas[mensaje.fila][mensaje.columna].className.includes("tribucc")){
+			$(cartas[mensaje.fila][mensaje.columna]).removeClass("tribuc");
+			$(cartas[mensaje.fila][mensaje.columna]).addClass("mercac");
+			$(cartas[mensaje.fila][mensaje.columna]).css("background-position",cartasM[19]);
+
+		}
+		$(cartas[mensaje.fila][mensaje.columna]).children().remove();
+	}
+});
 
 room.onUpdate.add(function(state,patch){
 	console.log(state);
@@ -70,9 +97,10 @@ room.onUpdate.add(function(state,patch){
 
 
 room.listen("tableroCartas/:filas/:columnas", function(change){
+
     if(change.operation=="replace"){
-		$(cartas[change.path.filas][change.path.columnas]).animateSprite("frame",change.value._id-1);
-	}
+		$(cartas[change.path.filas][change.path.columnas]).css("background-position",(change.value.tipo== undefined ?cartasM[change.value._id-1] :cartasT[change.value._id-1]));
+	  }
 	console.log(change);
 });
 
@@ -110,7 +138,7 @@ room.listen("jugadores/:id/:merca",function(change){
 			else{
 				$("#cSalP2").text(change.value);
 			}
-		break;	
+		break;
 	}
 });
 
@@ -118,7 +146,7 @@ room.listen("turno_act",function(change){
 	console.log(change);
 	console.log(client.id);
 	$("#nombreJ1").text("Tu");
-	$("#nombreJ2").text("Contrincante");	
+	$("#nombreJ2").text("Contrincante");
 	if(change.operation =="replace"){
 		if(change.value === client.id){
 			$("#turnoJugadorLabel").text("Es tu turno");
@@ -126,7 +154,7 @@ room.listen("turno_act",function(change){
 		else{
 			$("#turnoJugadorLabel").text("Es turno del contrincante");
 		}
-		
+
 	}
 });
 
@@ -141,7 +169,7 @@ room.listen("tableroAsaltante/:fila/:columna",function(change){
 room.listen("tableroTuareg/:fila/:columna",function(change){
 		if(change.operation=="replace"){
 			$(cartas[change.path.fila][change.path.columna]).append("<img id='Tuareg' class='asaltante' src='/assets/img/"+change.value+".png'></img>");
-		}	
+		}
 	console.log(change);
 });
 
