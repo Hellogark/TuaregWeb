@@ -537,3 +537,23 @@ span.label.label-default.jugadorTurnoLabel.rules{
   top:0.2em;
 }
 
+div.descartaJ1{
+  position:relative;
+  width:83px;
+  left:14em;
+  bottom:6.8em;
+  visibility:hidden;
+}
+
+img.descartaCarta{
+  width:83px;
+}
+
+div.descartaJ2{
+  position:relative;
+  width:83px;
+  left:14em;
+  bottom:6.8em;
+  visibility:hidden;
+}
+
