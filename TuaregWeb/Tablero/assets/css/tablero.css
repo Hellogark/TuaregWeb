@@ -228,7 +228,6 @@ div.col-md-2.tj2_1{
 }
 
 body{
-  height:100%;
   background-color:rgb(214,179,120);
 }
 
@@ -238,11 +237,9 @@ body{
 
 div.row.opcionesTurno{
   position:relative;
-  width:1073px;
-  height:58px;
-}
-
-html{
+  width:500px;
+  height:250px;
+  left:16em;
 }
 
 div.encabezado{
@@ -320,7 +317,6 @@ div.contenedorBotones{
   width:423px;
   position:absolute;
   top:4em;
-  left:20em;
 }
 
 button.btn.btn-default.formatoBotones{
@@ -555,5 +551,28 @@ div.descartaJ2{
   left:14em;
   bottom:6.8em;
   visibility:hidden;
+}
+
+div#notaVentana.nota{
+  width:300px;
+  height:250px;
+  position:relative;
+  bottom:5em;
+}
+
+textarea.ventanita{
+  position:relative;
+  display:none;
+  bottom:10em;
+  width:350px;
+  height:139px;
+  resize:none;
+  font-family:Arial;
+  border:inset;
+  border-color:#b8955c;
+}
+
+html{
+  height:100%;
 }
 
