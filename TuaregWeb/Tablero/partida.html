@@ -67,69 +67,52 @@
                 <div class="col-md-2" id="asalto2"><img src="assets/img/CARTASt_25.gif"></div>
             </div>
             <div id="asaltante" class="fichasTuareg"><img src="assets/img/Asaltante.png" id="tuaregasaltante" class="asaltante"></div>
-        </div>
-        <div class="container jugadores">
-            <div class="col-md-12">
+            <div class="col-md-3 jugadores">
                 <div class="row jugadores">
-                    <div>
-                        <div class="panel panel-default">
+                    <div class="panelJ">
+                        <div class="panel panel-default panels">
                             <div class="panel-heading">
                                 <h3 class="panel-title" id="nombreJ1">Jugador 1</h3></div>
-                            <div class="panel-body">
+                            <div class="panel-body Jugadores">
                                 <div class="row pts">
                                     <div class="jugadores"><span>Puntos: </span><span id="puntosP1">jsPuntos </span></div>
                                 </div>
                                 <div class="row fichas">
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/datil.jpg" id="datilP1" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/sal.jpg" id="salP1" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/pimienta.jpg" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/oro.png" id="oroP1" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas" id="fichaTurno"><img class="hidden fichas" src="assets/img/Turno.png"></div>
-                                </div>
-                                <div class="row cantidad" id="cantidades">
-                                    <div class="col-md-1 cantidades" id="cDatilp1"><span class="spans">4 </span></div>
-                                    <div class="col-md-1 cantidades" id="cSalP1"><span class="spans">4 </span></div>
-                                    <div class="col-md-1 cantidades" id="cPimP1"><span class="spans">4 </span></div>
-                                    <div class="col-md-1 masUno" id="cOroyMas1"><span class="spans">3 </span><span class="spans">+1 </span></div>
+                                    <div class="col-md-1 otrasFichas"><img src="assets/img/datil.jpg" id="datilP1" class="fichas"><span id="dJ1" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bDJ1" class="bordeR"></div>
+                                    <div class="col-md-1 otrasFichas"><img src="assets/img/sal.jpg" id="salP1" class="fichas"><span id="sJ1" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bSJ1" class="bordeR"></div>
+                                    <div class="col-md-1 otrasFichas"><img src="assets/img/pimienta.jpg" class="fichas"><span id="pJ1" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bPJ1" class="bordeR"></div>
+                                    <div class="col-md-1 otrasFichasOro"><img src="assets/img/oro.png" id="oroP1" class="fichas"><span id="oJ1" class="spans">3 </span><span id="oMJ1" class="spansOro">+1 </span><img src="assets/img/selecMerca.png" id="bOJ1" class="bordeROro"></div>
+                                    <div class="col-md-1 otrasFichas"
+                                    id="fichaTurno"><img src="assets/img/Turno.png" id="turnoJ1" class="fichas"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div id="cartaManoJ1" class="cartaMano">
                         <div id="imgCartaManoJ1" class="cartaMano"></div><img src="assets/img/cartaMano.png" alt="cartaManoJ1"></div>
-                    <div id="descartarJ1" class="descartaJ1"><img src="assets/img/discard.gif" class="descartaCarta"></div>
                     <div class="colDescartarJ1">
                         <button class="btn btn-default descarta" type="button" id="descartaJ1">Descartar Carta</button>
                     </div>
-                </div>
-                <div class="row jugadores">
                     <div>
-                        <div class="panel panel-default">
+                        <div class="panel panel-default panels" id="panelJ2">
                             <div class="panel-heading">
                                 <h3 class="panel-title" id="nombreJ2">Jugador 2</h3></div>
-                            <div class="panel-body">
+                            <div class="panel-body J2">
                                 <div class="row">
-                                    <div class="jugadores"><span>Puntos: </span><span id="puntosP2">jsPuntos </span></div>
+                                    <div class="puntos"><span>Puntos: </span><span id="puntosP2">jsPuntos </span></div>
                                 </div>
                                 <div class="row fichas">
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/datil.jpg" id="datilP1" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/sal.jpg" id="salP1" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/pimienta.jpg" alt="pimientaJ2" id="pimientap2" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas"><img src="assets/img/oro.png" alt="oroJ2" id="oroP2" class="fichas"></div>
-                                    <div class="col-md-1 otrasFichas" id="fichaTurno"><img class="hidden fichas" src="assets/img/Turno.png"></div>
-                                </div>
-                                <div class="row cantidad" id="cantidades">
-                                    <div class="col-md-1 cantidades" id="cDatilp2"><span class="spans">4 </span></div>
-                                    <div class="col-md-1 cantidades" id="cSalP2"><span class="spans">4 </span></div>
-                                    <div class="col-md-1 cantidades" id="cPimP2"><span class="spans">4 </span></div>
-                                    <div class="col-md-1 masUno" id="cOroyMas2"><span class="spans">3 </span><span class="spans">+1 </span></div>
+                                    <div class="col-md-1 otrasFichas"><img src="assets/img/datil.jpg" id="datilP1" class="fichas"><span id="dJ2" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bDJ2" class="bordeR"></div>
+                                    <div class="col-md-1 otrasFichas"><img src="assets/img/sal.jpg" id="salP1" class="fichas"><span id="sJ2" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bSJ2" class="bordeR"></div>
+                                    <div class="col-md-1 otrasFichas"><img src="assets/img/pimienta.jpg" class="fichas"><span id="pJ2" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bPJ2" class="bordeR"></div>
+                                    <div class="col-md-1 otrasFichasOro"><img src="assets/img/oro.png" id="oroP1" class="fichas"><span id="oJ2" class="spans">3 </span><span id="oMJ2" class="spansOro">+1 </span><img src="assets/img/selecMerca.png" id="bOJ2" class="bordeROro"></div>
+                                    <div class="col-md-1 otrasFichas"
+                                    id="fichaTurno"><img src="assets/img/Turno.png" id="tJ2" class="fichas"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="cartaManoJ2" class="cartaMano">
-                        <div id="imgCartaManoJ2" class="cartaMano"></div><img src="assets/img/cartaMano.png" alt="cartaManoJ2"></div>
-                    <div id="descartarJ2" class="descartaJ2"><img src="assets/img/discard.gif"></div>
+                    <div id="cartaManoJ2" class="cartaMano"><img src="assets/img/cartaMano.png" alt="cartaManoJ2" class="imgMano2"></div>
                     <div class="colDescartarJ2">
                         <button class="btn btn-default descarta" type="button" id="descartaJ2">Descartar Carta</button>
                     </div>
@@ -165,8 +148,32 @@
             <div class="col-md-2 tj2_1" id="cartaJ2_12"><img src="assets/img/fondoTableroJ.gif"></div>
         </div>
         <div class="row orfebre" id="muestraOfebre">
-            <div class="orfebre"><img src="assets/img/Orfebre.jpg" class="orfebreFicha"><img src="assets/img/2pv.png" id="twopv" class="Dospv"><img src="assets/img/3pv.png" id="threePv" class="tresPv"><img src="assets/img/4pv.png" id="fourpv" class="cuatropv"><img src="assets/img/1pv.png"
-                id="onepv" class="onePv"></div>
+            <div class="orfebre">
+                <div id="s1pv"><img src="assets/img/orfebre1.png" class="orf1"></div>
+                <div id="s2pv"><img src="assets/img/orfebre2.png" id="orf2"></div><img src="assets/img/Orfebre.jpg" class="orfebreFicha">
+                <div id="d2pv"><img src="assets/img/2pv.png" id="twopv" class="Dospv"></div>
+                <div id="d3Pv"><img src="assets/img/3pv.png" id="threePv" class="tresPv"></div>
+                <div id="d4Pv"><img src="assets/img/4pv.png" id="fourpv" class="cuatropv"></div>
+                <div id="d1Pv"><img src="assets/img/1pv.png" id="onepv" class="onePv"></div>
+            </div>
+        </div>
+        <div class="row comercanteRow">
+            <div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3">
+                <div class="row fichasMerca" id="cambiaMercancia">
+                    <div id="tMercaUno" class="mercasTres"><img src="assets/img/sal.jpg" class="mercas"></div>
+                    <div id="tMercaDos" class="mercas"><img src="assets/img/sal.jpg" id="tmercau" class="mercas"></div>
+                    <div id="tMercaTres" class="mercasTres"><img src="assets/img/sal.jpg" class="mercas"></div>
+                </div>
+                <div class="row mercas2" id="mercanciasDos">
+                    <div id="dMercasDos" class="mercasDos"><img src="assets/img/sal.jpg" class="mercasD"></div>
+                    <div id="dMercasUno" class="mercasUno"><img src="assets/img/sal.jpg" class="mercasD"></div>
+                </div>
+            </div>
+            <div class="colCom"><img src="assets/img/mercantes.jpg" id="fichaCom" class="fichaComercian"></div>
+            <div id="dosMerca" class="dosmerca"><img src="assets/img/orfebregde.png" class="merch2"></div>
+            <div id="acMerca3" class="accMerca3"><img src="assets/img/accMercante.png"></div>
+            <div id="acMerca2" class="accMerca2"><img src="assets/img/accMercante.png"></div>
+            <div id="cambMerca" class="cambiaMerca"><img src="assets/img/merca2.png" class="camMerca"></div>
         </div>
     </div>
     <div class="row opcionesTurno">
