@@ -96,6 +96,28 @@ div.col-md-1.otrasFichas{
   float:left;
 }
 
+div.col-md-1.otrasFichasT1{
+  width:37px;
+  height:44px;
+  margin-left:5px;
+  left:-28px;
+  position:relative;
+  display:inline-block;
+  float:right;
+  visibility:hidden;
+}
+
+div.col-md-1.otrasFichasT2{
+  width:37px;
+  height:44px;
+  margin-left:5px;
+  left:-28px;
+  position:relative;
+  display:inline-block;
+  float:right;
+  visibility:hidden;
+}
+
 div.col-md-1.otrasFichasOro{
   width:37px;
   height:81px;
@@ -596,6 +618,7 @@ img.bordeR{
   z-index:8;
   left:-1em;
   bottom:3.9em;
+  visibility:hidden;
 }
 
 img.bordeROro{
@@ -605,6 +628,7 @@ img.bordeROro{
   z-index:2;
   left:-1.1em;
   bottom:5.4em;
+  visibility:hidden;
 }
 
 div#fichaTurno.col-md-1.otrasFichas{
@@ -680,6 +704,7 @@ div.row.comercanteRow{
   bottom:12em;
   left:22em;
   z-index:10;
+  visibility:hidden;
 }
 
 div.colCom{
@@ -707,6 +732,7 @@ div.meerca{
   left:1.3em;
   top:2em;
   z-index:11;
+  visibility:hidden;
 }
 
 div.dosmerca{
@@ -716,6 +742,7 @@ div.dosmerca{
   left:5.7em;
   top:9em;
   z-index:11;
+  visibility:hidden;
 }
 
 div#acMerca3.accMerca3{
@@ -724,6 +751,7 @@ div#acMerca3.accMerca3{
   z-index:10;
   left:15.5em;
   top:1.5em;
+  visibility:hidden;
 }
 
 div#acMerca2.accMerca2{
@@ -732,6 +760,7 @@ div#acMerca2.accMerca2{
   z-index:10;
   left:15.5em;
   top:8.5em;
+  visibility:hidden;
 }
 
 div#cambMerca.cambiaMerca{
@@ -740,6 +769,7 @@ div#cambMerca.cambiaMerca{
   position:absolute;
   left:22em;
   top:9em;
+  visibility:hidden;
 }
 
 img.mercas{
@@ -748,6 +778,7 @@ img.mercas{
   position:absolute;
   left:0.5em;
   top:0.2em;
+  visibility:hidden;
 }
 
 div.row.fichasMerca{
@@ -756,6 +787,7 @@ div.row.fichasMerca{
   position:absolute;
   bottom:0em;
   left:1.1em;
+  visibility:hidden;
 }
 
 div#tMercaDos.mercas{
@@ -763,6 +795,7 @@ div#tMercaDos.mercas{
   height:54px;
   position:absolute;
   left:4.3em;
+  visibility:hidden;
 }
 
 div#tMercaTres.mercasTres{
@@ -770,12 +803,14 @@ div#tMercaTres.mercasTres{
   height:54px;
   position:absolute;
   left:9.1em;
+  visibility:hidden;
 }
 
 div#mercanciasDos.row.mercas2{
   width:121px;
   height:54px;
   position:absolute;
+  visibility:hidden;
 }
 
 div#dMercasUno.mercasUno{
@@ -784,6 +819,7 @@ div#dMercasUno.mercasUno{
   position:absolute;
   left:5.8em;
   top:3em;
+  visibility:hidden;
 }
 
 div#dMercasDos.mercasDos{
@@ -792,5 +828,13 @@ div#dMercasDos.mercasDos{
   position:absolute;
   left:10.4em;
   top:3em;
+  visibility:hidden;
+}
+
+div#tMercaUno.mercasTres{
+  width:54px;
+  height:53px;
+  z-index:11;
+  position:absolute;
 }
 
