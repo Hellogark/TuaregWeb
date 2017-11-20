@@ -160,12 +160,14 @@ div.pV{
   position:relative;
   width:400px;
   left:3em;
-  bottom:22em;
+  bottom:21em;
 }
 
 div.pvtxt{
   position:relative;
-  bottom:22em;
+  bottom:21em;
+  width:750px;
+  left:0.5em;
 }
 
 p{
@@ -218,5 +220,22 @@ p.sub{
 
 #vertical-nav a:hover{
   color:#554715;
+}
+
+p{
+  width:840px;
+  margin-left:0.5em;
+}
+
+img.palm{
+  margin-left:0em;
+}
+
+div.divPalm{
+  margin-left:1em;
+}
+
+img.reglas.imgun{
+  margin-left:1em;
 }
 
