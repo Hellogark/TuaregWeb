@@ -194,7 +194,7 @@ div.container.cartas{
 div.col-lg-offset-0.wrapper{
   position:relative;
   top:3em;
-  left:-6em;
+  left:-8em;
 }
 
 img#c1J1.cartasTableroJ1{
@@ -471,9 +471,9 @@ div.colDescartarJ1{
 }
 
 div.colDescartarJ2{
-  width:43px;
+  width:86px;
   height:40px;
-  bottom:5em;
+  bottom:7em;
   position:relative;
   left:13em;
   visibility:hidden;
@@ -650,8 +650,15 @@ div.col-md-3.jugadores{
   bottom:37.3em;
 }
 
-div.panel.panel-default.panels{
+div.panel.panel-default.panels1{
   width:209px;
+  position:relative;
+}
+
+div.panel.panel-default.panels2{
+  width:209px;
+  position:relative;
+  bottom:2em;
 }
 
 div#panelJ2.panel.panel-default.panels{
@@ -836,5 +843,33 @@ div#tMercaUno.mercasTres{
   height:53px;
   z-index:11;
   position:absolute;
+}
+
+@media only screen and (max-width:1100px ) {
+  div.panel.panel-default.panels1{
+    top:40em;
+    left:-35em;
+    display:block;
+  }
+}
+
+@media only screen and (max-width:1100px ) {
+  div.panel.panel-default.panels2{
+    top:17em;
+    left:-15em;
+    display:block;
+  }
+}
+
+@media only screen and (max-width:1100px ) {
+  div.row.tableroJugador1{
+    left:55.3em;
+  }
+}
+
+@media only screen and (max-width:1100px ) {
+  div.row.tableroJugador2{
+    left:55.3em;
+  }
 }
 
