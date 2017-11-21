@@ -1,6 +1,6 @@
 var mongo= require("mongoose");
 
-exports.db=mongo.connect('mongodb://192.168.0.8/Tuareg');
+exports.db=mongo.connect('mongodb://localhost/Tuareg');
 var bcrypt = require("bcrypt");
 var Schema = mongo.Schema;
 var usuarioSchema = new mongo.Schema({
