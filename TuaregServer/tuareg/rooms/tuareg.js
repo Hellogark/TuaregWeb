@@ -148,6 +148,92 @@ class Tuareg extends Room{
 		estado.jugadores[cliente.id].fichasT++;
 
 	}
+	cobraOfebre(data,estado,cliente){
+		console.log("negociando con orfebre");
+		switch(data.negocio[1]){
+			case 1:
+				switch(data.negocio[0]){
+					case 1:
+						estado.jugadores[cliente.id].datiles-=2;
+					break;
+					case 2:
+						estado.jugadores[cliente.id].pimienta-=2;
+					break;
+					case 3:
+						estado.jugadores[cliente.id].sal-=2;
+					break;
+				}
+				estado.jugadores[cliente.id].puntosv++;
+			break;
+			case 2:
+				estado.jugadores[cliente.id].oro-=1;
+				estado.jugadores[cliente.id].puntosv+=2;
+			break;
+			case 3:
+				switch(data.negocio[0]){
+					case 1:
+						estado.jugadores[cliente.id].datiles-=4;
+					break;
+					case 2:
+						estado.jugadores[cliente.id].pimienta-=4;
+					break;
+					case 3:
+						estado.jugadores[cliente.id].sal-=4;
+					break;
+				}
+				estado.jugadores[cliente.id].puntosv+=3;
+			break;
+			case 4:
+						estado.jugadores[cliente.id].datiles-=2;
+						estado.jugadores[cliente.id].puntosv+=4;
+			break;
+		}
+	}
+	cobraComerciante(data,estado,cliente){
+		console.log("negociando con comerciante");
+		switch(data.negocio[1]){
+			case 1:
+				switch(data.negocio[0]){
+					case 1:
+						estado.jugadores[cliente.id].datiles-=3;
+					break;
+					case 2:
+						estado.jugadores[cliente.id].pimienta-=3;
+					break;
+					case 3:
+						estado.jugadores[cliente.id].sal-=3;
+					break;
+				}
+				estado.jugadores[cliente.id].oro++;
+			break;
+
+			case 3:
+				switch(data.negocio[0]){
+					case 1:
+						estado.jugadores[cliente.id].datiles-=2;
+					break;
+					case 2:
+						estado.jugadores[cliente.id].pimienta-=2;
+					break;
+					case 3:
+						estado.jugadores[cliente.id].sal-=2;
+					break;
+				}
+				switch(data.merchant){
+					case 1:
+						estado.jugadores[cliente.id].datiles+=1;
+					break;
+					case 2:
+						estado.jugadores[cliente.id].pimienta+=1;
+					break;
+					case 3:
+						estado.jugadores[cliente.id].sal+=1;
+					break;
+				}
+			break;
+
+		}
+	}
 	interCobra(data,estado,cliente){
 
 		if(data.action=="choset"){
@@ -177,6 +263,12 @@ class Tuareg extends Room{
 		}
 		else if(estado.reubica){
 			this.reubicar(data,estado,cliente);
+		}
+		else if(data.action=="ofebre"){
+			this.cobraOfebre(data,estado,cliente);
+		}
+		else if(data.action=="comerciante"){
+			this.cobraComerciante(data,estado,cliente);
 		}
 		else if(cliente.id === estado.turno_act && estado.tableroInter[data.fila][data.columna]==cliente.id){
 			if(typeof(estado.tableroCartas[data.fila][data.columna])=="object" && estado.tableroCartas[data.fila][data.columna].tipo === undefined ) // es una carta de mercancia

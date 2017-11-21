@@ -7,7 +7,8 @@ var cartastj1=[];
 var cartastj2=[];
 var cartasM=[];
 var cartasT=[];
-
+var opciones=[0,0];
+var merchant=0;
 var t=0,q=0;
 ///////////////////////////////////////////////////////////////////
 $(document).ready(function(){
@@ -241,39 +242,372 @@ room.onData.add(function(mensaje){
                 '<div id="d3Pv"><img src="assets/img/3pv.png" id="threePv" class="tresPv"></div>'+
                 '<div id="d4Pv"><img src="assets/img/4pv.png" id="fourpv" class="cuatropv"></div>'+
                 '<div id="d1Pv"><img src="assets/img/1pv.png" id="onepv" class="onePv"></div>'+
+								'<div id="cobra" style="top:20px;left:10px;position:absolute;border-style:double;width:50px;height:50px;text-align:center;padding-top:15px">Cobrar</div>'+
+								'<div id="terminar" style="top:170px;left:10px;position:absolute;border-style:double;width:50px;height:50px;text-align:center;padding-top:15px">Terminar</div>'+
             '</div>'+
-						'<spanf id="mensaje" style="left:50%;position: absolute;left: 50%;font-weight:bold;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'
+						'<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
         '</div>'
 		$("body").append(chose);
 		$("body").on("click",".orfebre > div",function(){
 			console.log("clicked:"+'\n');
-			console.log(this);
+			console.log(this.id);
+			switch(this.id){
+				case "s1pv":
+					if(opciones[0]>=3){
+						opciones[0]=0;
+					}
+					opciones[0]+=1;
+					opciones[1]=1;
+					$("#s2pv").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					$("#onepv").css("visibility","inherit");
+					$("#twopv").css("visibility","hidden");
+					$("#threePv").css("visibility","hidden");
+					$("#fourpv").css("visibility","hidden");
+				break;
+				case "s2pv":
+					if(opciones[0]>=3){
+						opciones[0]=0;
+					}
+					opciones[0]+=1;
+					opciones[1]=3;
+					$("#s1pv").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/4Merca"+opciones[0] +".gif'></img>");
+					$("#onepv").css("visibility","hidden");
+					$("#twopv").css("visibility","hidden");
+					$("#threePv").css("visibility","inherit");
+					$("#fourpv").css("visibility","hidden");
+				break;
+				case "d1Pv":
+					opciones[1]=1;
+					if(opciones[0]==0){
+						opciones[0]=1;
+					}
+					$("#s2pv").children(".qpv").remove();
+					$("#s1pv").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					$("#onepv").css("visibility","inherit");
+					$("#twopv").css("visibility","hidden");
+					$("#threePv").css("visibility","hidden");
+					$("#fourpv").css("visibility","hidden");
+				break;
+				case "d3Pv":
+					opciones[1]=3;
+					if(opciones[0]==0){
+						opciones[0]=1;
+					}
+					$("#s1pv").children(".qpv").remove();
+					$("#s2pv").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/4Merca"+opciones[0] +".gif'></img>");
+					$("#onepv").css("visibility","hidden");
+					$("#twopv").css("visibility","hidden");
+					$("#threePv").css("visibility","inherit");
+					$("#fourpv").css("visibility","hidden");
+				break;
+				case "d2pv":
+					opciones[1]=2;
+					$("#onepv").css("visibility","hidden");
+					$("#twopv").css("visibility","inherit");
+					$("#threePv").css("visibility","hidden");
+					$("#fourpv").css("visibility","hidden");
+				break;
+				case "d4Pv":
+					opciones[1]=4;
+					$("#onepv").css("visibility","hidden");
+					$("#twopv").css("visibility","hidden");
+					$("#threePv").css("visibility","hidden");
+					$("#fourpv").css("visibility","inherit");
+				break;
+				case "cobra":
+					console.log(opciones);
+					switch(opciones[1]){
+						case 1:
+							switch(opciones[0]){
+								case 1:
+									if(mensaje.actual.datiles >= 2){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"ofebre",negocio:opciones});
+									}
+									else{
+										$("#mensajeof").text("No tienes suficientes dátiles");
+									}
+								break;
+								case 2:
+									if(mensaje.actual.pimienta >= 2){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"ofebre",negocio:opciones});
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente pimienta");
+									}
+								break;
+								case 3:
+									if(mensaje.actual.sal >= 2){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"ofebre",negocio:opciones});
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente sal");
+									}
+								break;
+
+							}
+							$("body").children("#muestraOfebre").remove();
+						break;
+
+						case 2:
+							if(mensaje.actual.oro>=1){
+								//
+								console.log("si se puede");
+								room.send({action:"ofebre",negocio:opciones});
+								$("body").children("#muestraOfebre").remove();
+							}
+							else{
+								$("#mensajeof").text("No tienes suficiente oro");
+							}
+						break;
+
+						case 3:
+							switch(opciones[0]){
+								case 1:
+									if(mensaje.actual.datiles >= 4){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"ofebre",negocio:opciones});
+									}
+									else{
+										$("#mensajeof").text("No tienes suficientes dátiles");
+									}
+								break;
+								case 2:
+									if(mensaje.actual.pimienta >= 4){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"ofebre",negocio:opciones});
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente pimienta");
+									}
+								break;
+								case 3:
+									if(mensaje.actual.sal >= 4){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"ofebre",negocio:opciones});
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente sal");
+									}
+								break;
+
+							}
+							$("body").children("#muestraOfebre").remove();
+						break;
+
+						case 4:
+							if(mensaje.actual.oro>=2){
+								//
+								console.log("si se puede");
+								room.send({action:"ofebre",negocio:opciones});
+								$("body").children("#muestraOfebre").remove();
+							}
+							else{
+								$("#mensajeof").text("No tienes suficiente oro");
+							}
+							$("body").children("#muestraOfebre").remove();
+						break;
+					}
+				break;
+				case "terminar":
+					console.log(opciones);
+					$("body").children("#muestraOfebre").remove();
+				break;
+			}
 		})
 	}
 	if(mensaje.action=="comerciante"){
 		var chose=
 				'<div class="row comercanteRow">'+
-            '<div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3">'+
-                '<div class="row fichasMerca" id="cambiaMercancia">'+
-                    '<div id="tMercaUno" class="mercasTres"><img src="assets/img/sal.jpg" class="mercas"></div>'+
-                    '<div id="tMercaDos" class="mercas"><img src="assets/img/sal.jpg" id="tmercau" class="mercas"></div>'+
-                    '<div id="tMercaTres" class="mercasTres"><img src="assets/img/sal.jpg" class="mercas"></div>'+
-                '</div>'+
-                '<div class="row mercas2" id="mercanciasDos">'+
-                    '<div id="dMercasDos" class="mercasDos"><img src="assets/img/sal.jpg" class="mercasD"></div>'+
-                    '<div id="dMercasUno" class="mercasUno"><img src="assets/img/sal.jpg" class="mercasD"></div>'+
-                '</div>'+
-            '</div>'+
+            '<div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3"></div>'+
             '<div class="colCom"><img src="assets/img/mercantes.jpg" id="fichaCom" class="fichaComercian"></div>'+
             '<div id="dosMerca" class="dosmerca"><img src="assets/img/orfebregde.png" class="merch2"></div>'+
-            '<div id="acMerca3" class="accMerca3"><img src="assets/img/accMercante.png"></div>'+
-            '<div id="acMerca2" class="accMerca2"><img src="assets/img/accMercante.png"></div>'+
+            '<div id="acMerca3" class="accMerca3"><img id="selMerca3" style="visibility:hidden" src="assets/img/accMercante.png"></div>'+
+            '<div id="acMerca2" class="accMerca2"><img id="selMerca2" style="visibility:hidden" src="assets/img/accMercante.png"></div>'+
             '<div id="cambMerca" class="cambiaMerca"><img src="assets/img/merca2.png" class="camMerca"></div>'+
-        '</div>'
+						'<div id="cobra" style="top:110px;left:10px;position:absolute;border-style:double;width:50px;height:25px;text-align:center">Cobrar</div>'+
+						'<div id="terminar" style="top:140px;left:10px;position:absolute;border-style:double;width:65px;height:25px;text-align:center">Terminar</div>'+
+
+			 '<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;font-size:20px;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
+       '</div>'
 		$("body").append(chose);
 		$("body").on("click",".comercanteRow > div",function(){
 			console.log("clicked:"+'\n');
 			console.log(this);
+			switch(this.id){
+				case "tresMerca":
+					if(opciones[0]>=3){
+						opciones[0]=0;
+					}
+					opciones[0]+=1;
+					opciones[1]=1;
+					$("#dosMerca").children(".qpv").remove();
+					$("#cambMerca").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/3Merca"+opciones[0] +".gif'></img>");
+					$(".merch3").css("visibility","visible");
+					$(".selMerca3").css("visibility","visible");
+					$(".merch2").css("visibility","hidden");
+					$(".selMerca2").css("visibility","hidden");
+				break;
+				case "dosMerca":
+					if(opciones[0]>=3){
+						opciones[0]=0;
+					}
+					opciones[0]+=1;
+					opciones[1]=3;
+					$("#tresMerca").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					$("#cambMerca").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+merchant +".jpg'></img>");
+					$(".merch2").css("visibility","visible");
+					$(".selMerca2").css("visibility","visible");
+					$(".merch3").css("visibility","hidden");
+					$(".selMerca3").css("visibility","hidden");
+				break;
+				case "acMerca3":
+					opciones[1]=1;
+					if(opciones[0]==0){
+						opciones[0]=1;
+					}
+					if(merchant==0){
+						merchant=1;
+					}
+					$("#dosMerca").children(".qpv").remove();
+					$("#cambMerca").children(".qpv").remove();
+					$("#tresMerca").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/3Merca"+opciones[0] +".gif'></img>");
+					$(".merch3").css("visibility","inherit");
+					$(".selMerca3").css("visibility","inherit");
+					$(".merch2").css("visibility","hidden");
+					$(".selMerca2").css("visibility","hidden");
+				break;
+				case "acMerca2":
+					opciones[1]=3;
+					if(opciones[0]==0){
+						opciones[0]=1;
+					}
+					if(merchant==0){
+						merchant=1;
+					}
+					$("#tresMerca").children(".qpv").remove();
+					$("#dosMerca").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					$("#cambMerca").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+merchant +".jpg'></img>");
+					$(".merch3").css("visibility","hidden");
+					$(".selMerca3").css("visibility","hidden");
+					$(".merch2").css("visibility","visible");
+					$(".selMerca2").css("visibility","visible");
+				break;
+				case "cambMerca":
+					opciones[1]=3;
+					if(merchant>=3){
+						merchant=0;
+					}
+					merchant+=1;
+					$("#tresMerca").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+merchant +".jpg'></img>");
+					$("#dosMerca").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					$(".merch2").css("visibility","visible");
+					$(".selMerca2").css("visibility","visible");
+					$(".merch3").css("visibility","hidden");
+					$(".selMerca3").css("visibility","hidden");
+				break;
+				case "cobra":
+					console.log(opciones);
+					switch(opciones[1]){
+						case 1:
+							switch(opciones[0]){
+								case 1:
+									if(mensaje.actual.datiles >= 3){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"comerciante",negocio:opciones});
+										$("body").children(".comercanteRow").remove();
+									}
+									else{
+										$("#mensajeof").text("No tienes suficientes dátiles");
+									}
+								break;
+								case 2:
+									if(mensaje.actual.pimienta >= 3){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"comerciante",negocio:opciones});
+										$("body").children(".comercanteRow").remove();
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente pimienta");
+									}
+								break;
+								case 3:
+									if(mensaje.actual.sal >= 3){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"comerciante",negocio:opciones});
+									  $("body").children(".comercanteRow").remove();
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente sal");
+									}
+								break;
+
+							}
+
+						break;
+
+						case 3:
+							switch(opciones[0]){
+								case 1:
+									if(mensaje.actual.datiles >= 2){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
+										$("body").children(".comercanteRow").remove();
+									}
+									else{
+										$("#mensajeof").text("No tienes suficientes dátiles");
+									}
+								break;
+								case 2:
+									if(mensaje.actual.pimienta >= 2){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
+										$("body").children(".comercanteRow").remove();
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente pimienta");
+									}
+								break;
+								case 3:
+									if(mensaje.actual.sal >= 2){
+										//enviar al servidor respuesta
+										console.log("si se puede");
+										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
+										$("body").children(".comercanteRow").remove();
+									}
+									else{
+										$("#mensajeof").text("No tienes suficiente sal");
+									}
+								break;
+
+							}
+
+						break;
+					}
+				break;
+				case "terminar":
+					console.log(opciones);
+					$("body").children(".comercanteRow").remove();
+				break;
+			}
 		})
 	}
 });
