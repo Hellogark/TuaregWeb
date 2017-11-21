@@ -696,7 +696,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 /*Boton Guardar*/
 #testimonials .quote button[type="submit"] {
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   border: 0;
   padding: 10px 24px;
   color: #fff;
@@ -705,7 +705,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #testimonials .quote button[type="submit"]:hover {
-  background: #8A5C2A;
+  background: rgba(183, 163, 25, 1);
 }
 
 #testimonials .profile {
