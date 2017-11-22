@@ -47,7 +47,7 @@ img.barajaTribu{
 }
 
 div.row.jugadores{
-  width:234px;
+  width:205px;
   display:block;
   height:292px;
   float:left;
@@ -600,7 +600,7 @@ div.descartaJ2{
 textarea.ventanita{
   position:relative;
   display:none;
-  bottom:15em;
+  bottom:28em;
   width:350px;
   height:139px;
   resize:none;
@@ -863,25 +863,34 @@ div#tMercaUno.mercasTres{
   position:absolute;
 }
 
+@media only screen and (max-width:1100px) {
+  html#docum{
+    max-width:100%;
+    overflow-x:hidden;
+    max-height:100%;
+    overflow-y:scroll;
+  }
+}
+
 html#docum{
   max-width:100%;
   overflow-x:hidden;
   max-height:100%;
-  overflow-y:hidden;
+  overflow-y:auto;
 }
 
-@media only screen and (max-width:1100px) {
+@media only screen and (min-width:1300px) {
   html#docum{
-    max-width:900px;
+    max-width:100%;
     overflow-x:hidden;
-    height:1000px;
-    overflow-y:auto;
+    max-height:100%;
+    overflow-y:scroll;
   }
 }
 
 @media only screen and (max-width:1100px ) {
   div.panel.panel-default.panels1{
-    top:40em;
+    top:39.5em;
     left:-35em;
     display:block;
   }
@@ -992,5 +1001,72 @@ div#divofM44.divofM44{
   position:absolute;
   left:11.5em;
   top:0.3em;
+}
+
+div#mostrarCartaComprada.cartaComprada{
+  width:108px;
+  height:102px;
+  position:relative;
+  left:17em;
+  bottom:25em;
+  box-shadow:50px 9px 46px 9px black;
+  background-color:rgb(214,179,120);
+  visibility:hidden;
+}
+
+img#cartaComprada.cartaComprada{
+  position:relative;
+  bottom:21em;
+  left:0em;
+  width:162px;
+}
+
+div#cobroPVJ1.cobroPVJ1{
+  position:absolute;
+  bottom:0.8em;
+  width:71px;
+  left:-0.2em;
+  height:10px;
+  visibility:hidden;
+}
+
+div#cobroPVJ2.cobroPVJ2{
+  position:absolute;
+  bottom:0.8em;
+  width:71px;
+  left:-0.2em;
+  height:10px;
+  visibility:hidden;
+}
+
+div.row.pts{
+  width:100px;
+  position:relative;
+  left:1em;
+}
+
+img#imgCobroPVJ1.cobroPVJ1{
+  height:20px;
+}
+
+img#imgCobroPVJ2.cobroPVJ2{
+  height:20px;
+}
+
+div#mostrarHacer.Instrucciones{
+  width:689px;
+  height:20px;
+  position:relative;
+  bottom:47em;
+  background-color:rgba(0,0,0,0.156863);
+  left:-1.3em;
+}
+
+span#textInstru.textoInstru{
+  font-size:medium;
+  width:300px;
+  z-index:11;
+  position:relative;
+  left:-14em;
 }
 

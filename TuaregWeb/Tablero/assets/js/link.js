@@ -3,7 +3,8 @@ var texto = document.getElementById('txtArea');
 var note= document.getElementById('notas');
 var seMuestra=false;
 var htm=document.getElementById('docum'); 
-var w = $(document).height();
+var bod=document.getElementById('cuerpo');
+    var w = $(document).height();
 note.onclick=function(event){
     if(seMuestra==false){
         
@@ -14,26 +15,33 @@ note.onclick=function(event){
     seMuestra=true;
         
         
-    }else{if(seMuestra=true){
-        window.scrollTo(900,0);
+    }else{
+        if(seMuestra==true){
+        window.scrollTo(-900,0);
         
         texto.style.display='none';
+           // htm.style.overflowY='hidden';
        seMuestra=false;
-         window.scrollTo(0,-900);
-        if(w<=1100){
+         //window.scrollTo(0,-900);
+       
+    }
+}
+}
+htm.onresize=function (event){
+ if($(window).width()<=1100  ){
             htm.style.overflowY='scroll';
             
         }else
-            {
-        htm.style.overflowY='hidden';
+            { if($(window).width()>=1101 && document.bod.scrollTop == 0){
+            
+            window.scrollTo(-9000,0); 
+            htm.style.overflowY='hidden';
+                bod.style.overflowY='scroll';
             }
-      }    
-    }
+            }
 }
-htm.onresize=function(event){
-if(w<=1100){
-        htm.style.overflowY='scroll';
-    htm.style.width=1100;
-        }
-}
+
+         
+        
+
 

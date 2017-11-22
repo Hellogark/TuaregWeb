@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="assets/css/Pretty-Header.css">
 </head>
 
-<body>
+<body id="cuerpo">
     <header>
         <div class="row encabezado">
             <div id="clicreglas" class="reglas">
-                <a href="../reglas/Reglas.html" class="rules"> <img src="assets/img/open-book-top-view.png" id="reglas"> <span class="label label-default jugadorTurnoLabel rules">Reglas </span></a>
+                <a href="../reglas/Reglas.html" target="_blank" class="rules"> <img src="assets/img/open-book-top-view.png" id="reglas"> <span class="label label-default jugadorTurnoLabel rules">Reglas </span></a>
             </div>
             <div class="encabezado"><img src="assets/img/header.gif" alt="encabezado"></div>
         </div>
@@ -75,7 +75,9 @@
                                 <h3 class="panel-title" id="nombreJ1">Jugador 1</h3></div>
                             <div class="panel-body Jugadores">
                                 <div class="row pts">
-                                    <div class="jugadores"><span>Puntos: </span><span id="puntosP1">jsPuntos </span></div>
+                                    <div class="jugadores"><span>Puntos: </span><span id="puntosP1">60 </span>
+                                        <div id="cobroPVJ1" class="cobroPVJ1"><img src="assets/img/orfebre1.png" id="imgCobroPVJ1" class="cobroPVJ1"></div>
+                                    </div>
                                 </div>
                                 <div class="row fichas">
                                     <div class="col-md-1 otrasFichas"><img src="assets/img/datil.jpg" id="datilP1" class="fichas"><span id="dJ1" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bDJ1" class="bordeR"></div>
@@ -90,16 +92,16 @@
                     </div>
                     <div id="cartaManoJ1" class="cartaMano">
                         <div id="imgCartaManoJ1" class="cartaMano"></div><img src="assets/img/cartaMano.png" alt="cartaManoJ1"></div>
-                    <div class="colDescartarJ1">
-                        <button class="btn btn-default descarta" type="button" id="descartaJ1">Descartar Carta</button>
-                    </div>
+                    <div class="colDescartarJ1"></div>
                     <div class="columnP2">
                         <div class="panel panel-default panels2" id="panelJ2">
                             <div class="panel-heading">
                                 <h3 class="panel-title" id="nombreJ2">Jugador 2</h3></div>
                             <div class="panel-body J2">
-                                <div class="row">
-                                    <div class="puntos"><span>Puntos: </span><span id="puntosP2">jsPuntos </span></div>
+                                <div class="row pts">
+                                    <div class="puntos"><span>Puntos: </span><span id="puntosP2">60 </span>
+                                        <div id="cobroPVJ2" class="cobroPVJ2"><img src="assets/img/orfebre1.png" id="imgCobroPVJ2" class="cobroPVJ2"></div>
+                                    </div>
                                 </div>
                                 <div class="row fichas">
                                     <div class="col-md-1 otrasFichas"><img src="assets/img/datil.jpg" id="datilP1" class="fichas"><span id="dJ2" class="spans">4 </span><img src="assets/img/selecMerca.png" id="bDJ2" class="bordeR"></div>
@@ -113,11 +115,11 @@
                         </div>
                     </div>
                     <div id="cartaManoJ2" class="cartaMano"><img src="assets/img/cartaMano.png" alt="cartaManoJ2" class="imgMano2"></div>
-                    <div class="colDescartarJ2">
-                        <button class="btn btn-default descarta" type="button" id="descartaJ2">Descartar Carta</button>
-                    </div>
+                    <div class="colDescartarJ2"></div>
                 </div>
             </div>
+            <div id="mostrarCartaComprada" class="cartaComprada"><img src="assets/img/soloTribu_07.gif" id="cartaComprada" class="cartaComprada"></div>
+            <div id="mostrarHacer" class="Instrucciones"><span id="textInstru" class="textoInstru"> Coloca una ficha Tuareg en una casilla permitida </span></div>
         </div>
         <div class="row tableroJugador1">
             <div class="col-md-2 tj1_1" id="cartaJ1_1"><img src="assets/img/fondoTableroJ.gif"></div>
@@ -196,7 +198,7 @@
                 <button class="btn btn-default formatoBotones" type="button" id="Chat">Chat </button>
                 <button class="btn btn-default formatoBotones" type="button" id="notas">Notas </button>
                 <button class="btn btn-default formatoBotones" type="button" id="surrender">Rendirse </button>
-                <button class="btn btn-default formatoBotones" type="button" id="cobros">Cobros </button>
+                <button class="btn btn-default formatoBotones" type="button" id="terminaTurno">Terminar Turno</button>
             </div>
         </div>
     </div>
