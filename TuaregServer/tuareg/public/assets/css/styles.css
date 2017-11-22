@@ -12,8 +12,16 @@
   left:50%;
   transform: translateX(-50%);
 }
-
-
+.tribucT{
+  background-image:url(/assets/img/TribuTableroJ.gif);
+}
+input[type=button] {
+    box-sizing: border-box;
+    border: solid;
+    border-width: thin;
+    background-color: #B5AF89;
+    color: black;
+}
 div#muestraOfebre.row.orfebre{
   width:660px;
   height:318px;
@@ -506,6 +514,7 @@ div.row.tableroJugador2{
 div.col-md-2.tj1_1{
   width:85px;
   height:55px;
+  border-radius: 5px;
 }
 
 body{
@@ -614,9 +623,10 @@ div.row.jugadores{
 }
 
 div.cartaMano{
-  width:150px;
-  height:100px;
+  width:138px;
+  height:92px;
   position:relative;
+  border-radius: 5px
   left:1em;
 }
 

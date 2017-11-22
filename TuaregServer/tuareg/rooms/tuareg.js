@@ -94,7 +94,8 @@ class Tuareg extends Room{
 			c_In:[],
 			descuentos:false,
 			tarjetaMano:null,
-			intersec:0
+			intersec:0,
+			cobraBorde:0
 		};
 
 		this.state.jugadores[client.id].colorT=((this.state.jugadores[client.id].playerIndex==0)? "targiAzul":"targiGris");
@@ -144,9 +145,9 @@ class Tuareg extends Room{
 		estado.tableroInter[data.fila][data.columna]=0;
 		estado.tableroTuareg[data.fila][data.columna]=0;
 		this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,reubica:estado.reubica});
+		estado.jugadores[cliente.id].cobraBorde--;
 		estado.estado=1;
-		estado.jugadores[cliente.id].fichasT++;
-
+		//estado.jugadores[cliente.id].intersec++;
 	}
 	cobraOfebre(data,estado,cliente){
 		console.log("negociando con orfebre");
@@ -188,6 +189,7 @@ class Tuareg extends Room{
 						estado.jugadores[cliente.id].puntosv+=4;
 			break;
 		}
+		estado.jugadores[cliente.id].cobraBorde--;
 	}
 	cobraComerciante(data,estado,cliente){
 		console.log("negociando con comerciante");
@@ -233,10 +235,22 @@ class Tuareg extends Room{
 			break;
 
 		}
+		estado.jugadores[cliente.id].cobraBorde--;
 	}
 	interCobra(data,estado,cliente){
+		if(data.action=="terminar"){
+			estado.jugadores[cliente.id].cobraBorde--;
+		}
+		else if(data.action=="turnosig"){
+			if(estado.jugadores[cliente.id].cobraBorde==0 && estado.jugadores[cliente.id].intersec==0){
+					this.cambiarTurno();
+			}
+			else{
+					this.send(cliente,{action:"mensaje",text:"No puedes cambiar de turno aún tienes cosas que hacer."})
+			}
 
-		if(data.action=="choset"){
+		}
+		else if(data.action=="choset"){
 			if(data.columna!=null && data.fila!=null){
 				console.log()
 				this.cobraCartaTribu(data,estado,cliente,true);
@@ -309,29 +323,36 @@ class Tuareg extends Room{
 					if(estado.jugadores[cliente.id].intersec>0){
 							estado.reubica=true;
 					}
+					else{
+						estado.jugadores[cliente.id].cobraBorde--;
+					}
 
 				break;
 				case "N":
 					//Nobles
 					this.send(cliente,{action:"showTr",carta:estado.jugadores[cliente.id].tarjetaMano});
-					carta:estado.jugadores[cliente.id].tarjetaMano=null;
+
 
 				break;
 				case "d":
 					estado.jugadores[cliente.id].datiles++;
-
+					estado.jugadores[cliente.id].cobraBorde--;
 				break;
 				case "p":
 					estado.jugadores[cliente.id].pimienta++;
+					estado.jugadores[cliente.id].cobraBorde--;
 				break;
 				case "s":
 					estado.jugadores[cliente.id].sal++;
+					estado.jugadores[cliente.id].cobraBorde--;
 				break;
 				case "o":
 					estado.jugadores[cliente.id].oro++;
+					estado.jugadores[cliente.id].cobraBorde--;
 				break;
 				case "v":
 					estado.jugadores[cliente.id].puntosv++;
+					estado.jugadores[cliente.id].cobraBorde--;
 				break;
 			}
 			estado.tableroInter[data.fila][data.columna]=0;
@@ -363,7 +384,7 @@ class Tuareg extends Room{
 					}
 					else{
 						estado.tablero_jugador2[data.cartafila].push(carta);
-						columna=estado.tablero_jugador2[data.cartafila].length-1;
+						columnaReal=estado.tablero_jugador2[data.cartafila].length-1;
 					}
 					if(isfromtablero){
 						console.log("es carta del tablero")
@@ -371,8 +392,12 @@ class Tuareg extends Room{
 						estado.tableroInter[data.fila][data.columna]=0;
 						estado.tableroTuareg[data.fila][data.columna]=0;
 						estado.jugadores[cliente.id].intersec--;
-						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
 					}
+					else{
+							estado.jugadores[cliente.id].cobraBorde--;
+					}
+
 					this.broadcast({action:"refreshtj",fila:data.cartafila,columna:columnaReal,clientid:cliente.id,cartaid:carta._id});
 
 				break;
@@ -386,14 +411,17 @@ class Tuareg extends Room{
 					}
 					else{
 						estado.tablero_jugador2[data.cartafila].push(carta);
-						columna=estado.tablero_jugador2[data.cartafila].length-1;
+						columnaReal=estado.tablero_jugador2[data.cartafila].length-1;
 					}
 					if(isfromtablero){
 						this.state.tableroCartas[data.fila][data.columna]= estado.cartas_mercancia_baraja.pop();
 						estado.tableroInter[data.fila][data.columna]=0;
 						estado.tableroTuareg[data.fila][data.columna]=0;
 						estado.jugadores[cliente.id].intersec--;
-						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
+					}
+					else{
+						estado.jugadores[cliente.id].cobraBorde--;
 					}
 					this.broadcast({action:"refreshtj",fila:data.cartafila,columna:columnaReal,clientid:cliente.id,cartaid:carta._id});
 
@@ -407,7 +435,10 @@ class Tuareg extends Room{
 						estado.tableroInter[data.fila][data.columna]=0;
 						estado.tableroTuareg[data.fila][data.columna]=0;
 						estado.jugadores[cliente.id].intersec--;
-						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
+					}
+					else{
+						estado.jugadores[cliente.id].cobraBorde--;
 					}
 					estado.jugadores[cliente.id].tarjetaMano=carta;
 					//this.broadcast({action:"refreshtjm",clientid:cliente.id,cartaid:carta._id});
@@ -424,7 +455,10 @@ class Tuareg extends Room{
 						estado.tableroInter[data.fila][data.columna]=0;
 						estado.tableroTuareg[data.fila][data.columna]=0;
 						estado.jugadores[cliente.id].intersec--;
-						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
+					}
+					else{
+						estado.jugadores[cliente.id].cobraBorde--;
 					}
 
 				break;
@@ -434,7 +468,7 @@ class Tuareg extends Room{
 		}
 		else{
 			this.send(cliente,{action:"choset",fila:data.fila,columna:data.columna,costo:[carta.costo1_d,carta.costo1_s,carta.costo1_o,carta.costo1_p,carta.costo2_o ],
-			descuento:estado.jugadores[cliente.id].descuentos,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta});
+			descuento:estado.jugadores[cliente.id].descuentos,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero});
 		}
 
 	}
@@ -465,9 +499,16 @@ class Tuareg extends Room{
 				estado.tableroInter[data.fila][data.columna]=0;
 				estado.tableroTuareg[data.fila][data.columna]=0;
 				estado.jugadores[cliente.id].intersec--;
+				carta=estado.tableroCartas[data.fila][data.columna];
+				estado.cartas_mercancia_recicla.push(carta);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
 			}
-			estado.cartas_mercancia_recicla.push(carta);
-			this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			else{
+				estado.jugadores[cliente.id].cobraBorde--;
+				estado.cartas_mercancia_recicla.push(carta);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			}
+
 		}
 		else if(carta.otorga.length>2){
 			this.send(cliente,{action:"chosem",fila:data.fila,columna:data.columna});
@@ -495,10 +536,15 @@ class Tuareg extends Room{
 				estado.tableroInter[data.fila][data.columna]=0;
 				estado.tableroTuareg[data.fila][data.columna]=0;
 				estado.jugadores[cliente.id].intersec--;
-
+				estado.cartas_mercancia_recicla.push(carta);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
 			}
-			estado.cartas_mercancia_recicla.push(carta);
-			this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			else{
+				estado.jugadores[cliente.id].cobraBorde--;
+				estado.cartas_mercancia_recicla.push(carta);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			}
+
 		}
 		else if(carta.otorga.length ==2 && !isNaN(carta.otorga[0])){ // si su tamaño es 2 y el primer elemento es un numero
 				var cantidad = Number(carta.otorga[0]);
@@ -524,10 +570,15 @@ class Tuareg extends Room{
 				estado.tableroInter[data.fila][data.columna]=0;
 				estado.tableroTuareg[data.fila][data.columna]=0;
 				estado.jugadores[cliente.id].intersec--;
-
+				estado.cartas_mercancia_recicla.push(estado.tableroCartas[data.fila][data.columna]);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
 			}
-			estado.cartas_mercancia_recicla.push(carta);
-			this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			else{
+				estado.jugadores[cliente.id].cobraBorde--;
+				estado.cartas_mercancia_recicla.push(carta);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			}
+
 		}
 		else if(carta.otorga.length ==2 && isNaN(carta.otorga[0])){ // si su tamaño es 2 y el primer elemento no es un numero
 			switch(carta.otorga[0]){
@@ -569,10 +620,16 @@ class Tuareg extends Room{
 				estado.tableroInter[data.fila][data.columna]=0;
 				estado.tableroTuareg[data.fila][data.columna]=0;
 				estado.jugadores[cliente.id].intersec--;
-
+				estado.cartas_mercancia_recicla.push(estado.tableroCartas[data.fila][data.columna]);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
+			}
+			else{
+				estado.jugadores[cliente.id].cobraBorde--;
+				estado.cartas_mercancia_recicla.push(carta);
+				this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
 			}
 			estado.cartas_mercancia_recicla.push(carta);
-			this.broadcast({action:"refresh",fila:data.fila,columna:data.columna});
+			this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:carta._id});
 		}
 
 	}
@@ -599,7 +656,22 @@ class Tuareg extends Room{
 	}
 
 	cambiarTurno(){
-		this.state.turno_act=((this.state.jugadores[this.state.turno_act].playerIndex==0)? this.clients[1].id :this.clients[0].id );
+		if(this.state.estado ==3 && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
+			this.state.estado++;
+			this.moverAsaltante();
+			//Comprobar si hay asalto
+			this.state.estado++;
+			//Comprobar si exedes la cantidad de mercancias y oro limite del juego
+
+			this.broadcast({action:"refreshall"})
+
+			//
+			this.state.estado=1;
+			this.state.jugadores[this.state.players[0]].fichasT=3;
+			this.state.jugadores[this.state.players[1]].fichasT=3;
+
+		}
+		this.state.turno_act=((this.state.players[0]==this.state.turno_act) ?this.state.players[1] :this.state.players[0] );
 	}
 
 
@@ -708,7 +780,7 @@ class Tuareg extends Room{
 				estado.tableroTuareg[data.fila][data.columna]= estado.jugadores[cliente.id].colorT// jugador que inicia la sala es el colorT azul
 				estado.tableroInter[data.fila][data.columna]=cliente.id;
 				estado.jugadores[cliente.id].fichasT--;
-
+				estado.jugadores[cliente.id].cobraBorde++;
 				this.cambiarTurno();
 				console.log(data);
 			}
