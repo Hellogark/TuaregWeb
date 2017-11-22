@@ -390,7 +390,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 18px;
   bottom: 0;
   z-index: 998;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(183, 163, 25, 1);
   left: -260px;
   width: 260px;
   overflow-y: auto;
@@ -420,7 +420,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #mobile-nav ul li a:hover {
-  color: #fff;
+  color: #000;
 }
 
 #mobile-nav ul li li {
@@ -544,11 +544,11 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #services .service-icon {
   float: left;
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   padding: 16px;
   border-radius: 50%;
   transition: 0.5s;
-  border: 1px solid #8A6D3B;
+  border: 1px solid rgba(183, 163, 25, 1);
 }
 
 #services .service-icon i {
@@ -561,7 +561,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #services .service-item:hover .service-icon i {
-  color: #8A6D3B;
+  color: rgba(183, 163, 25, 1);
 }
 
 #services .service-title {
