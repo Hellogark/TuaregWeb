@@ -91,12 +91,15 @@ $(document).ready(function(){
 room.onJoin.add(function(){
 	console.log("Bienvenido a tuareg");
 });
-function escogerm(opcion,fila,columna){
+room.onUpdate.add(function(change){
+	console.log(change);
+});
+function escogerm(opcion,fila,columna,data){
 	$("#chose").remove();
-	room.send({action:"chosem",otorga:opcion,fila:fila,columna:columna});
+	room.send({action:"chosem",otorga:opcion,fila:fila,columna:columna,data:data});
 }
 
-function escogert(opcion,fila,columna,data){
+function escogert(opcion,fila,columna,data){ // para posicionar en tablero
 	$("#chose").remove();
   // falta verificar opcion para saber que hacer en caso de escojer rechazar y poner en mano
 	if(opcion==1 || opcion==2 ){
@@ -132,10 +135,16 @@ function escogert(opcion,fila,columna,data){
 room.onData.add(function(mensaje){
 	console.log(mensaje);
 	if(mensaje.action=="refreshtjm"){
-		if (client.id == mensaje.clientid){
+		if (client.id == mensaje.clientid && mensaje.cartaid !=46){
 			$("#imgCartaManoJ1").children().remove();
 			$("#imgCartaManoJ1").addClass("tribuc").css("background-position",cartasT[mensaje.cartaid-1]);
 		}
+		else{
+			$("#imgCartaManoJ1").children().remove();
+			$("#imgCartaManoJ1").append("<img src='assets/img/cartaMano.png'>");
+			$("#imgCartaManoJ1").removeClass("tribuc").css("background-position","");
+		}
+
 		/*else{
 			$("#imgCartaManoJ2").children().remove();
 			$("#imgCartaManoJ2").addClass("tribuc").css("background-position",cartasT[mensaje.cartaid-1]);
@@ -159,10 +168,13 @@ room.onData.add(function(mensaje){
 			$("body").append(chose);
 			$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.data._id-1]);
 		}
+		////////////////////NOTA: Se usan inputs y eventos on click por la necesidad de pasar objetos como argumentos/////////////////
 		var chose=
-		 	"<div id='chose' style='position:absolute;z-index:100;left:50%;text-align:center;transform:translateX(-50%);top:7em'>"+
-			"<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
-		if(mensaje.costo[4]>0){
+		 	"<div id='chose' style='position:absolute;z-index:100;left:50%;text-align:center;transform:translateX(-50%);top:7em'>";
+		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3]){
+			chose+="<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
+		}
+		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]){
 			chose+= "<br><input type='button' id='t2' value='tarifa 2 :1 X Oro' >";
 		}
 		if(mensaje.descuento){
@@ -172,57 +184,87 @@ room.onData.add(function(mensaje){
 			chose+=	"<br><input id='t4' type='button' value='Poner en mano'>";
 		}
 		chose+="<br><input id='t5' type='button' value='Rechazar'>";
-
+		chose+= "<br><spanf id='comunica' style='color:red;'></spanf>";
+		chose+= "</div>";
 		$("#showTr").append(chose);
+		/////////////////////////Eventos para los input/////////////////////////////////////////////////////////////////////////////
 		$('#showTr').on('click', '#t1', function(){
 			console.log("click");
 			$('#showTr').off("click","#t1");
-			 $("#showTr").remove();
-			escogert(1,mensaje.fila,mensaje.columna,mensaje.data);
+			$("#showTr").remove();
+			if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3]){
+
+				escogert(1,mensaje.fila,mensaje.columna,mensaje.data);
+			}
+			else{
+				$("#comunica").text("No tienes suficientes Mercancias");
+			}
+
 
 		});
 		$('#showTr').on('click', '#t2', function(){
 			console.log("click");
 			$('#showTr').off("click","#t2");
-			 $("#showTr").remove();
-			escogert(2,mensaje.fila,mensaje.columna,mensaje.data);
+			$("#showTr").remove();
+ 			escogert(2,mensaje.fila,mensaje.columna,mensaje.data);
+
 
 		});
 		$('#showTr').on('click', '#t3', function(){
 			console.log("click");
 			$('#showTr').off("click","#t3");
-			 $("#showTr").remove();
-			escogert(3,mensaje.fila,mensaje.columna,mensaje.data);
+		  $("#showTr").remove();
+			 //Aplicar  descuento en una mercancia
 
 		});
 
 		$('#showTr').on('click', '#t4', function(){
 			console.log("click");
 			$('#showTr').off("click","#t4");
-			 $("#showTr").remove();
+		  $("#showTr").remove();
 			escogert(4,mensaje.fila,mensaje.columna,mensaje.data);
+
 
 		});
 
 		$('#showTr').on('click', '#t5', function(){
 			console.log("click");
 			$('#showTr').off("click","#t5");
-			 $("#showTr").remove();
+			$("#showTr").remove();
 			escogert(5,mensaje.fila,mensaje.columna,mensaje.data);
 
-		});
 
+		});
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
 	if(mensaje.action=="chosem"){
 		$("#chose").remove();
 		$("body").append(
 			"<div id='chose' style='position:absolute;z-index:100'>"+
-				"<button onclick='escogerm(1,"+mensaje.fila+","+mensaje.columna+")'>datiles</button>"+
-				"<button onclick='escogerm(2,"+mensaje.fila+","+mensaje.columna+")'>sal</button>"+
-				"<button onclick='escogerm(3,"+mensaje.fila+","+mensaje.columna+")'>pimienta</button>"+
+				"<input type='button' id='td' value='Datil' ><br>"+
+				"<input type='button' id='ts' value='Sal' ><br>"+
+				"<input type='button' id='tp' value='pimienta'><br>"+
 			"</div>"
 			);
+		$('#chose').on('click', '#td', function(){
+			console.log("click escogerm");
+			$('#chose').off("click","#td");
+			$("#chose").remove();
+			escogerm(1,mensaje.fila,mensaje.columna,mensaje.data);
+		});
+		$('#chose').on('click', '#ts', function(){
+			console.log("click escogerm");
+			$('#showTr').off("click","#ts");
+			$("#showTr").remove();
+			escogerm(2,mensaje.fila,mensaje.columna,mensaje.data);
+		});
+		$('#chose').on('click', '#tp', function(){
+			console.log("click escogerm");
+			$('#chose').off("click","#tp");
+			$("#chose").remove();
+			escogerm(3,mensaje.fila,mensaje.columna,mensaje.data);
+		});
 	}
 	if(mensaje.action=="refresh" && mensaje.columna!=null && mensaje.fila!=null  ){
 		if(cartas[mensaje.fila][mensaje.columna].className.includes("mercac") && !mensaje.reubica){
@@ -251,6 +293,7 @@ room.onData.add(function(mensaje){
 			}
 
 		});
+		cache_cartas=[];
 	}
 	if(mensaje.action=="showC"){
 		//console.log(mensaje);
@@ -259,6 +302,7 @@ room.onData.add(function(mensaje){
 		$("body").append(chose);
 		$("#showC").addClass("mercac").css("background-position",cartasM[mensaje.carta._id-1]);
 		$('body').on('click', '#showC', function(){
+			$("body").off("click");
 			room.send({action:"showC",data:mensaje.carta});
 			 $("#showC").remove();
 		});
@@ -289,7 +333,7 @@ room.onData.add(function(mensaje){
 						'<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
         '</div>'
 		$("body").append(chose);
-		$("body").on("click",".orfebre > div",function(){
+		$("#muestraOfebre").on("click",".orfebre > div",function(){
 			console.log("clicked:"+'\n');
 			console.log(this.id);
 			switch(this.id){
@@ -365,8 +409,11 @@ room.onData.add(function(mensaje){
 								case 1:
 									if(mensaje.actual.datiles >= 2){
 										//enviar al servidor respuesta
+										$("#muestraOfebre").off("click");
+										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficientes dátiles");
@@ -375,8 +422,11 @@ room.onData.add(function(mensaje){
 								case 2:
 									if(mensaje.actual.pimienta >= 2){
 										//enviar al servidor respuesta
+										$("#muestraOfebre").off("click");
+										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente pimienta");
@@ -385,8 +435,11 @@ room.onData.add(function(mensaje){
 								case 3:
 									if(mensaje.actual.sal >= 2){
 										//enviar al servidor respuesta
+										$("#muestraOfebre").off("click");
+										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente sal");
@@ -394,15 +447,17 @@ room.onData.add(function(mensaje){
 								break;
 
 							}
-							$("body").children("#muestraOfebre").remove();
+
 						break;
 
 						case 2:
 							if(mensaje.actual.oro>=1){
 								//
+								$("#muestraOfebre").off("click");
+								$("body").children("#muestraOfebre").remove();
 								console.log("si se puede");
 								room.send({action:"ofebre",negocio:opciones});
-								$("body").children("#muestraOfebre").remove();
+
 							}
 							else{
 								$("#mensajeof").text("No tienes suficiente oro");
@@ -414,8 +469,11 @@ room.onData.add(function(mensaje){
 								case 1:
 									if(mensaje.actual.datiles >= 4){
 										//enviar al servidor respuesta
+										$("#muestraOfebre").off("click");
+										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficientes dátiles");
@@ -424,8 +482,11 @@ room.onData.add(function(mensaje){
 								case 2:
 									if(mensaje.actual.pimienta >= 4){
 										//enviar al servidor respuesta
+										$("#muestraOfebre").off("click");
+										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente pimienta");
@@ -434,8 +495,11 @@ room.onData.add(function(mensaje){
 								case 3:
 									if(mensaje.actual.sal >= 4){
 										//enviar al servidor respuesta
+										$("#muestraOfebre").off("click");
+										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente sal");
@@ -443,25 +507,27 @@ room.onData.add(function(mensaje){
 								break;
 
 							}
-							$("body").children("#muestraOfebre").remove();
 						break;
 
 						case 4:
 							if(mensaje.actual.oro>=2){
 								//
+								$("#muestraOfebre").off("click");
+								$("body").children("#muestraOfebre").remove();
 								console.log("si se puede");
 								room.send({action:"ofebre",negocio:opciones});
-								$("body").children("#muestraOfebre").remove();
+
 							}
 							else{
 								$("#mensajeof").text("No tienes suficiente oro");
 							}
-							$("body").children("#muestraOfebre").remove();
+
 						break;
 					}
 				break;
 				case "terminar":
 					console.log(opciones);
+					$("#muestraOfebre").off("click");
 					$("body").children("#muestraOfebre").remove();
 					room.send({action:"terminar"});
 				break;
@@ -470,7 +536,7 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="comerciante"){
 		var chose=
-				'<div class="row comercanteRow">'+
+				'<div id="comerc" class="row comercanteRow">'+
             '<div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3"></div>'+
             '<div class="colCom"><img src="assets/img/mercantes.jpg" id="fichaCom" class="fichaComercian"></div>'+
             '<div id="dosMerca" class="dosmerca"><img src="assets/img/orfebregde.png" class="merch2"></div>'+
@@ -480,10 +546,10 @@ room.onData.add(function(mensaje){
 						'<div id="cobra" style="top:110px;left:10px;position:absolute;border-style:double;width:50px;height:25px;text-align:center">Cobrar</div>'+
 						'<div id="terminar" style="top:140px;left:10px;position:absolute;border-style:double;width:65px;height:25px;text-align:center">Terminar</div>'+
 
-			 '<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;font-size:14px;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
+			 '<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;font-size:12px;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
        '</div>'
 		$("body").append(chose);
-		$("body").on("click",".comercanteRow > div",function(){
+		$("#comerc").on("click","div",function(){
 			console.log("clicked:"+'\n');
 			console.log(this);
 			switch(this.id){
@@ -569,9 +635,11 @@ room.onData.add(function(mensaje){
 								case 1:
 									if(mensaje.actual.datiles >= 3){
 										//enviar al servidor respuesta
+										$("#comerc").off("click");
+										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones});
-										$("body").children(".comercanteRow").remove();
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficientes dátiles");
@@ -580,9 +648,11 @@ room.onData.add(function(mensaje){
 								case 2:
 									if(mensaje.actual.pimienta >= 3){
 										//enviar al servidor respuesta
+										$("#comerc").off("click");
+										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones});
-										$("body").children(".comercanteRow").remove();
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente pimienta");
@@ -591,9 +661,10 @@ room.onData.add(function(mensaje){
 								case 3:
 									if(mensaje.actual.sal >= 3){
 										//enviar al servidor respuesta
+										$("#comerc").off("click");
+										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones});
-									  $("body").children(".comercanteRow").remove();
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente sal");
@@ -609,9 +680,11 @@ room.onData.add(function(mensaje){
 								case 1:
 									if(mensaje.actual.datiles >= 2){
 										//enviar al servidor respuesta
+										$("#comerc").off("click");
+										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
-										$("body").children(".comercanteRow").remove();
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficientes dátiles");
@@ -620,9 +693,11 @@ room.onData.add(function(mensaje){
 								case 2:
 									if(mensaje.actual.pimienta >= 2){
 										//enviar al servidor respuesta
+										$("#comerc").off("click");
+										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
-										$("body").children(".comercanteRow").remove();
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente pimienta");
@@ -631,9 +706,11 @@ room.onData.add(function(mensaje){
 								case 3:
 									if(mensaje.actual.sal >= 2){
 										//enviar al servidor respuesta
+										$("#comerc").off("click");
+										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
-										$("body").children(".comercanteRow").remove();
+
 									}
 									else{
 										$("#mensajeof").text("No tienes suficiente sal");
@@ -647,6 +724,7 @@ room.onData.add(function(mensaje){
 				break;
 				case "terminar":
 					console.log(opciones);
+					$("#comerc").off("click");
 					room.send({action:"terminar"});
 					$("body").children(".comercanteRow").remove();
 				break;
@@ -655,9 +733,6 @@ room.onData.add(function(mensaje){
 	}
 });
 
-room.onUpdate.add(function(state,patch){
-	console.log(state);
-});
 /*
 room.listen("tablero_jugador1/:fila/:columna",function(change){
 
@@ -677,7 +752,8 @@ room.listen("tableroCartas/:filas/:columnas", function(change){
 	  }
 	console.log(change);
 });
-room.listen("estado",function(change){
+
+room.listen("estado",function(change){ // Para determinar cuando se debe avisar al jugador que ha agotado sus acciones del turno
 	if(change.value==3){
 		flagCobrando=true;
 	}
@@ -685,6 +761,7 @@ room.listen("estado",function(change){
 		flagCobrando=false;
 	}
 });
+
 room.listen("jugadores/:id/:merca",function(change){
 	switch(change.path.merca)
 	{
