@@ -52,13 +52,14 @@ class Tuareg extends Room{
 			cartas_tribu_recicla:[],   // cartas desechadas
 			cartas_mercancia_recicla:[], //cartas desechadas
 			turno_act:0,
-			asaltante_pos:1,
+			asaltante_pos:3,
 			empate:null,
 			ganador:null,
 			estado:1,
 			players:null, // player 0 es azul player 1 es gris
 			reubica:false,
-			lastTurno:false
+			lastTurno:false,
+			asaltoscobrados:0
 		});
 
 
@@ -79,10 +80,10 @@ class Tuareg extends Room{
 		client.playerIndex = Object.keys(this.state.jugadores).length;
 
 		this.state.jugadores[client.id] ={
-			datiles:2,
-			oro:1,
-			pimienta:2,
-			sal:2,
+			datiles:200,
+			oro:100,
+			pimienta:200,
+			sal:200,
 			puntosv:4 , //[0]= fichas 1 punto , [1]=fichas 3 puntos , [2]=fichas 5 puntos
 			playerIndex:client.playerIndex,
 			fichasT:3,
@@ -114,17 +115,25 @@ class Tuareg extends Room{
 	}
 	onMessage(client,data){
 		console.log(data);
-	 if (client.id == this.state.turno_act){ // si la partida no ha terminado hacer esto
+		// si la partida no ha terminado y es mi turno hacer esto
+	 if ((client.id == this.state.turno_act || this.state.estado==5)  && this.state.ganador==null && this.state.empate==null){
 			//Comprobar  que es lo que actualmente se esta haciendo:
 			//1)poniendo fichas tuareg
 			//2)utilizando/comprando cartas
+			console.log("aqui en nada");
 			switch(this.state.estado){
 				case 1:
+					console.log("aqui en 1");
 					this.ponerFichas(data,this.state,client);
 				break;
 				case 3:
+					console.log("aqui en 3");
 					this.interCobra(data,this.state,client);
 					//this.cobraCartaMerca(data,this.state,client);
+				break;
+				case 5: //Asalto
+					console.log("aqui en 5");
+					this.cobraAsalto(data,this.state,client);
 				break;
 
 			}
@@ -137,6 +146,81 @@ class Tuareg extends Room{
 		if(this.clients > 0){
 			this.state.ganador= this.clients[0];
 		}
+	}
+	cobraAsalto(data,estado,cliente){
+			console.log("cobrando asalto");
+			switch(data.posicion){
+				case 4:
+					switch(data.opcion){
+						case 1:
+						 estado.jugadores[cliente.id].datiles--;
+						break;
+						case 2:
+							estado.jugadores[cliente.id].sal--;
+						break;
+						case 3:
+							estado.jugadores[cliente.id].pimienta--;
+						break;
+						case 4:
+							estado.jugadores[cliente.id].puntosv--;
+						break;
+					}
+				break;
+				case 8:
+					switch(data.opcion){
+						case 1:
+						 estado.jugadores[cliente.id].datiles-=2;
+						break;
+						case 2:
+							estado.jugadores[cliente.id].sal-=2;
+						break;
+						case 3:
+							estado.jugadores[cliente.id].pimienta-=2;
+						break;
+						case 4:
+							estado.jugadores[cliente.id].puntosv--;
+						break;
+					}
+				break;
+				case 12:
+					switch(data.opcion){
+						case 1:
+						 estado.jugadores[cliente.id].datiles-=3;
+						break;
+						case 2:
+							estado.jugadores[cliente.id].sal-=3;
+						break;
+						case 3:
+							estado.jugadores[cliente.id].pimienta-=3;
+						break;
+						case 4:
+							estado.jugadores[cliente.id].puntosv-=2;
+						break;
+					}
+				break;
+				case 16:
+					switch(data.opcion){
+						case 1:
+						 estado.jugadores[cliente.id].oro--;
+						break;
+						case 2:
+							estado.jugadores[cliente.id].puntosv-=3;
+						break;
+
+					}
+
+				break;
+			}
+			//Una vez se cobran  los 2 asaltos se cambia al estado 1
+
+			estado.asaltoscobrados++;
+			if(estado.asaltoscobrados ==2){
+				this.broadcast({action:"refreshall"})
+				this.state.estado=1;
+				this.state.jugadores[this.state.players[0]].fichasT=3; //variable auxiliar para saber que tantas fichas tuareg faltan
+				this.state.jugadores[this.state.players[1]].fichasT=3;
+			}
+
 	}
 	reubicar(data,estado,cliente){
 
@@ -183,7 +267,7 @@ class Tuareg extends Room{
 				estado.jugadores[cliente.id].puntosv+=3;
 			break;
 			case 4:
-						estado.jugadores[cliente.id].datiles-=2;
+						estado.jugadores[cliente.id].oro-=2;
 						estado.jugadores[cliente.id].puntosv+=4;
 			break;
 		}
@@ -274,7 +358,12 @@ class Tuareg extends Room{
 			this.cobraCartaTribu(data,estado,cliente,false);
 		}
 		else if(estado.reubica){
-			this.reubicar(data,estado,cliente);
+			if(this.state.tableroInter[data.fila][data.columna]==cliente.id && this.state.tableroTuareg[data.fila][data.columna]!="targiAzul"){
+				this.reubicar(data,estado,cliente);
+			}
+			else{
+				//Avisar que no se puede
+			}
 		}
 		else if(data.action=="ofebre"){
 			this.cobraOfebre(data,estado,cliente);
@@ -333,7 +422,7 @@ class Tuareg extends Room{
 				break;
 				case "E":
 					//Espejismo
-					if(estado.jugadores[cliente.id].intersec>0){
+					if(estado.jugadores[cliente.id].intersec>0 ){
 							estado.reubica=true;
 					}
 					else{
@@ -476,8 +565,20 @@ class Tuareg extends Room{
 
 		}
 		else{
+			///Calcular si tablero de jugador tiene espacio para acomodar
+			var espacio;
+			estado.jugadores[cliente.id].tablero_jugador.forEach(function(el,indx,arr){
+				if(el.length<4){
+					espacio= true;
+				}
+				else{
+					espacio=false;
+				}
+			});
+			console.log(espacio);
+			/////
 			this.send(cliente,{action:"choset",fila:data.fila,columna:data.columna,costo:[carta.costo1_d,carta.costo1_s,carta.costo1_o,carta.costo1_p,carta.costo2_o ],
-			descuento:estado.jugadores[cliente.id].descuentos,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id]});
+			descuento:estado.jugadores[cliente.id].descuentos,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
 		}
 		//verificar si nos quedamos sin cartas
 		if(estado.cartas_mercancia_baraja.length <=0){
@@ -651,10 +752,24 @@ class Tuareg extends Room{
 		}
 	}
 	contarPuntosTableros(estado,cliente){
-		
+		var puntos=[0,0];
+		estado.jugadores[estado.players[0]].tablero_jugador.forEach(function(el,index,arr){
+			el.forEach(function(el1,index1,arr1){
+				if(el1 != null){
+					puntos[0]+=el1.puntos_v;
+				}
 
+			});
+		});
+		estado.jugadores[estado.players[1]].tablero_jugador.forEach(function(el,index,arr){
+			el.forEach(function(el1,index1,arr1){
+				if(el1 != null){
+					puntos[1]+=el1.puntos_v;
+				}
+			});
+		});
+		return puntos;
 		// contar puntos
-
 
 	}
 	isTableroLleno(estado,cliente){
@@ -690,13 +805,53 @@ class Tuareg extends Room{
 			});
 		})
 
+
 	}
 	cambiarTurno(cliente){
 		//lastTurno indica que el jugador 1
 		if(this.state.lastTurno){
-			var puntos= this.contarPuntosTableros(this.state,cliente);
+			var puntosf= this.contarPuntosTableros(this.state,cliente);
 			console.log("Finalizó la partida");
-			console.log(puntos);
+			//se suman los puntos acumulados en el juego
+			puntosf[0]+=this.state.jugadores[this.state.players[0]].puntosv; // puntos del jugador1
+			puntosf[1]+=this.state.jugadores[this.state.players[1]].puntosv;// puntos del jugador2
+			//aplicar efectos
+
+			//si es empate gana el que tenga mas monedas de oro , si ambos tienen las mismas monedas de oro gana el que tenga mas mercancias
+			if(puntosf[0] > puntosf[1]){
+				this.state.ganador=this.state.players[0];
+			}
+			else if (puntosf[0] < puntosf[1]){
+				this.state.ganador=this.state.players[1];
+			}
+			else{
+				if(this.state.jugadores[this.players[0]].oro > this.state.jugadores[this.players[1]].oro ){
+					this.state.ganador=this.state.players[0];
+				}
+				else if(this.state.jugadores[this.players[0]].oro < this.state.jugadores[this.players[1]].oro ){
+					this.state.ganador=this.state.players[1];
+				}
+				else{
+					mercanciast=[0,0];
+					mercanciast[0]+=this.state.jugadores[this.players[0]].sal;
+					mercanciast[0]+=this.state.jugadores[this.players[0]].datiles;
+					mercanciast[0]+=this.state.jugadores[this.players[0]].pimienta;
+					mercanciast[1]+=this.state.jugadores[this.players[1]].sal;
+					mercanciast[1]+=this.state.jugadores[this.players[1]].datiles;
+					mercanciast[1]+=this.state.jugadores[this.players[1]].pimienta;
+					if(mercanciast[0]>mercanciast[1]){
+						this.state.ganador=this.state.players[0];
+					}
+					else if(mercanciast[0]<mercanciast[1]){
+						this.state.ganador=this.state.players[1];
+					}
+					else{
+						this.state.empate=true;
+					}
+				}
+			}
+			this.broadcast({action:"finpartida",resultado:(this.state.ganador!=null)?this.state.ganador:this.state.empate});
+			console.log(puntosf);
 			return false;
 		}
 		if(this.state.estado ==3 && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
@@ -709,12 +864,22 @@ class Tuareg extends Room{
 				this.state.jugadores[this.state.players[1]].f_In=[];
 				//Comprobar si hay asalto
 				this.state.estado++;
+				/////////Aqui realizar asalto///
+				if(this.state.asaltante_pos==4 || this.state.asaltante_pos==8 || this.state.asaltante_pos==12 || this.state.asaltante_pos==16 ){
+					this.broadcast({action:"asalto",posicion:this.state.asaltante_pos});
+				}
+				else{
+					this.broadcast({action:"refreshall"})
+					//
+					this.state.estado=1;
+					this.state.jugadores[this.state.players[0]].fichasT=3;
+					this.state.jugadores[this.state.players[1]].fichasT=3;
+				}
 				//Comprobar si exedes la cantidad de mercancias y oro limite del juego
-				this.broadcast({action:"refreshall"})
-				//
-				this.state.estado=1;
-				this.state.jugadores[this.state.players[0]].fichasT=3;
-				this.state.jugadores[this.state.players[1]].fichasT=3;
+
+
+
+
 		}
 		//comprobar si tablero esta lleno si eres jugador1 entonces es la ultima ronda , de lo contrario el juego termina en este cambio de turno.
 		if(this.isTableroLleno(this.state,cliente) && this.state.estado==3 && this.clients[0].id==cliente.id){ // si eres el indice 0 de clients eres el player 1
@@ -846,11 +1011,13 @@ class Tuareg extends Room{
 			estado.estado++;
 		}
 		if(estado.reubica && estado.jugadores[cliente.id].intersec>0){
-			estado.estado++;
-			estado.tableroInter[data.fila][data.columna]=cliente.id;
-			estado.tableroTuareg[data.fila][data.columna]=estado.jugadores[cliente.id].colorM;
-			estado.estado++;
-			estado.reubica=false;
+			if(estado.tableroInter[data.fila][data.columna]==0){
+				estado.estado++;
+				estado.tableroInter[data.fila][data.columna]=cliente.id;
+				estado.tableroTuareg[data.fila][data.columna]=estado.jugadores[cliente.id].colorM;
+				estado.estado++;
+				estado.reubica=false;
+			}
 		}
 		else if(estado.reubica){
 			estado.estado++;

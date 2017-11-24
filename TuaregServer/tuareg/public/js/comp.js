@@ -96,15 +96,17 @@ room.onUpdate.add(function(change){
 });
 function escogerm(opcion,fila,columna,data){
 	$("#chose").remove();
+	$(".wrapper").css("pointer-events","auto");
 	room.send({action:"chosem",otorga:opcion,fila:fila,columna:columna,data:data});
 }
 
-function escogert(opcion,fila,columna,data){ // para posicionar en tablero
+function escogert(opcion,fila,columna,data,tablero){ // para posicionar en tablero
 	$("#chose").remove();
   // falta verificar opcion para saber que hacer en caso de escojer rechazar y poner en mano
 	if(opcion==1 || opcion==2 ){
 		$("#tableroJugador3").remove();
-		var tab = "<div id='tableroJugador3' class='row tableroJugador1' style='position:absolute;top:40em;left:10em;z-index:100'>";
+		var tab = "<div id='tableroJugador3' class='row tableroJugador1' style='position:fixed;top:40em;left:10em;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%)'>"+
+							"<spanf style ='color:red'>¿En que fila deseas ubicar la carta?</spanf>"
 		tab+= $(".row.tableroJugador1").html();
 		tab+="</div>"
 		$("body").append(tab);
@@ -115,10 +117,15 @@ function escogert(opcion,fila,columna,data){ // para posicionar en tablero
 				el.forEach(function(eli,ini){
 					if(cartastj1[ino][ini].id==clicked.id){
 						console.log(ino+" , "+ini+ " TJ");
-						$("body").off("click");
-						room.send({action:"choset",tarifa:opcion,cartafila:ino,cartacolumna:ini,fila:fila,columna:columna,data:data});
-						$("#tableroJugador3").remove();
-
+						if(tablero[ino].length>=4){
+							console.log("esta llena la fila , escoge otra")
+						}
+						else{
+							$("body").off("click");
+							$(".wrapper").css("pointer-events","auto");
+							room.send({action:"choset",tarifa:opcion,cartafila:ino,cartacolumna:ini,fila:fila,columna:columna,data:data});
+							$("#tableroJugador3").remove();
+						}
 					}
 				});
 			});
@@ -161,17 +168,18 @@ room.onData.add(function(mensaje){
 		}
 	}
 	if(mensaje.action=="choset"){
-
+		$(".wrapper").css("pointer-events","none");
 		if(mensaje.isfromtablero){
 			$("#showTr").remove();
-			var chose="<div id='showTr' style='position:absolute;z-index:50;width:138px;height:92px;top:20em;left:20em;transform:scale(2);border-style:double'></div>";
+			var chose="<div id='showTr' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform: translate(-50%,-50%);border-style:double'></div>";
 			$("body").append(chose);
 			$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.data._id-1]);
 		}
+
+
 		////////////////////NOTA: Se usan inputs y eventos on click por la necesidad de pasar objetos como argumentos/////////////////
-		var chose=
-		 	"<div id='chose' style='position:absolute;z-index:100;left:50%;text-align:center;transform:translateX(-50%);top:7em'>";
-		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3]){
+		var chose="<div id='chose' style='position:absolute;z-index:100;left:50%;text-align:center;transform:translateX(-50%);top:7em'>";
+		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3] && mensaje.espacio ){
 			chose+="<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
 		}
 		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]){
@@ -183,30 +191,22 @@ room.onData.add(function(mensaje){
 		if(mensaje.tarjetaMano){
 			chose+=	"<br><input id='t4' type='button' value='Poner en mano'>";
 		}
-		chose+="<br><input id='t5' type='button' value='Rechazar'>";
-		chose+= "<br><spanf id='comunica' style='color:red;'></spanf>";
-		chose+= "</div>";
+			chose+="<br><input id='t5' type='button' value='Rechazar'>";
+			chose+= "<br><spanf id='comunica' style='color:red;'></spanf>";
+			chose+= "</div>";
 		$("#showTr").append(chose);
 		/////////////////////////Eventos para los input/////////////////////////////////////////////////////////////////////////////
 		$('#showTr').on('click', '#t1', function(){
 			console.log("click");
 			$('#showTr').off("click","#t1");
 			$("#showTr").remove();
-			if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3]){
-
-				escogert(1,mensaje.fila,mensaje.columna,mensaje.data);
-			}
-			else{
-				$("#comunica").text("No tienes suficientes Mercancias");
-			}
-
-
+			escogert(1,mensaje.fila,mensaje.columna,mensaje.data,mensaje.actual.tablero_jugador);
 		});
 		$('#showTr').on('click', '#t2', function(){
 			console.log("click");
 			$('#showTr').off("click","#t2");
 			$("#showTr").remove();
- 			escogert(2,mensaje.fila,mensaje.columna,mensaje.data);
+ 			escogert(2,mensaje.fila,mensaje.columna,mensaje.data,mensaje.actual.tablero_jugador);
 
 
 		});
@@ -221,6 +221,7 @@ room.onData.add(function(mensaje){
 		$('#showTr').on('click', '#t4', function(){
 			console.log("click");
 			$('#showTr').off("click","#t4");
+			$(".wrapper").css("pointer-events","auto");
 		  $("#showTr").remove();
 			escogert(4,mensaje.fila,mensaje.columna,mensaje.data);
 
@@ -230,6 +231,7 @@ room.onData.add(function(mensaje){
 		$('#showTr').on('click', '#t5', function(){
 			console.log("click");
 			$('#showTr').off("click","#t5");
+			$(".wrapper").css("pointer-events","auto");
 			$("#showTr").remove();
 			escogert(5,mensaje.fila,mensaje.columna,mensaje.data);
 
@@ -240,8 +242,9 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="chosem"){
 		$("#chose").remove();
+		$(".wrapper").css("pointer-events","none");
 		$("body").append(
-			"<div id='chose' style='position:absolute;z-index:100'>"+
+			"<div id='chose' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%)'>"+
 				"<input type='button' id='td' value='Datil' ><br>"+
 				"<input type='button' id='ts' value='Sal' ><br>"+
 				"<input type='button' id='tp' value='pimienta'><br>"+
@@ -298,18 +301,21 @@ room.onData.add(function(mensaje){
 	if(mensaje.action=="showC"){
 		//console.log(mensaje);
 		//Mostrar la carta con z-index menor a 100
-		var chose="<div id='showC' style='position:absolute;z-index:50;width:138px;height:92px;top:20em;left:20em;transform:scale(2);border-style:double'></div>";
+		$(".wrapper").css("pointer-events","none");
+		var chose="<div id='showC' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);border-style:double'></div>";
 		$("body").append(chose);
 		$("#showC").addClass("mercac").css("background-position",cartasM[mensaje.carta._id-1]);
 		$('body').on('click', '#showC', function(){
 			$("body").off("click");
 			room.send({action:"showC",data:mensaje.carta});
+			 $(".wrapper").css("pointer-events","auto");
 			 $("#showC").remove();
 		});
 
 	}
 	if(mensaje.action=="showTr"){
-		var chose="<div id='showTr' style='position:absolute;z-index:50;width:138px;height:92px;top:20em;left:20em;transform:scale(2);border-style:double'></div>";
+		$(".wrapper").css("pointer-events","none");
+		var chose="<div id='showTr' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);border-style:double'></div>";
 		$("body").append(chose);
 		$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.carta._id-1]);
 		$('body').on('click', '#showTr', function(){
@@ -318,8 +324,9 @@ room.onData.add(function(mensaje){
 		});
 	}
 	if(mensaje.action=="orfebre"){
+		$(".wrapper").css("pointer-events","none");
 		var chose=
-				'<div class="row orfebre" id="muestraOfebre">'+
+				'<div class="row orfebre" id="muestraOfebre" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">'+
             '<div class="orfebre">'+
                 '<div id="s1pv"><img src="assets/img/orfebre1.png" class="orf1"></div>'+
                 '<div id="s2pv"><img src="assets/img/orfebre2.png" id="orf2"></div><img src="assets/img/Orfebre.jpg" class="orfebreFicha">'+
@@ -410,6 +417,7 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.datiles >= 2){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
+										$(".wrapper").css("pointer-events","auto");
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -423,6 +431,7 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.pimienta >= 2){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
+										$(".wrapper").css("pointer-events","auto");
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -436,6 +445,7 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.sal >= 2){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
+										$(".wrapper").css("pointer-events","auto");
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -454,6 +464,7 @@ room.onData.add(function(mensaje){
 							if(mensaje.actual.oro>=1){
 								//
 								$("#muestraOfebre").off("click");
+								$(".wrapper").css("pointer-events","auto");
 								$("body").children("#muestraOfebre").remove();
 								console.log("si se puede");
 								room.send({action:"ofebre",negocio:opciones});
@@ -470,6 +481,7 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.datiles >= 4){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
+										$(".wrapper").css("pointer-events","auto");
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -483,6 +495,7 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.pimienta >= 4){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
+										$(".wrapper").css("pointer-events","auto");
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -496,6 +509,7 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.sal >= 4){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
+										$(".wrapper").css("pointer-events","auto");
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -513,6 +527,7 @@ room.onData.add(function(mensaje){
 							if(mensaje.actual.oro>=2){
 								//
 								$("#muestraOfebre").off("click");
+								$(".wrapper").css("pointer-events","auto");
 								$("body").children("#muestraOfebre").remove();
 								console.log("si se puede");
 								room.send({action:"ofebre",negocio:opciones});
@@ -528,6 +543,7 @@ room.onData.add(function(mensaje){
 				case "terminar":
 					console.log(opciones);
 					$("#muestraOfebre").off("click");
+					$(".wrapper").css("pointer-events","auto");
 					$("body").children("#muestraOfebre").remove();
 					room.send({action:"terminar"});
 				break;
@@ -535,8 +551,9 @@ room.onData.add(function(mensaje){
 		})
 	}
 	if(mensaje.action=="comerciante"){
+		$(".wrapper").css("pointer-events","none");
 		var chose=
-				'<div id="comerc" class="row comercanteRow">'+
+				'<div id="comerc" class="row comercanteRow" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">'+
             '<div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3"></div>'+
             '<div class="colCom"><img src="assets/img/mercantes.jpg" id="fichaCom" class="fichaComercian"></div>'+
             '<div id="dosMerca" class="dosmerca"><img src="assets/img/orfebregde.png" class="merch2"></div>'+
@@ -725,11 +742,188 @@ room.onData.add(function(mensaje){
 				case "terminar":
 					console.log(opciones);
 					$("#comerc").off("click");
+					$(".wrapper").css("pointer-events","auto");
 					room.send({action:"terminar"});
 					$("body").children(".comercanteRow").remove();
 				break;
 			}
 		})
+	}
+	if(mensaje.action=="asalto"){
+		$(".wrapper").css("pointer-events","none");
+		switch(mensaje.posicion){
+			case 4:
+
+				$("#choseA").remove();
+				$("body").append(
+					"<div id='choseA' style='position:fixed;z-index:100;top:50%;left:50%;transform: translate(-50%,-50%)'>"+
+						"<spanf>Escoge con que pagar el Primer Asalto</spanf>"+
+						"<input type='button' id='td' value='Datil' ><br>"+
+						"<input type='button' id='ts' value='Sal' ><br>"+
+						"<input type='button' id='tp' value='Pimienta'><br>"+
+						"<input type='button' id='tv' value='1 punto de victoria'>"+
+					"</div>"
+					);
+				$('#choseA').on('click', '#td', function(){
+					console.log("click escogerA");
+					$('#chose').off("click","#td");
+					$(".wrapper").css("pointer-events","auto");
+					$("#chose").remove();
+					room.send({action:"asalto",posicion:4,opcion:1});
+				});
+				$('#choseA').on('click', '#ts', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#ts");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:4,opcion:2});
+				});
+				$('#choseA').on('click', '#tp', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#tp");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:4,opcion:3});
+				});
+				$('#choseA').on('click', '#tv', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#tv");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:4,opcion:4});
+				});
+			break;
+
+			case 8:
+				$("#choseA").remove();
+				$("body").append(
+					"<div id='choseA' style='position:absolute;z-index:100'>"+
+						"<spanf>Escoge con que pagar el Segundo Asalto</spanf>"+
+						"<input type='button' id='td' value='Datil' ><br>"+
+						"<input type='button' id='ts' value='Sal' ><br>"+
+						"<input type='button' id='tp' value='Pimienta'><br>"+
+						"<input type='button' id='tv' value='1 punto de victoria'>"+
+					"</div>"
+					);
+				$('#choseA').on('click', '#td', function(){
+					console.log("click escogerA");
+					$('#chose').off("click","#td");
+					$(".wrapper").css("pointer-events","auto");
+					$("#chose").remove();
+					room.send({action:"asalto",posicion:8,opcion:1});
+					//comunicar eleccion
+				});
+				$('#choseA').on('click', '#ts', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#ts");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:8,opcion:2});
+					//comunicar eleccion
+				});
+				$('#choseA').on('click', '#tp', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#tp");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:8,opcion:3});
+					//comunicar eleccion
+				});
+				$('#choseA').on('click', '#tv', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#tv");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:8,opcion:4});
+				});
+			break;
+
+			case 12:
+				$("#choseA").remove();
+				$("body").append(
+					"<div id='choseA' style='position:absolute;z-index:100'>"+
+						"<spanf>Escoge con que pagar el Tercer Asalto</spanf>"+
+						"<input type='button' id='td' value='3 Datiles' ><br>"+
+						"<input type='button' id='ts' value='3 Sales' ><br>"+
+						"<input type='button' id='tp' value='3 Pimientas'><br>"+
+						"<input type='button' id='tv' value='2 puntos de victoria'>"+
+					"</div>"
+					);
+				$('#choseA').on('click', '#td', function(){
+					console.log("click escogerA");
+					$('#chose').off("click","#td");
+					$(".wrapper").css("pointer-events","auto");
+					$("#chose").remove();
+					room.send({action:"asalto",posicion:12,opcion:1});
+					//comunicar eleccion
+				});
+				$('#choseA').on('click', '#ts', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#ts");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:12,opcion:2});
+					//comunicar eleccion
+				});
+				$('#choseA').on('click', '#tp', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#tp");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:12,opcion:3});
+					//comunicar eleccion
+				});
+				$('#choseA').on('click', '#tv', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#tv");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:12,opcion:4});
+				});
+			break;
+
+			case 16:
+				$("#choseA").remove();
+				$("body").append(
+					"<div id='choseA' style='position:absolute;z-index:100'>"+
+						"<spanf>Escoge con que pagar el Cuarto Asalto</spanf>"+
+						"<input type='button' id='to' value='1 moneda de Oro' ><br>"+
+						"<input type='button' id='tv' value='3 puntos de victoria' ><br>"+
+					"</div>"
+					);
+				$('#choseA').on('click', '#to', function(){
+					console.log("click escogerA");
+					$('#chose').off("click","#td");
+					$(".wrapper").css("pointer-events","auto");
+					$("#chose").remove();
+					room.send({action:"asalto",posicion:16,opcion:1});
+				});
+				$('#choseA').on('click', '#tv', function(){
+					console.log("click escogerm");
+					$('#choseA').off("click","#ts");
+					$(".wrapper").css("pointer-events","auto");
+					$("#choseA").remove();
+					room.send({action:"asalto",posicion:16,opcion:2});
+				});
+
+			break;
+
+		}
+
+	}
+	if(mensaje.action=="finpartida"){
+		$("body").children().remove();
+		if(client.id == mensaje.resultado){
+			$("body").append("<h1 style='color: black;z-index: 104;position: fixed;bottom: 50%; left: 50%; transform: translate(-50%,-50%);'>GANASTE</h1>");
+		}
+		else if(typeof(mensaje.resultado)=="string")
+		{
+			$("body").append("<h1 style='color: black;z-index: 104;position: fixed;bottom: 50%; left: 50%; transform: translate(-50%,-50%);'>PERDISTE</h1>");
+		}
+		else{
+			$("body").append("<h1 style='color: black;z-index: 104;position: fixed;bottom: 50%; left: 50%; transform: translate(-50%,-50%);'>EMPATE</h1>");
+		}
+
 	}
 });
 
