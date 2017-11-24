@@ -211,11 +211,7 @@ room.onData.add(function(mensaje){
 		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3] && mensaje.espacio ){
 			chose+="<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
 		}
-<<<<<<< HEAD
 		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio){
-=======
-		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4] && mensaje.espacio){
->>>>>>> c2906be7042099ecb20ebdad7b8f340b6c1a0675
 			chose+= "<br><input type='button' id='t2' value='tarifa 2 :1 X Oro' >";
 		}
 		if(mensaje.descuento){
