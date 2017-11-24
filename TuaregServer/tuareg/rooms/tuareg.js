@@ -56,11 +56,13 @@ class Tuareg extends Room{
 			empate:null,
 			ganador:null,
 			estado:1,
-			players:null, // player 0 es azul player 1 es gris
+			players:[], // player 0 es azul player 1 es gris
 			reubica:false,
 			lastTurno:false,
 			asaltoscobrados:0,
 			cobrandoAsalto:false,
+			cobrandoExceso:false,
+			excesoscobrados:0,
 			fichaInicio:null
 		});
 
@@ -82,10 +84,10 @@ class Tuareg extends Room{
 		client.playerIndex = Object.keys(this.state.jugadores).length;
 
 		this.state.jugadores[client.id] ={
-			datiles:200,
-			oro:100,
-			pimienta:200,
-			sal:200,
+			datiles:4,
+			oro:1,
+			pimienta:4,
+			sal:3,
 			puntosv:4 , //[0]= fichas 1 punto , [1]=fichas 3 puntos , [2]=fichas 5 puntos
 			playerIndex:client.playerIndex,
 			fichasT:3,
@@ -97,7 +99,7 @@ class Tuareg extends Room{
 			tarjetaMano:null,
 			intersec:0,
 			cobraBorde:0,
-			excesos:false,
+			excesoM:false,
 			tablero_jugador:[[],[],[]]
 		};
 
@@ -119,7 +121,20 @@ class Tuareg extends Room{
 	}
 	onMessage(client,data){
 		console.log(data);
+		//console.log(this.clients);
 		// si la partida no ha terminado y es mi turno hacer esto
+		if(data.action=="cobraexcesoM"){
+			this.state.jugadores[client.id].datiles-=data.seleccion[0];
+			this.state.jugadores[client.id].sal-=data.seleccion[1];
+			this.state.jugadores[client.id].pimienta-=data.seleccion[2];
+			this.state.excesoscobrados--;
+			if(this.state.excesoscobrados ==0){
+				this.state.cobrandoExceso=false;
+				this.cambiarTurno(client);
+			}
+
+		}
+
 	 if ((client.id == this.state.turno_act || this.state.estado==5)  && this.state.ganador==null && this.state.empate==null){
 			//Comprobar  que es lo que actualmente se esta haciendo:
 			//1)poniendo fichas tuareg
@@ -337,7 +352,8 @@ class Tuareg extends Room{
 		estado.jugadores[cliente.id].cobraBorde--;
 	}
 	interCobra(data,estado,cliente){
-		if(data.action=="terminar"){
+
+		 if(data.action=="terminar"){
 			estado.jugadores[cliente.id].cobraBorde--;
 		}
 		else if(data.action=="turnosig"){
@@ -891,27 +907,60 @@ class Tuareg extends Room{
 		console.log(puntosf);
 		return false;
 	}
-	comprobarExcesodeMercas(jugador){
+	comprobarExceso(){
+		var mercancias1=0; //jugador1
+		var mercancias2=0; //jugador2
 
-	}
-	excesoMercas(data,estado,cliente){
 
+		mercancias1+=this.state.jugadores[this.state.players[0]].datiles;
+		mercancias1+=this.state.jugadores[this.state.players[0]].sal;
+		mercancias1+=this.state.jugadores[this.state.players[0]].pimienta;
+		mercancias2+=this.state.jugadores[this.state.players[1]].datiles;
+		mercancias2+=this.state.jugadores[this.state.players[1]].sal;
+		mercancias2+=this.state.jugadores[this.state.players[1]].pimienta;
+		if(mercancias1 > 10){
+			this.state.cobrandoExceso=true;
+			this.send(this.clients[0],{action:"mensaje",mensaje:"Cobrando Excesos de mercancia espere porfavor."});
+			this.send(this.clients[0],{action:"excesoM",diferencia:mercancias1-10,actual:this.state.jugadores[this.state.players[0]]});
+			this.state.excesoscobrados++;
+		}
+		if(mercancias2 > 10){
+			this.state.cobrandoExceso=true;
+			this.send(this.clients[1],{action:"mensaje",mensaje:"Cobrando Excesos de mercancia espere porfavor."});
+			this.send(this.clients[1],{action:"excesoM",diferencia:mercancias2-10,actual:this.state.jugadores[this.state.players[1]]});
+			this.state.excesoscobrados++;
+		}
+		if(this.state.jugadores[this.state.players[0]].oro > 3){
+			this.state.jugadores[this.state.players[0]].oro=3;
+		}
+		if(this.state.jugadores[this.state.players[1]].oro > 3){
+			this.state.jugadores[this.state.players[1]].oro=3;
+		}
 	}
 	cambiarTurno(cliente){
 		//lastTurno indica que el jugador 1
+		console.log("aqui cambiando de turno");
 		if(this.state.lastTurno){
 			this.findeJuego(cliente)
 		}
 		//Siguiente ronda
 		// si ya todos en esta ronda (compra/rechaza/cobra) hicieron lo que tenían que hacer ,cambio de ronda.
-		if(this.state.estado ==3 && !this.state.cobrandoAsalto && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
+		if(this.state.estado ==3  &&!this.state.cobrandoAsalto && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
+
+			//si hay exceso cambiar el estado del servidor
+			this.comprobarExceso();
+
+			//si no se necesita cobrar exceso entonces finalizar ronda
+			if(!this.state.cobrandoExceso){
+				console.log("sin exceso");
 				this.state.estado++;
 				this.moverAsaltante(cliente);
 				//borramos variables/arreglos auxiliares
 				this.state.jugadores[this.state.players[0]].c_In=[];
 				this.state.jugadores[this.state.players[1]].c_In=[];
 				this.state.jugadores[this.state.players[0]].f_In=[];
-				this.state.jugadores[this.state.players[1]].f_In=[];
+				this.state.jugadores[this.state.players[1]].f_In
+				this.state.excesoscobrados=0;
 				//Comprobar si hay asalto
 				this.state.estado++;
 
@@ -929,13 +978,14 @@ class Tuareg extends Room{
 					this.state.fichaInicio=(this.state.fichaInicio== this.state.players[0])?this.state.players[1]:this.state.players[0];
 					this.state.turno_act=this.state.fichaInicio;
 				}
+			}
+
+
+
+
 				//Comprobar si exedes la cantidad de mercancias y oro limite del juego
 
-
-
-
 		}
-
 		//si no, cambio de turno.
 		else{
 			this.state.turno_act=((this.state.players[0]==this.state.turno_act) ?this.state.players[1] :this.state.players[0] );

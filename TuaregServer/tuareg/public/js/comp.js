@@ -71,7 +71,7 @@ $(document).ready(function(){
 						$("#dialog-confirm").remove();
 						$( this ).dialog( "close" );
 					},
-					close: function() {
+					cancel: function() {
 						$("#dialog-confirm").remove();
 						$( this ).dialog( "close" );
 					}
@@ -211,7 +211,7 @@ room.onData.add(function(mensaje){
 		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3] && mensaje.espacio ){
 			chose+="<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
 		}
-		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4] && && mensaje.espacio){
+		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio){
 			chose+= "<br><input type='button' id='t2' value='tarifa 2 :1 X Oro' >";
 		}
 		if(mensaje.descuento){
@@ -993,6 +993,77 @@ room.onData.add(function(mensaje){
 		}
 
 	}
+	if(mensaje.action=="excesoM"){
+		var seleccionR=[0,0,0]
+		$("#chose").remove();
+		$("button").prop("disabled",true);
+		$(".wrapper").css("pointer-events","none");
+		$("body").append(
+			"<div id='chose' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%)'>"+
+				"<spanf>¿Que mercancias regresarás al deposito?</spanf><br>"+
+				"<spanf id='cantidad'>Faltan: "+mensaje.diferencia+"</spanf>"+
+				"<input type='button' id='td' value='Datil' ><br>"+
+				"<input type='button' id='ts' value='Sal' ><br>"+
+				"<input type='button' id='tp' value='pimienta'><br>"+
+			"</div>"
+			);
+		$('#chose').on('click', '#td', function(){
+
+
+			//enviar selección solo si ya restaste las mercancias que faltan
+
+			if(mensaje.actual.datiles-1 >=0){
+				seleccionR[0]++;
+				mensaje.diferencia--;
+			}
+
+			$("#cantidad").text("Faltan: "+mensaje.diferencia);
+			if(mensaje.diferencia==0){
+				console.log("click escogerm");
+				$('#chose').off("click","#td");
+				$("button").prop("disabled",false);
+				$(".wrapper").css("pointer-events","auto");
+				$("#chose").remove();
+				room.send({action:"cobraexcesoM",seleccion:seleccionR});
+			}
+
+		});
+		$('#chose').on('click', '#ts', function(){
+
+			if(mensaje.actual.sal-1 >=0){
+				seleccionR[1]++;
+				mensaje.diferencia--;
+			}
+			
+			$("#cantidad").text("Faltan: "+mensaje.diferencia);
+			if(mensaje.diferencia==0){
+				console.log("click escogerm");
+				$('#chose').off("click","#td");
+				$("button").prop("disabled",false);
+				$(".wrapper").css("pointer-events","auto");
+				$("#chose").remove();
+				room.send({action:"cobraexcesoM",seleccion:seleccionR});
+			}
+			//enviar selección
+		});
+		$('#chose').on('click', '#tp', function(){
+
+			if(mensaje.actual.pimienta-1 >=0){
+				seleccionR[2]++;
+				mensaje.diferencia--;
+			}
+			$("#cantidad").text("Faltan: "+mensaje.diferencia);
+			if(mensaje.diferencia==0){
+				console.log("click escogerm");
+				$("button").prop("disabled",false);
+				$('#chose').off("click","#tp");
+				$(".wrapper").css("pointer-events","auto");
+				$("#chose").remove();
+				room.send({action:"cobraexcesoM",seleccion:seleccionR});
+			}
+			//enviar selección
+		});
+	}
 });
 
 /*
@@ -1163,5 +1234,6 @@ room.listen("tableroTuareg/:fila/:columna",function(change){
 });
 
 function onUpdate(state,patch){
+
 	console.log(patch);
 }
