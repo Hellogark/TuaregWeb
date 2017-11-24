@@ -59,7 +59,9 @@ class Tuareg extends Room{
 			players:null, // player 0 es azul player 1 es gris
 			reubica:false,
 			lastTurno:false,
-			asaltoscobrados:0
+			asaltoscobrados:0,
+			cobrandoAsalto:false,
+			fichaInicio:null
 		});
 
 
@@ -102,7 +104,8 @@ class Tuareg extends Room{
 		this.state.jugadores[client.id].colorM=((this.state.jugadores[client.id].playerIndex==0)? "marcadorAzul":"marcadorGris");
 
 		if(this.clients.length == 2 ){
-			this.state.turno_act = this.clients[0].id;
+			this.state.fichaInicio=this.clients[0].id;
+			this.state.turno_act = this.state.fichaInicio;
 			console.log(this.state.turno_act);
 			this.lock();
 			 this.state.players=Object.keys(this.state.jugadores);
@@ -148,6 +151,7 @@ class Tuareg extends Room{
 		}
 	}
 	cobraAsalto(data,estado,cliente){
+		if(data.action=="asalto"){
 			console.log("cobrando asalto");
 			switch(data.posicion){
 				case 4:
@@ -215,11 +219,20 @@ class Tuareg extends Room{
 
 			estado.asaltoscobrados++;
 			if(estado.asaltoscobrados ==2){
+				estado.asaltoscobrados=0;
 				this.broadcast({action:"refreshall"})
 				this.state.estado=1;
-				this.state.jugadores[this.state.players[0]].fichasT=3; //variable auxiliar para saber que tantas fichas tuareg faltan
+				this.state.jugadores[this.state.players[0]].fichasT=3;
 				this.state.jugadores[this.state.players[1]].fichasT=3;
+				this.state.fichaInicio=(this.state.fichaInicio== this.state.players[0])?this.state.players[1]:this.state.players[0];
+				this.state.turno_act=this.state.fichaInicio;
+				estado.cobrandoAsalto=false;
 			}
+			else{
+				estado.cobrandoAsalto=true;
+			}
+		}
+
 
 	}
 	reubicar(data,estado,cliente){
@@ -328,7 +341,27 @@ class Tuareg extends Room{
 					this.cambiarTurno(cliente);
 			}
 			else{
-					this.send(cliente,{action:"mensaje",text:"No puedes cambiar de turno aún tienes cosas que hacer."})
+				//borrar todas las fichas puestas en el turno
+				estado.tableroInter.forEach(function(el,indx,arr){
+					el.forEach(function(el1,indx1,arr1){
+						if(el1==cliente.id){
+							arr[indx][indx1]=0;
+						}
+					});
+				});
+				estado.tableroTuareg.forEach(function(el,indx,arr){
+					el.forEach(function(el1,indx1,arr1){
+						if(el1==estado.jugadores[cliente.id].colorM || el1 == estado.jugadores[cliente.id].colorT){
+							arr[indx][indx1]=0;
+						}
+					});
+				});
+				estado.jugadores[cliente.id].cobraBorde=0;
+				estado.jugadores[cliente.id].intersec=0;
+				if(estado.reubica){
+					estado.estado=3;
+				}
+				this.cambiarTurno(cliente);
 			}
 
 		}
@@ -854,7 +887,8 @@ class Tuareg extends Room{
 			console.log(puntosf);
 			return false;
 		}
-		if(this.state.estado ==3 && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
+		//Siguiente ronda
+		if(this.state.estado ==3 && !this.state.cobrandoAsalto && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
 				this.state.estado++;
 				this.moverAsaltante();
 				//borramos variables/arreglos auxiliares
@@ -874,6 +908,8 @@ class Tuareg extends Room{
 					this.state.estado=1;
 					this.state.jugadores[this.state.players[0]].fichasT=3;
 					this.state.jugadores[this.state.players[1]].fichasT=3;
+					this.state.fichaInicio=(this.state.fichaInicio== this.state.players[0])?this.state.players[1]:this.state.players[0];
+					this.state.turno_act=this.state.fichaInicio;
 				}
 				//Comprobar si exedes la cantidad de mercancias y oro limite del juego
 
@@ -881,11 +917,16 @@ class Tuareg extends Room{
 
 
 		}
+		else{
+			this.state.turno_act=((this.state.players[0]==this.state.turno_act) ?this.state.players[1] :this.state.players[0] );
+		}
 		//comprobar si tablero esta lleno si eres jugador1 entonces es la ultima ronda , de lo contrario el juego termina en este cambio de turno.
-		if(this.isTableroLleno(this.state,cliente) && this.state.estado==3 && this.clients[0].id==cliente.id){ // si eres el indice 0 de clients eres el player 1
+		if(this.isTableroLleno(this.state,cliente) && this.state.estado==3 && this.state.fichaInicio==cliente.id){ // si eres el indice 0 de clients eres el jugador con la ficha de inicio
 				this.state.lastTurno=true;
 		}
-		this.state.turno_act=((this.state.players[0]==this.state.turno_act) ?this.state.players[1] :this.state.players[0] );
+
+		//siguiente turno
+
 
 
 	}
@@ -1008,7 +1049,8 @@ class Tuareg extends Room{
 			estado.estado++;
 			this.applicarIntersec(estado,estado.players[0]); // intersección para jugador 1
 			this.applicarIntersec(estado,estado.players[1]); // intersección para jugador 2
-			estado.estado++;
+			estado.estado++; // Se pasa al estado 3
+			estado.turno_act=estado.fichaInicio;
 		}
 		if(estado.reubica && estado.jugadores[cliente.id].intersec>0){
 			if(estado.tableroInter[data.fila][data.columna]==0){

@@ -55,7 +55,34 @@ $(document).ready(function(){
 
 	$("#terminarTurno").click(function(){
 		$("#terminarTurno").css({"color": "", "border-color": "", "border-width": "", "border-radius": "" });
-		room.send({action:"turnosig"})
+		if((!flagcobraborde || !flagMarcadores) && flagCobrando){
+			var html = '<div id="dialog-confirm" title="¿Estas seguro?">'+
+	  								'<p><span style="float:left; margin:12px 12px 20px 0;" class="ui-icon ui-icon-alert"></span>Aun quedan cosas que hacer en este turno</p>'+
+									'</div>'
+			$("body").append(html);
+			$( "#dialog-confirm" ).dialog({
+				resizable: false,
+				height: "auto",
+				width: 400,
+				modal: true,
+				buttons: {
+					"Si": function() {
+						room.send({action:"turnosig"});
+						$("#dialog-confirm").remove();
+						$( this ).dialog( "close" );
+					},
+					close: function() {
+						$("#dialog-confirm").remove();
+						$( this ).dialog( "close" );
+					}
+				}
+			});
+		}
+		else{
+			room.send({action:"turnosig"});
+		}
+
+
 
 	});
 
@@ -105,8 +132,8 @@ function escogert(opcion,fila,columna,data,tablero){ // para posicionar en table
   // falta verificar opcion para saber que hacer en caso de escojer rechazar y poner en mano
 	if(opcion==1 || opcion==2 ){
 		$("#tableroJugador3").remove();
-		var tab = "<div id='tableroJugador3' class='row tableroJugador1' style='position:fixed;top:40em;left:10em;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%)'>"+
-							"<spanf style ='color:red'>¿En que fila deseas ubicar la carta?</spanf>"
+		var tab = "<div id='tableroJugador3' class='row tableroJugador1' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(1.5) translate(-50%,-50%)'>"+
+							"<spanf style ='color:red;position:absolute;left:50%;translateX(-50%)'>¿En que fila deseas ubicar la carta?</spanf><br>"
 		tab+= $(".row.tableroJugador1").html();
 		tab+="</div>"
 		$("body").append(tab);
@@ -122,6 +149,7 @@ function escogert(opcion,fila,columna,data,tablero){ // para posicionar en table
 						}
 						else{
 							$("body").off("click");
+							$("button").prop("disabled",false);
 							$(".wrapper").css("pointer-events","auto");
 							room.send({action:"choset",tarifa:opcion,cartafila:ino,cartacolumna:ini,fila:fila,columna:columna,data:data});
 							$("#tableroJugador3").remove();
@@ -169,9 +197,10 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="choset"){
 		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
 		if(mensaje.isfromtablero){
 			$("#showTr").remove();
-			var chose="<div id='showTr' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform: translate(-50%,-50%);border-style:double'></div>";
+			var chose="<div id='showTr' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);border-style:double'></div>";
 			$("body").append(chose);
 			$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.data._id-1]);
 		}
@@ -221,6 +250,7 @@ room.onData.add(function(mensaje){
 		$('#showTr').on('click', '#t4', function(){
 			console.log("click");
 			$('#showTr').off("click","#t4");
+			$("button").prop("disabled",false);
 			$(".wrapper").css("pointer-events","auto");
 		  $("#showTr").remove();
 			escogert(4,mensaje.fila,mensaje.columna,mensaje.data);
@@ -231,6 +261,7 @@ room.onData.add(function(mensaje){
 		$('#showTr').on('click', '#t5', function(){
 			console.log("click");
 			$('#showTr').off("click","#t5");
+			$("button").prop("disabled",false);
 			$(".wrapper").css("pointer-events","auto");
 			$("#showTr").remove();
 			escogert(5,mensaje.fila,mensaje.columna,mensaje.data);
@@ -242,6 +273,7 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="chosem"){
 		$("#chose").remove();
+		$("button").prop("disabled",true);
 		$(".wrapper").css("pointer-events","none");
 		$("body").append(
 			"<div id='chose' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%)'>"+
@@ -253,17 +285,20 @@ room.onData.add(function(mensaje){
 		$('#chose').on('click', '#td', function(){
 			console.log("click escogerm");
 			$('#chose').off("click","#td");
+			$("button").prop("disabled",false);
 			$("#chose").remove();
 			escogerm(1,mensaje.fila,mensaje.columna,mensaje.data);
 		});
 		$('#chose').on('click', '#ts', function(){
 			console.log("click escogerm");
 			$('#showTr').off("click","#ts");
+			$("button").prop("disabled",false);
 			$("#showTr").remove();
 			escogerm(2,mensaje.fila,mensaje.columna,mensaje.data);
 		});
 		$('#chose').on('click', '#tp', function(){
 			console.log("click escogerm");
+			$("button").prop("disabled",false);
 			$('#chose').off("click","#tp");
 			$("#chose").remove();
 			escogerm(3,mensaje.fila,mensaje.columna,mensaje.data);
@@ -282,7 +317,6 @@ room.onData.add(function(mensaje){
 			$(cartas[mensaje.fila][mensaje.columna]).css("background-position",cartasM[19]);
 			cache_cartas.push({fila:mensaje.fila,columna:mensaje.columna,id:mensaje.id});
 		}
-		$(cartas[mensaje.fila][mensaje.columna]).children("#Tuareg").remove();
 	}
 	if(mensaje.action=="refreshall"){
 		console.log(cache_cartas);
@@ -315,6 +349,7 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="showTr"){
 		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
 		var chose="<div id='showTr' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);border-style:double'></div>";
 		$("body").append(chose);
 		$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.carta._id-1]);
@@ -325,6 +360,7 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="orfebre"){
 		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
 		var chose=
 				'<div class="row orfebre" id="muestraOfebre" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">'+
             '<div class="orfebre">'+
@@ -418,6 +454,7 @@ room.onData.add(function(mensaje){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
 										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -432,6 +469,7 @@ room.onData.add(function(mensaje){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
 										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -446,6 +484,7 @@ room.onData.add(function(mensaje){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
 										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -466,6 +505,7 @@ room.onData.add(function(mensaje){
 								$("#muestraOfebre").off("click");
 								$(".wrapper").css("pointer-events","auto");
 								$("body").children("#muestraOfebre").remove();
+								$("button").prop("disabled",false);
 								console.log("si se puede");
 								room.send({action:"ofebre",negocio:opciones});
 
@@ -482,6 +522,7 @@ room.onData.add(function(mensaje){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
 										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -496,6 +537,7 @@ room.onData.add(function(mensaje){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
 										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -510,6 +552,7 @@ room.onData.add(function(mensaje){
 										//enviar al servidor respuesta
 										$("#muestraOfebre").off("click");
 										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children("#muestraOfebre").remove();
 										console.log("si se puede");
 										room.send({action:"ofebre",negocio:opciones});
@@ -528,6 +571,7 @@ room.onData.add(function(mensaje){
 								//
 								$("#muestraOfebre").off("click");
 								$(".wrapper").css("pointer-events","auto");
+								$("button").prop("disabled",false);
 								$("body").children("#muestraOfebre").remove();
 								console.log("si se puede");
 								room.send({action:"ofebre",negocio:opciones});
@@ -544,6 +588,7 @@ room.onData.add(function(mensaje){
 					console.log(opciones);
 					$("#muestraOfebre").off("click");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("body").children("#muestraOfebre").remove();
 					room.send({action:"terminar"});
 				break;
@@ -552,6 +597,7 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="comerciante"){
 		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
 		var chose=
 				'<div id="comerc" class="row comercanteRow" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">'+
             '<div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3"></div>'+
@@ -653,6 +699,8 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.datiles >= 3){
 										//enviar al servidor respuesta
 										$("#comerc").off("click");
+										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones});
@@ -666,6 +714,8 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.pimienta >= 3){
 										//enviar al servidor respuesta
 										$("#comerc").off("click");
+										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones});
@@ -679,6 +729,8 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.sal >= 3){
 										//enviar al servidor respuesta
 										$("#comerc").off("click");
+										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones});
@@ -689,7 +741,6 @@ room.onData.add(function(mensaje){
 								break;
 
 							}
-
 						break;
 
 						case 3:
@@ -698,6 +749,8 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.datiles >= 2){
 										//enviar al servidor respuesta
 										$("#comerc").off("click");
+										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
@@ -711,6 +764,8 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.pimienta >= 2){
 										//enviar al servidor respuesta
 										$("#comerc").off("click");
+										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
@@ -724,6 +779,8 @@ room.onData.add(function(mensaje){
 									if(mensaje.actual.sal >= 2){
 										//enviar al servidor respuesta
 										$("#comerc").off("click");
+										$(".wrapper").css("pointer-events","auto");
+										$("button").prop("disabled",false);
 										$("body").children(".comercanteRow").remove();
 										console.log("si se puede");
 										room.send({action:"comerciante",negocio:opciones,merchant:merchant});
@@ -743,6 +800,7 @@ room.onData.add(function(mensaje){
 					console.log(opciones);
 					$("#comerc").off("click");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					room.send({action:"terminar"});
 					$("body").children(".comercanteRow").remove();
 				break;
@@ -751,13 +809,13 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="asalto"){
 		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
 		switch(mensaje.posicion){
 			case 4:
-
 				$("#choseA").remove();
 				$("body").append(
 					"<div id='choseA' style='position:fixed;z-index:100;top:50%;left:50%;transform: translate(-50%,-50%)'>"+
-						"<spanf>Escoge con que pagar el Primer Asalto</spanf>"+
+						"<spanf>Escoge con que pagar el Primer Asalto</spanf><br>"+
 						"<input type='button' id='td' value='Datil' ><br>"+
 						"<input type='button' id='ts' value='Sal' ><br>"+
 						"<input type='button' id='tp' value='Pimienta'><br>"+
@@ -768,12 +826,14 @@ room.onData.add(function(mensaje){
 					console.log("click escogerA");
 					$('#chose').off("click","#td");
 					$(".wrapper").css("pointer-events","auto");
-					$("#chose").remove();
+					$("button").prop("disabled",false);
+					$("#choseA").remove();
 					room.send({action:"asalto",posicion:4,opcion:1});
 				});
 				$('#choseA').on('click', '#ts', function(){
 					console.log("click escogerm");
 					$('#choseA').off("click","#ts");
+					$("button").prop("disabled",false);
 					$(".wrapper").css("pointer-events","auto");
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:4,opcion:2});
@@ -782,18 +842,19 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#tp");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:4,opcion:3});
 				});
 				$('#choseA').on('click', '#tv', function(){
 					console.log("click escogerm");
 					$('#choseA').off("click","#tv");
+					$("button").prop("disabled",false);
 					$(".wrapper").css("pointer-events","auto");
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:4,opcion:4});
 				});
 			break;
-
 			case 8:
 				$("#choseA").remove();
 				$("body").append(
@@ -809,6 +870,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerA");
 					$('#chose').off("click","#td");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#chose").remove();
 					room.send({action:"asalto",posicion:8,opcion:1});
 					//comunicar eleccion
@@ -817,6 +879,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#ts");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:8,opcion:2});
 					//comunicar eleccion
@@ -825,6 +888,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#tp");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:8,opcion:3});
 					//comunicar eleccion
@@ -833,11 +897,11 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#tv");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:8,opcion:4});
 				});
 			break;
-
 			case 12:
 				$("#choseA").remove();
 				$("body").append(
@@ -853,6 +917,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerA");
 					$('#chose').off("click","#td");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#chose").remove();
 					room.send({action:"asalto",posicion:12,opcion:1});
 					//comunicar eleccion
@@ -861,6 +926,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#ts");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:12,opcion:2});
 					//comunicar eleccion
@@ -869,6 +935,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#tp");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:12,opcion:3});
 					//comunicar eleccion
@@ -877,11 +944,11 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#tv");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:12,opcion:4});
 				});
 			break;
-
 			case 16:
 				$("#choseA").remove();
 				$("body").append(
@@ -895,6 +962,7 @@ room.onData.add(function(mensaje){
 					console.log("click escogerA");
 					$('#chose').off("click","#td");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#chose").remove();
 					room.send({action:"asalto",posicion:16,opcion:1});
 				});
@@ -902,10 +970,10 @@ room.onData.add(function(mensaje){
 					console.log("click escogerm");
 					$('#choseA').off("click","#ts");
 					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
 					$("#choseA").remove();
 					room.send({action:"asalto",posicion:16,opcion:2});
 				});
-
 			break;
 
 		}
@@ -939,10 +1007,10 @@ room.listen("tablero_jugador2/:fila/:columna",function(change){
 	$(cartastj2[change.path.fila][change.path.columna]).addClass("tribuc").css("background-position",cartasT[change.value._id-1]);
 });
 */
-room.listen("tableroCartas/:filas/:columnas", function(change){
+room.listen("tableroCartas/:fila/:columna", function(change){
 
     if(change.operation=="replace"){
-		$(cartas[change.path.filas][change.path.columnas]).css("background-position",(change.value.tipo== undefined ?cartasM[change.value._id-1] :cartasT[change.value._id-1]));
+		$(cartas[change.path.fila][change.path.columna]).css("background-position",(change.value.tipo== undefined ?cartasM[change.value._id-1] :cartasT[change.value._id-1]));
 	  }
 	console.log(change);
 });
@@ -967,10 +1035,10 @@ room.listen("jugadores/:id/:merca",function(change){
 			else{
 				flagMarcadores=false;
 			}
-			if(flagMarcadores && flagcobraborde && flagCobrando && change.operation=="replace"){
+			/*if(flagMarcadores && flagcobraborde && flagCobrando && change.operation=="replace"){
 				$("#terminarTurno").css({"color": "red", "border-color": "red", "border-width": "medium", "border-radius": "5px" });
 				$("#terminarTurno").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-			}
+			}*/
 		break;
 		case "cobraBorde":
 			if(change.value==0 && change.path.id==client.id){
@@ -979,10 +1047,10 @@ room.listen("jugadores/:id/:merca",function(change){
 			else{
 				flagcobraborde=false;
 			}
-			if(flagMarcadores && flagcobraborde && flagCobrando && change.operation=="replace"){
+			/*if(flagMarcadores && flagcobraborde && flagCobrando && change.operation=="replace"){
 				$("#terminarTurno").css({"color": "red", "border-color": "red", "border-width": "medium", "border-radius": "5px" });
 				$("#terminarTurno").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-			}
+			}*/
 		break;
 		case "datiles":
 			if(change.path.id==client.id){
@@ -1035,18 +1103,28 @@ room.listen("turno_act",function(change){
 	if(change.operation =="replace"){
 		if(change.value === client.id){
 			$("#turnoJugadorLabel").text("Es tu turno");
-			$("#fichaTurno2").css("visibility","hidden");
-			$("#fichaTurno1").css("visibility","visible");
+			//$("#fichaTurno2").css("visibility","hidden");
+			//$("#fichaTurno1").css("visibility","visible");
 		}
 		else{
 			$("#turnoJugadorLabel").text("Es turno del contrincante");
-			$("#fichaTurno2").css("visibility","visible");
-			$("#fichaTurno1").css("visibility","hidden");
+			//$("#fichaTurno2").css("visibility","visible");
+			//$("#fichaTurno1").css("visibility","hidden");
 		}
 
 	}
 });
+room.listen("fichaInicio",function(change){
+	if(change.value === client.id){
+		$("#fichaTurno2").css("visibility","hidden");
+		$("#fichaTurno1").css("visibility","visible");
+	}
+	else{
 
+		$("#fichaTurno2").css("visibility","visible");
+		$("#fichaTurno1").css("visibility","hidden");
+	}
+});
 room.listen("tableroAsaltante/:fila/:columna",function(change){
 	if(change.value=="A"){
 		$("#Asaltante").remove();
@@ -1054,10 +1132,32 @@ room.listen("tableroAsaltante/:fila/:columna",function(change){
 	}
 	console.log(change);
 });
+/*
+room.listen("tableroCartas/:fila/:columna/:id",function(change){
+	if(change.path.id =="_id" ){
+		if(cartas[change.path.fila][change.path.columna].className.includes("mercac") ){
+			$(cartas[change.path.fila][change.path.columna]).removeClass("mercac");
+			$(cartas[change.path.fila][change.path.columna]).addClass("tribuc");
+			$(cartas[change.path.fila][change.path.columna]).css("background-position",cartasT[45]);
+			cache_cartas.push({fila:change.path.fila,columna:change.path.columna,id:change.value});
+		}
+		else if(cartas[change.path.fila][change.path.columna].className.includes("tribuc") ){
+			$(cartas[change.path.fila][change.path.columna]).removeClass("tribuc");
+			$(cartas[change.path.fila][change.path.columna]).addClass("mercac");
+			$(cartas[change.path.fila][change.path.columna]).css("background-position",cartasM[19]);
+			cache_cartas.push({fila:change.path.fila,columna:change.path.columna,id:change.value});
+		}
+		console.log("evento triggered");
+	}
+
+});*/
 
 room.listen("tableroTuareg/:fila/:columna",function(change){
 		if(change.operation=="replace" && change.value!=0){
 			$(cartas[change.path.fila][change.path.columna]).append("<img id='Tuareg' class='asaltante' src='/assets/img/"+change.value+".png'></img>");
+		}
+		else if (change.operation=="replace" && change.value==0){
+			$(cartas[change.path.fila][change.path.columna]).children("#Tuareg").remove();
 		}
 	console.log(change);
 });
