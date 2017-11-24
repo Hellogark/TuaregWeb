@@ -52,7 +52,7 @@ class Tuareg extends Room{
 			cartas_tribu_recicla:[],   // cartas desechadas
 			cartas_mercancia_recicla:[], //cartas desechadas
 			turno_act:0,
-			asaltante_pos:3,
+			asaltante_pos:1,
 			empate:null,
 			ganador:null,
 			estado:1,
@@ -97,6 +97,7 @@ class Tuareg extends Room{
 			tarjetaMano:null,
 			intersec:0,
 			cobraBorde:0,
+			excesos:false,
 			tablero_jugador:[[],[],[]]
 		};
 
@@ -227,6 +228,9 @@ class Tuareg extends Room{
 				this.state.fichaInicio=(this.state.fichaInicio== this.state.players[0])?this.state.players[1]:this.state.players[0];
 				this.state.turno_act=this.state.fichaInicio;
 				estado.cobrandoAsalto=false;
+			if(this.state.asaltante_pos==16){
+				this.findeJuego(cliente);
+			}
 			}
 			else{
 				estado.cobrandoAsalto=true;
@@ -819,13 +823,15 @@ class Tuareg extends Room{
 			return true;
 		}
 	}
-	moverAsaltante(){
-		if(this.state.asaltante_pos==16){
-			return -1;
-		}
+	moverAsaltante(cliente){
+
 		var act_pos=this.state.asaltante_pos;
 		var estado=this.state
 		this.state.asaltante_pos++;
+		if(this.state.asaltante_pos==16){
+			//this.findeJuego(cliente);
+			return -1;
+		}
 		this.state.tableroAsaltante.forEach(function(el,indf){
 			el.forEach(function(el2,indc){
 				if(el2==="A"){
@@ -840,57 +846,67 @@ class Tuareg extends Room{
 
 
 	}
-	cambiarTurno(cliente){
-		//lastTurno indica que el jugador 1
-		if(this.state.lastTurno){
-			var puntosf= this.contarPuntosTableros(this.state,cliente);
-			console.log("Finalizó la partida");
-			//se suman los puntos acumulados en el juego
-			puntosf[0]+=this.state.jugadores[this.state.players[0]].puntosv; // puntos del jugador1
-			puntosf[1]+=this.state.jugadores[this.state.players[1]].puntosv;// puntos del jugador2
-			//aplicar efectos
+	findeJuego(cliente){
+		var puntosf= this.contarPuntosTableros(this.state,cliente);
+		console.log("Finalizó la partida");
+		//se suman los puntos acumulados en el juego
+		puntosf[0]+=this.state.jugadores[this.state.players[0]].puntosv; // puntos del jugador1
+		puntosf[1]+=this.state.jugadores[this.state.players[1]].puntosv;// puntos del jugador2
+		//aplicar efectos
 
-			//si es empate gana el que tenga mas monedas de oro , si ambos tienen las mismas monedas de oro gana el que tenga mas mercancias
-			if(puntosf[0] > puntosf[1]){
+		//si es empate gana el que tenga mas monedas de oro , si ambos tienen las mismas monedas de oro gana el que tenga mas mercancias
+		if(puntosf[0] > puntosf[1]){
+			this.state.ganador=this.state.players[0];
+		}
+		else if (puntosf[0] < puntosf[1]){
+			this.state.ganador=this.state.players[1];
+		}
+		else{
+			if(this.state.jugadores[this.state.players[0]].oro > this.state.jugadores[this.state.players[1]].oro ){
 				this.state.ganador=this.state.players[0];
 			}
-			else if (puntosf[0] < puntosf[1]){
+			else if(this.state.jugadores[this.state.players[0]].oro < this.state.jugadores[this.state.players[1]].oro ){
 				this.state.ganador=this.state.players[1];
 			}
 			else{
-				if(this.state.jugadores[this.players[0]].oro > this.state.jugadores[this.players[1]].oro ){
+				var mercanciast=[0,0];
+				mercanciast[0]+=this.state.jugadores[this.state.players[0]].sal;
+				mercanciast[0]+=this.state.jugadores[this.state.players[0]].datiles;
+				mercanciast[0]+=this.state.jugadores[this.state.players[0]].pimienta;
+				mercanciast[1]+=this.state.jugadores[this.state.players[1]].sal;
+				mercanciast[1]+=this.state.jugadores[this.state.players[1]].datiles;
+				mercanciast[1]+=this.state.jugadores[this.state.players[1]].pimienta;
+				if(mercanciast[0]>mercanciast[1]){
 					this.state.ganador=this.state.players[0];
 				}
-				else if(this.state.jugadores[this.players[0]].oro < this.state.jugadores[this.players[1]].oro ){
+				else if(mercanciast[0]<mercanciast[1]){
 					this.state.ganador=this.state.players[1];
 				}
 				else{
-					mercanciast=[0,0];
-					mercanciast[0]+=this.state.jugadores[this.players[0]].sal;
-					mercanciast[0]+=this.state.jugadores[this.players[0]].datiles;
-					mercanciast[0]+=this.state.jugadores[this.players[0]].pimienta;
-					mercanciast[1]+=this.state.jugadores[this.players[1]].sal;
-					mercanciast[1]+=this.state.jugadores[this.players[1]].datiles;
-					mercanciast[1]+=this.state.jugadores[this.players[1]].pimienta;
-					if(mercanciast[0]>mercanciast[1]){
-						this.state.ganador=this.state.players[0];
-					}
-					else if(mercanciast[0]<mercanciast[1]){
-						this.state.ganador=this.state.players[1];
-					}
-					else{
-						this.state.empate=true;
-					}
+					this.state.empate=true;
 				}
 			}
-			this.broadcast({action:"finpartida",resultado:(this.state.ganador!=null)?this.state.ganador:this.state.empate});
-			console.log(puntosf);
-			return false;
+		}
+		this.broadcast({action:"finpartida",resultado:(this.state.ganador!=null)?this.state.ganador:this.state.empate});
+		console.log(puntosf);
+		return false;
+	}
+	comprobarExcesodeMercas(jugador){
+
+	}
+	excesoMercas(data,estado,cliente){
+
+	}
+	cambiarTurno(cliente){
+		//lastTurno indica que el jugador 1
+		if(this.state.lastTurno){
+			this.findeJuego(cliente)
 		}
 		//Siguiente ronda
+		// si ya todos en esta ronda (compra/rechaza/cobra) hicieron lo que tenían que hacer ,cambio de ronda.
 		if(this.state.estado ==3 && !this.state.cobrandoAsalto && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
 				this.state.estado++;
-				this.moverAsaltante();
+				this.moverAsaltante(cliente);
 				//borramos variables/arreglos auxiliares
 				this.state.jugadores[this.state.players[0]].c_In=[];
 				this.state.jugadores[this.state.players[1]].c_In=[];
@@ -898,11 +914,13 @@ class Tuareg extends Room{
 				this.state.jugadores[this.state.players[1]].f_In=[];
 				//Comprobar si hay asalto
 				this.state.estado++;
+
 				/////////Aqui realizar asalto///
 				if(this.state.asaltante_pos==4 || this.state.asaltante_pos==8 || this.state.asaltante_pos==12 || this.state.asaltante_pos==16 ){
 					this.broadcast({action:"asalto",posicion:this.state.asaltante_pos});
 				}
 				else{
+
 					this.broadcast({action:"refreshall"})
 					//
 					this.state.estado=1;
@@ -917,6 +935,8 @@ class Tuareg extends Room{
 
 
 		}
+
+		//si no, cambio de turno.
 		else{
 			this.state.turno_act=((this.state.players[0]==this.state.turno_act) ?this.state.players[1] :this.state.players[0] );
 		}

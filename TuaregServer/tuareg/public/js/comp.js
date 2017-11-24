@@ -211,7 +211,7 @@ room.onData.add(function(mensaje){
 		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3] && mensaje.espacio ){
 			chose+="<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
 		}
-		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]){
+		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4] && && mensaje.espacio){
 			chose+= "<br><input type='button' id='t2' value='tarifa 2 :1 X Oro' >";
 		}
 		if(mensaje.descuento){
@@ -858,7 +858,7 @@ room.onData.add(function(mensaje){
 			case 8:
 				$("#choseA").remove();
 				$("body").append(
-					"<div id='choseA' style='position:absolute;z-index:100'>"+
+					"<div id='choseA' style='position:fixed;z-index:100;top:50%;left:50%;transform: translate(-50%,-50%)'>"+
 						"<spanf>Escoge con que pagar el Segundo Asalto</spanf>"+
 						"<input type='button' id='td' value='Datil' ><br>"+
 						"<input type='button' id='ts' value='Sal' ><br>"+
@@ -905,7 +905,7 @@ room.onData.add(function(mensaje){
 			case 12:
 				$("#choseA").remove();
 				$("body").append(
-					"<div id='choseA' style='position:absolute;z-index:100'>"+
+					"<div id='choseA' style='position:fixed;z-index:100;top:50%;left:50%;transform: translate(-50%,-50%)'>"+
 						"<spanf>Escoge con que pagar el Tercer Asalto</spanf>"+
 						"<input type='button' id='td' value='3 Datiles' ><br>"+
 						"<input type='button' id='ts' value='3 Sales' ><br>"+
@@ -952,7 +952,7 @@ room.onData.add(function(mensaje){
 			case 16:
 				$("#choseA").remove();
 				$("body").append(
-					"<div id='choseA' style='position:absolute;z-index:100'>"+
+					"<div id='choseA' style='position:fixed;z-index:100;top:50%;left:50%;transform: translate(-50%,-50%)'>"+
 						"<spanf>Escoge con que pagar el Cuarto Asalto</spanf>"+
 						"<input type='button' id='to' value='1 moneda de Oro' ><br>"+
 						"<input type='button' id='tv' value='3 puntos de victoria' ><br>"+
