@@ -52,7 +52,7 @@ class Tuareg extends Room{
 			cartas_tribu_recicla:[],   // cartas desechadas
 			cartas_mercancia_recicla:[], //cartas desechadas
 			turno_act:0,
-			asaltante_pos:3,
+			asaltante_pos:7,
 			empate:null,
 			ganador:null,
 			estado:1,
@@ -63,7 +63,8 @@ class Tuareg extends Room{
 			cobrandoAsalto:false,
 			cobrandoExceso:false,
 			excesoscobrados:0,
-			fichaInicio:null
+			fichaInicio:null,
+			aumentadoefecto:false,
 		});
 
 
@@ -95,12 +96,21 @@ class Tuareg extends Room{
 			colorM:null,
 			f_In:[],
 			c_In:[],
-			descuentos:false,
+			descuento:false,
 			tarjetaMano:null,
 			intersec:0,
 			cobraBorde:0,
 			excesoM:false,
-			tablero_jugador:[[],[],[]]
+			flagMerca:[false,false,false],
+			efectoA:[false,false,false],
+			tablero_jugador:[[],[],[]],
+			efectoB:[false,false,false,false,false],
+			conteodePares:[0,0,0,0,0],
+			oasis:0,
+			tuareg:0,
+			tienda:0,
+			pozo:0,
+			camello:0
 		};
 
 		this.state.jugadores[client.id].colorT=((this.state.jugadores[client.id].playerIndex==0)? "targiAzul":"targiGris"); // index 0 es player 1
@@ -524,6 +534,13 @@ class Tuareg extends Room{
 	}
 	cobraCartaTribu(data,estado,cliente,isfromtablero){
 		var carta=(isfromtablero) ? this.state.tableroCartas[data.fila][data.columna] : data.data;
+		var descuento;
+		if(data.descuento == undefined){
+			descuento=[0,0,0];
+		}
+		else{
+			descuento=data.descuento;
+		}
 		console.log("Aqui andamos: "+'\n');
 		console.log(carta);
 		console.log('\n');
@@ -534,11 +551,72 @@ class Tuareg extends Room{
 					console.log(carta.costo1_d);
 					console.log(data);
 					var columnaReal;
-					estado.jugadores[cliente.id].datiles-= carta.costo1_d;
-					estado.jugadores[cliente.id].sal-= carta.costo1_s;
-					estado.jugadores[cliente.id].pimienta-= carta.costo1_p;
-					estado.jugadores[cliente.id].oro-= carta.costo1_o;
+					estado.jugadores[cliente.id].datiles+= -carta.costo1_d+descuento[0]; // + data.descuento
+					estado.jugadores[cliente.id].sal+= -carta.costo1_s+descuento[1]; // + data.descuento
+					estado.jugadores[cliente.id].pimienta+= -carta.costo1_p+descuento[2]; // + data.descuento
+					estado.jugadores[cliente.id].oro+= -carta.costo1_o;
 					estado.jugadores[cliente.id].tablero_jugador[data.cartafila].push(carta); //Introducir al tablero del jugador
+					//contar tipos de cartas en tablero de jugador
+					switch(carta.tipo){
+						case "oasis":
+							estado.jugadores[cliente.id].oasis++;
+						break;
+						case "tienda":
+							estado.jugadores[cliente.id].tienda++;
+						break;
+						case "tuareg":
+							estado.jugadores[cliente.id].tuareg++;
+						break;
+						case "camello":
+							estado.jugadores[cliente.id].camello++;
+						break;
+						case "pozo":
+							estado.jugadores[cliente.id].pozo++;
+						break;
+					}
+					//contar los pares
+					estado.jugadores[cliente.id].conteodePares[0]= Math.floor(estado.jugadores[cliente.id].oasis/2);
+					estado.jugadores[cliente.id].conteodePares[1]= Math.floor(estado.jugadores[cliente.id].camello/2);
+					estado.jugadores[cliente.id].conteodePares[2]= Math.floor(estado.jugadores[cliente.id].pozo/2);
+					estado.jugadores[cliente.id].conteodePares[3]= Math.floor(estado.jugadores[cliente.id].tienda/2);
+					estado.jugadores[cliente.id].conteodePares[4]= Math.floor(estado.jugadores[cliente.id].tuareg/2);
+					//si la carta es de efecto aplicar flags
+					switch(carta.efecto[0]){
+						case "a":   // Efecto A
+							switch(carta.efecto[1]){
+								case "d":
+									estado.jugadores[cliente.id].efectoA[0]=true;
+								break;
+								case "s":
+									estado.jugadores[cliente.id].efectoA[1]=true;
+								break;
+								case "p":
+									estado.jugadores[cliente.id].efectoA[2]=true;
+								break;
+							}
+						break;
+
+						case "b":
+							switch(carta.efecto[1]){
+								case "o":
+									estado.jugadores[cliente.id].efectoB[0]=true;
+								break;
+								case "c":
+									estado.jugadores[cliente.id].efectoB[1]=true;
+								break;
+								case "p":
+									estado.jugadores[cliente.id].efectoB[2]=true;
+								break;
+								case "t":
+									estado.jugadores[cliente.id].efectoB[3]=true;
+								break;
+								case "T":
+									estado.jugadores[cliente.id].efectoB[4]=true;
+								break;
+							}
+						break;
+					}
+
 					columnaReal=estado.jugadores[cliente.id].tablero_jugador[data.cartafila].length-1; //Determinar columna de la ultima carta
 
 					if(isfromtablero){
@@ -561,6 +639,20 @@ class Tuareg extends Room{
 					var columnaReal;
 					estado.jugadores[cliente.id].oro-= carta.costo2_o
 					estado.jugadores[cliente.id].tablero_jugador[data.cartafila].push(carta);
+					//Aplicar efecto A
+					if(carta.efecto[0]=="a"){
+						switch(carta.efecto[1]){
+							case "d":
+								estado.jugadores[cliente.id].efectoA[0]=true;
+							break;
+							case "s":
+								estado.jugadores[cliente.id].efectoA[1]=true;
+							break;
+							case "p":
+								estado.jugadores[cliente.id].efectoA[2]=true;
+							break;
+						}
+					}
 					columnaReal=estado.jugadores[cliente.id].tablero_jugador[data.cartafila].length-1;
 
 					if(isfromtablero){
@@ -628,10 +720,65 @@ class Tuareg extends Room{
 					espacio=false;
 				}
 			});
+
+			///Detectar si hay descuento
+			var c_descuento=0;
+			var desc=false;
+			switch(carta.tipo){
+				case "oasis":
+					if (estado.jugadores[cliente.id].efectoB[0] && estado.jugadores[cliente.id].oasis>0){
+						c_descuento=estado.jugadores[cliente.id].oasis;
+						desc=true;
+					}
+					else{
+						desc=false;
+					}
+				break;
+				case "camello":
+					if (estado.jugadores[cliente.id].efectoB[1] && estado.jugadores[cliente.id].camello>0){
+						c_descuento=estado.jugadores[cliente.id].camello;
+						desc=true;
+					}
+					else{
+						desc=false;
+					}
+				break;
+				case "pozo":
+					if (estado.jugadores[cliente.id].efectoB[2] && estado.jugadores[cliente.id].pozo>0){
+						c_descuento=estado.jugadores[cliente.id].pozo;
+						desc=true;
+					}
+					else{
+						desc=false;
+					}
+				break;
+				case "tienda":
+					if (estado.jugadores[cliente.id].efectoB[3] && estado.jugadores[cliente.id].tienda>0){
+						c_descuento=estado.jugadores[cliente.id].tienda;
+						desc=true;
+					}
+					else{
+						desc=false;
+					}
+				break;
+				case "tuareg":
+					if (estado.jugadores[cliente.id].efectoB[4] && estado.jugadores[cliente.id].tuareg>0){
+						c_descuento=estado.jugadores[cliente.id].tuareg;
+						desc=true;
+					}
+					else{
+						desc=false;
+					}
+				break;
+			}
+
+
+
+			///
 			console.log(espacio);
 			/////
 			this.send(cliente,{action:"choset",fila:data.fila,columna:data.columna,costo:[carta.costo1_d,carta.costo1_s,carta.costo1_o,carta.costo1_p,carta.costo2_o ],
-			descuento:estado.jugadores[cliente.id].descuentos,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
+			descuento:desc,cantidad:c_descuento,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
 		}
 		//verificar si nos quedamos sin cartas
 		if(estado.cartas_mercancia_baraja.length <=0){
@@ -650,12 +797,15 @@ class Tuareg extends Room{
 			switch(data.otorga){
 				case 1:
 					estado.jugadores[cliente.id].datiles++;
+					estado.jugadores[cliente.id].flagMerca[0]=true;
 				break;
 				case 2:
 				estado.jugadores[cliente.id].sal++;
+				estado.jugadores[cliente.id].flagMerca[1]=true;
 				break;
 				case 3:
 				estado.jugadores[cliente.id].pimienta++;
+				estado.jugadores[cliente.id].flagMerca[2]=true;
 				break;
 			}
 			if(isfromtablero){
@@ -681,12 +831,15 @@ class Tuareg extends Room{
 			switch(carta.otorga){
 				case "d":
 					estado.jugadores[cliente.id].datiles++;
+					estado.jugadores[cliente.id].flagMerca[0]=true;
 				break;
 				case "p":
 				estado.jugadores[cliente.id].pimienta++;
+				estado.jugadores[cliente.id].flagMerca[2]=true;
 				break;
 				case "s":
 				estado.jugadores[cliente.id].sal++;
+				estado.jugadores[cliente.id].flagMerca[1]=true;
 				break;
 				case "o":
 				estado.jugadores[cliente.id].oro++;
@@ -715,12 +868,15 @@ class Tuareg extends Room{
 			switch(carta.otorga[1]){
 				case "d":
 					estado.jugadores[cliente.id].datiles+=cantidad;
+					estado.jugadores[cliente.id].flagMerca[0]=true;
 				break;
 				case "p":
 				estado.jugadores[cliente.id].pimienta+=cantidad;
+				estado.jugadores[cliente.id].flagMerca[2]=true;
 				break;
 				case "s":
 				estado.jugadores[cliente.id].sal+=cantidad;
+				estado.jugadores[cliente.id].flagMerca[1]=true;
 				break;
 				case "o":
 				estado.jugadores[cliente.id].oro+=cantidad;
@@ -748,12 +904,15 @@ class Tuareg extends Room{
 			switch(carta.otorga[0]){
 				case "d":
 					estado.jugadores[cliente.id].datiles++;
+					estado.jugadores[cliente.id].flagMerca[0]=true;
 				break;
 				case "p":
 				estado.jugadores[cliente.id].pimienta++;
+				estado.jugadores[cliente.id].flagMerca[2]=true;
 				break;
 				case "s":
 				estado.jugadores[cliente.id].sal++;
+				estado.jugadores[cliente.id].flagMerca[1]=true;
 				break;
 				case "o":
 				estado.jugadores[cliente.id].oro++;
@@ -765,12 +924,16 @@ class Tuareg extends Room{
 			switch(carta.otorga[1]){
 				case "d":
 					estado.jugadores[cliente.id].datiles++;
+					estado.jugadores[cliente.id].flagMerca[0]=true;
 				break;
 				case "p":
 				estado.jugadores[cliente.id].pimienta++;
+				estado.jugadores[cliente.id].flagMerca[2]=true;
+
 				break;
 				case "s":
 				estado.jugadores[cliente.id].sal++;
+				estado.jugadores[cliente.id].flagMerca[1]=true;
 				break;
 				case "o":
 				estado.jugadores[cliente.id].oro++;
@@ -946,6 +1109,33 @@ class Tuareg extends Room{
 		//Siguiente ronda
 		// si ya todos en esta ronda (compra/rechaza/cobra) hicieron lo que tenían que hacer ,cambio de ronda.
 		if(this.state.estado ==3  &&!this.state.cobrandoAsalto && this.state.jugadores[this.state.players[0]].intersec<=0 && this.state.jugadores[this.state.players[1]].intersec<=0 && this.state.jugadores[this.state.players[0]].cobraBorde<=0 && this.state.jugadores[this.state.players[1]].cobraBorde<=0){
+			if(!this.state.aumentadoefecto){
+				if(this.state.jugadores[this.state.players[0]].efectoA[0] && this.state.jugadores[this.state.players[0]].flagMerca[0]){
+					this.state.jugadores[this.state.players[0]].datiles++;
+					this.send(this.clients[0],{action:"mensaje",mensaje:"Adquiriste uno mas de datiles por carta tribu tuareg"});
+				}
+				if(this.state.jugadores[this.state.players[0]].efectoA[1] && this.state.jugadores[this.state.players[0]].flagMerca[1]){
+					this.state.jugadores[this.state.players[0]].sal++;
+					this.send(this.clients[0],{mensaje:"Adquiriste uno mas de sal por carta tribu oasis"});
+				}
+				if(this.state.jugadores[this.state.players[0]].efectoA[2] && this.state.jugadores[this.state.players[0]].flagMerca[2]){
+					this.state.jugadores[this.state.players[0]].pimienta++;
+					this.send(this.clients[0],{mensaje:"Adquiriste uno mas de pimienta por carta tribu camello"});
+				}
+				if(this.state.jugadores[this.state.players[1]].efectoA[0] && this.state.jugadores[this.state.players[1]].flagMerca[0]){
+					this.state.jugadores[this.state.players[1]].datiles++;
+					this.send(this.clients[1],{mensaje:"Adquiriste uno mas de datiles por carta tribu tuareg"});
+				}
+				if(this.state.jugadores[this.state.players[1]].efectoA[1] && this.state.jugadores[this.state.players[1]].flagMerca[1]){
+					this.state.jugadores[this.state.players[1]].sal++;
+					this.send(this.clients[1],{mensaje:"Adquiriste uno mas de sal por carta tribu oasis"});
+				}
+				if(this.state.jugadores[this.state.players[1]].efectoA[2] && this.state.jugadores[this.state.players[1]].flagMerca[2]){
+					this.state.jugadores[this.state.players[1]].pimienta++;
+					this.send(this.clients[1],{mensaje:"Adquiriste uno mas de pimienta por carta tribu camello"});
+				}
+				this.state.aumentadoefecto=true;
+			}
 
 			//si hay exceso cambiar el estado del servidor
 			this.comprobarExceso();
@@ -953,20 +1143,32 @@ class Tuareg extends Room{
 			//si no se necesita cobrar exceso entonces finalizar ronda
 			if(!this.state.cobrandoExceso){
 				console.log("sin exceso");
+
+
+
+
+
 				this.state.estado++;
 				this.moverAsaltante(cliente);
 				//borramos variables/arreglos auxiliares
 				this.state.jugadores[this.state.players[0]].c_In=[];
 				this.state.jugadores[this.state.players[1]].c_In=[];
 				this.state.jugadores[this.state.players[0]].f_In=[];
-				this.state.jugadores[this.state.players[1]].f_In
-				this.state.excesoscobrados=0;
-				//Comprobar si hay asalto
-				this.state.estado++;
+				this.state.jugadores[this.state.players[1]].f_In=[];
+				this.state.jugadores[this.state.players[0]].flagMerca=[false,false,false];
+				this.state.jugadores[this.state.players[1]].flagMercan=[false,false,false];
+				//comprobar si se adquirió datiles , pimienta o sal mediante cartas merca para aplicar efecto de cartas tipo A
 
+
+
+
+				this.state.excesoscobrados=0;
+				this.state.aumentadoefecto=false;
+				this.state.estado++;
+				//Comprobar si hay asalto
 				/////////Aqui realizar asalto///
 				if(this.state.asaltante_pos==4 || this.state.asaltante_pos==8 || this.state.asaltante_pos==12 || this.state.asaltante_pos==16 ){
-					this.broadcast({action:"asalto",posicion:this.state.asaltante_pos});
+					this.broadcast({action:"asalto",posicion:this.state.asaltante_pos,act: { [this.state.players[0]] : this.state.jugadores[this.state.players[0]] , [this.state.players[1]]:this.state.jugadores[this.state.players[1]]} });
 				}
 				else{
 
