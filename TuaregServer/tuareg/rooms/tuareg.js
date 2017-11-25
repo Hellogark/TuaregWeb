@@ -52,7 +52,7 @@ class Tuareg extends Room{
 			cartas_tribu_recicla:[],   // cartas desechadas
 			cartas_mercancia_recicla:[], //cartas desechadas
 			turno_act:0,
-			asaltante_pos:1,
+			asaltante_pos:3,
 			empate:null,
 			ganador:null,
 			estado:1,
@@ -135,27 +135,27 @@ class Tuareg extends Room{
 
 		}
 
-	 if ((client.id == this.state.turno_act || this.state.estado==5)  && this.state.ganador==null && this.state.empate==null){
-			//Comprobar  que es lo que actualmente se esta haciendo:
-			//1)poniendo fichas tuareg
-			//2)utilizando/comprando cartas
-			console.log("aqui en nada");
-			switch(this.state.estado){
-				case 1:
-					console.log("aqui en 1");
-					this.ponerFichas(data,this.state,client);
-				break;
-				case 3:
-					console.log("aqui en 3");
-					this.interCobra(data,this.state,client);
-					//this.cobraCartaMerca(data,this.state,client);
-				break;
-				case 5: //Asalto
-					console.log("aqui en 5");
-					this.cobraAsalto(data,this.state,client);
-				break;
+	 	else if ((client.id == this.state.turno_act || this.state.estado==5)  && this.state.ganador==null && this.state.empate==null){
+				//Comprobar  que es lo que actualmente se esta haciendo:
+				//1)poniendo fichas tuareg
+				//2)utilizando/comprando cartas
+				console.log("aqui en nada");
+				switch(this.state.estado){
+					case 1:
+						console.log("aqui en 1");
+						this.ponerFichas(data,this.state,client);
+					break;
+					case 3:
+						console.log("aqui en 3");
+						this.interCobra(data,this.state,client);
+						//this.cobraCartaMerca(data,this.state,client);
+					break;
+					case 5: //Asalto
+						console.log("aqui en 5");
+						this.cobraAsalto(data,this.state,client);
+					break;
 
-			}
+				}
 		}
 
 
@@ -354,8 +354,8 @@ class Tuareg extends Room{
 	interCobra(data,estado,cliente){
 
 		 if(data.action=="terminar"){
-			estado.jugadores[cliente.id].cobraBorde--;
-		}
+				estado.jugadores[cliente.id].cobraBorde--;
+			}
 		else if(data.action=="turnosig"){
 			if(estado.jugadores[cliente.id].cobraBorde==0 && estado.jugadores[cliente.id].intersec==0){
 					this.cambiarTurno(cliente);
