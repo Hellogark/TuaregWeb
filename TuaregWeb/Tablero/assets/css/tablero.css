@@ -593,7 +593,7 @@ div.descartaJ2{
     width:300px;
     height:250px;
     position:relative;
-    top:7em;
+    top:-9em;
   }
 }
 
@@ -613,7 +613,7 @@ textarea.ventanita{
   textarea.ventanita{
     position:relative;
     display:none;
-    bottom:37em;
+    bottom:43em;
     width:350px;
     height:139px;
     resize:none;
