@@ -3,6 +3,7 @@ html{
   -webkit-text-size-adjust:100%;
   -ms-text-size-adjust:100%;
   width:1000px;
+  overflow-x:hidden;
 }
 
 div.container.reglas{
@@ -14,7 +15,7 @@ div.container.reglas{
 }
 
 div.imagenHeader{
-  width:1200px;
+  width:1220px;
   clear:both;
   z-index:1;
   float:left;
@@ -23,7 +24,7 @@ div.imagenHeader{
 }
 
 img.imagenHeader{
-  width:1350px;
+  width:1356px;
   height:30px;
   position:relative;
 }
