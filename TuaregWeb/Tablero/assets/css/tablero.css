@@ -777,10 +777,28 @@ div#acMerca3.accMerca3{
   visibility:hidden;
 }
 
+div#acOro11.acOro11{
+  width:70px;
+  position:absolute;
+  z-index:16;
+  left:15.5em;
+  top:1.5em;
+  visibility:hidden;
+}
+
 div#acMerca2.accMerca2{
   width:70px;
   position:absolute;
   z-index:10;
+  left:15.5em;
+  top:8.5em;
+  visibility:hidden;
+}
+
+div#acMerca11.accMerca11{
+  width:70px;
+  position:absolute;
+  z-index:16;
   left:15.5em;
   top:8.5em;
   visibility:hidden;
@@ -1075,5 +1093,47 @@ div#notaVentana.nota{
   width:300px;
   position:relative;
   top:13em;
+}
+
+div#muestraCom11.com11{
+  position:relative;
+  z-index:15;
+  visibility:hidden;
+}
+
+div#com11Merca.com11Merca{
+  position:relative;
+  width:50px;
+  height:50px;
+  left:11em;
+  bottom:5em;
+  z-index:16;
+  visibility:hidden;
+}
+
+div#com11Oro.com11Oro{
+  position:relative;
+  width:50px;
+  height:50px;
+  left:11em;
+  bottom:16em;
+  z-index:16;
+  visibility:hidden;
+}
+
+img#commerca11.commerca11{
+  position:relative;
+  width:56px;
+  height:56px;
+  left:-0.2em;
+  bottom:0.4em;
+}
+
+img#commOro11.commOro11{
+  position:relative;
+  width:56px;
+  height:52px;
+  left:-0.2em;
+  bottom:0.0em;
 }
 
