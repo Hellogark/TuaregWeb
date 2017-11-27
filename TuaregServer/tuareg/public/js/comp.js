@@ -85,8 +85,12 @@ $(document).ready(function(){
 
 
 	});
-
-
+	$("#cartaManoJ1").click(function(){
+		room.send({action:"efectoU"})
+	});
+	$("#oroP1").click(function(){
+		room.send({action:"reserva"});
+	});
 	var arreglo= $(".container.tablero").children().children();
 	for (var i=0;i<5;i++){
 		cartas[i]=arreglo.splice(0,5);
@@ -127,7 +131,7 @@ function escogerm(opcion,fila,columna,data){
 	room.send({action:"chosem",otorga:opcion,fila:fila,columna:columna,data:data});
 }
 
-function escogert(opcion,fila,columna,data,tablero,descuento){ // para posicionar en tablero
+function escogert(opcion,fila,columna,data,tablero,descuento,reserva){ // para posicionar en tablero
 	$("#chose").remove();
   // falta verificar opcion para saber que hacer en caso de escojer rechazar y poner en mano
 	if(opcion==1 || opcion==2 ){
@@ -151,8 +155,12 @@ function escogert(opcion,fila,columna,data,tablero,descuento){ // para posiciona
 							$("body").off("click");
 							$("#tableroJugador3").off("click");
 							$("button").prop("disabled",false);
+							$('#showTr').off("click","#t2");
+							$('#showTr').off("click","#t31");
+							$('#showTr').off("click","#t32");
+							$('#showTr').off("click","#t33");
 							$(".wrapper").css("pointer-events","auto");
-							room.send({action:"choset",tarifa:opcion,cartafila:ino,cartacolumna:ini,fila:fila,columna:columna,data:data,descuento:descuento});
+							room.send({action:"choset",tarifa:opcion,cartafila:ino,cartacolumna:ini,fila:fila,columna:columna,data:data,descuento:descuento,reserva:reserva});
 							$("#tableroJugador3").remove();
 						}
 					}
@@ -188,17 +196,31 @@ room.onData.add(function(mensaje){
 	}
 	if(mensaje.action=="refreshtj"){
 		if (client.id == mensaje.clientid){
-			$(cartastj1[mensaje.fila][mensaje.columna]).children().remove();
-			$(cartastj1[mensaje.fila][mensaje.columna]).addClass("tribucT").css("background-position",cartasTT[mensaje.cartaid-1]);
+			if(mensaje.cartaid ==60){
+				$(cartastj1[mensaje.fila][mensaje.columna]).removeClass("tribucT");
+				$(cartastj1[mensaje.fila][mensaje.columna]).append('<img  src="assets/img/fondoTableroJ.gif">');
+			}
+			else{
+				$(cartastj1[mensaje.fila][mensaje.columna]).children().remove();
+				$(cartastj1[mensaje.fila][mensaje.columna]).addClass("tribucT").css("background-position",cartasTT[mensaje.cartaid-1]);
+			}
+
+
 		}
 		else{
-			$(cartastj2[mensaje.fila][mensaje.columna]).children().remove();
-			$(cartastj2[mensaje.fila][mensaje.columna]).addClass("tribucT").css("background-position",cartasTT[mensaje.cartaid-1]);
+			if(mensaje.cartaid ==60){
+				$(cartastj2[mensaje.fila][mensaje.columna]).removeClass("tribucT");
+				$(cartastj2[mensaje.fila][mensaje.columna]).append('<img  src="assets/img/fondoTableroJ.gif">');
+			}
+			else{
+				$(cartastj2[mensaje.fila][mensaje.columna]).children().remove();
+				$(cartastj2[mensaje.fila][mensaje.columna]).addClass("tribucT").css("background-position",cartasTT[mensaje.cartaid-1]);
+			}
 		}
 	}
 	if(mensaje.action=="choset"){
 		var cantidad= mensaje.cantidad;
-		var mercadesc=[0,0,0];
+		var mercadesc=[0,0,0,0];
 		$(".wrapper").css("pointer-events","none");
 		$("button").prop("disabled",true);
 		if(mensaje.isfromtablero){
@@ -216,6 +238,9 @@ room.onData.add(function(mensaje){
 		}
 		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio){
 			chose+= "<br><input type='button' id='t2' value='tarifa 2 :1 X Oro' >";
+		}
+		if((mensaje.costo[4]>0 ||mensaje.costo[2]>0) && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio && mensaje.actual.efectoU[4]){
+			chose+= "<br><input type='button' id='tr' value='Pagar con reserva' >";
 		}
 		if(mensaje.descuento){
 			chose+=	"<spanf id='comunica'style='color:red'>Descuento: "+mensaje.cantidad+ "</spanf>";
@@ -241,6 +266,7 @@ room.onData.add(function(mensaje){
 		$('#showTr').on('click', '#t1', function(){
 			console.log("click");
 			$('#showTr').off("click","#t1");
+			$('#showTr').off("click","#tr");
 			$('#showTr').off("click","#t31");
 			$('#showTr').off("click","#t32");
 			$('#showTr').off("click","#t33");
@@ -250,6 +276,7 @@ room.onData.add(function(mensaje){
 		$('#showTr').on('click', '#t2', function(){
 			console.log("click");
 			$('#showTr').off("click","#t2");
+			$('#showTr').off("click","#tr");
 			$('#showTr').off("click","#t31");
 			$('#showTr').off("click","#t32");
 			$('#showTr').off("click","#t33");
@@ -258,7 +285,25 @@ room.onData.add(function(mensaje){
 
 
 		});
+		$('#showTr').on('click', '#tr', function(){
+			console.log("click");
+			$('#showTr').off("click","#t2");
+			$('#showTr').off("click","#tr");
+			$('#showTr').off("click","#t31");
+			$('#showTr').off("click","#t32");
+			$('#showTr').off("click","#t33");
+			$("#showTr").remove();
+			if(mensaje.costo[4]>0){
+				escogert(2,mensaje.fila,mensaje.columna,mensaje.data,mensaje.actual.tablero_jugador,true);
+			}
+			else if(mensaje.costo[2]>0){
+				mercadesc[3]=1;
+				$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+(mensaje.costo[2]-mercadesc[3])+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
+			}
 
+
+
+		});
 		$('#showTr').on('click', '#t31', function(){
 			console.log("click");
 
@@ -268,7 +313,7 @@ room.onData.add(function(mensaje){
 			else{
 				cantidad--;
 			 	mercadesc[0]++;
-			 	$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
+			 	$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+(mensaje.costo[2]-mercadesc[3])+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
 			}
 
 			 //Aplicar  descuento en una mercancia
@@ -282,7 +327,7 @@ room.onData.add(function(mensaje){
 			else{
 				cantidad--;
 				mercadesc[1]++;
-				$("#t1").val("Tarifa 1: "+mensaje.costo[0]-mercadesc[0]+" xDatiles "+mensaje.costo[1]-mercadesc[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]-mercadesc[2]+" xPimienta");
+				$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
 			}
 			 //Aplicar  descuento en una mercancia
 
@@ -295,15 +340,15 @@ room.onData.add(function(mensaje){
 			else{
 				cantidad--;
 				mercadesc[2]++;
-				$("#t1").val("Tarifa 1: "+mensaje.costo[0]-mercadesc[0]+" xDatiles "+mensaje.costo[1]-mercadesc[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]-mercadesc[2]+" xPimienta");
+				$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
 			}
 			 //Aplicar  descuento en una mercancia
 
 		});
-
 		$('#showTr').on('click', '#t4', function(){
 			console.log("click");
 			$('#showTr').off("click","#t4");
+			$('#showTr').off("click","#tr");
 			$('#showTr').off("click","#t31");
 			$('#showTr').off("click","#t32");
 			$('#showTr').off("click","#t33");
@@ -314,10 +359,10 @@ room.onData.add(function(mensaje){
 
 
 		});
-
 		$('#showTr').on('click', '#t5', function(){
 			console.log("click");
 			$('#showTr').off("click","#t5");
+			$('#showTr').off("click","#tr");
 			$('#showTr').off("click","#t31");
 			$('#showTr').off("click","#t32");
 			$('#showTr').off("click","#t33");
@@ -414,7 +459,80 @@ room.onData.add(function(mensaje){
 		$("body").append(chose);
 		$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.carta._id-1]);
 		$('body').on('click', '#showTr', function(){
-			room.send({action:"showTr",data:mensaje.carta});
+			if(mensaje.efecto ==6){
+				var seleccionR=[0,0,0];
+				var pares = 1;
+				$("#chose").remove();
+				$("button").prop("disabled",true);
+				$(".wrapper").css("pointer-events","none");
+				$("body").append(
+					"<div id='chose' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);background-color:#f5dba3;border-radius:20px'>"+
+						"<spanf style='color:black'>Escoge tus mercancias</spanf><br>"+
+						"<spanf id='cantidad' style='color:black'>Faltan: "+pares+"</spanf><br>"+
+						"<input type='image' id='td' src='/assets/img/1Merca1.jpg' style='float:left; position:absolute; top:3em; left:1em;' ><br>"+
+						"<input type='image' id='ts' src='/assets/img/1Merca3.jpg' style='float:left; position:absolute; top:3em; left:4em;'><br>"+
+						"<input type='image' id='tp' src='/assets/img/1Merca2.jpg' style='float:left; position:absolute; top:3em; left:7em;'><br>"+
+					"</div>"
+					);
+				$('#chose').on('click', '#td', function(){
+					//enviar selección solo si ya restaste las mercancias que faltan
+					if(pares-1 >=0){
+						seleccionR[0]++;
+						pares--;
+					}
+					$("#cantidad").text("Faltan: "+pares);
+					if(pares==0){
+								console.log("click escogerm");
+								$('#chose').off("click","#td");
+								$("button").prop("disabled",false);
+								$(".wrapper").css("pointer-events","auto");
+								$("#chose").remove();
+								room.send({action:"mercancias1",seleccion:seleccionR});
+								room.send({action:"showTr",data:mensaje.carta});
+					}
+				});
+				$('#chose').on('click', '#ts', function(){
+
+					if(pares-1 >=0){
+						seleccionR[1]++;
+						pares--;
+					}
+
+					$("#cantidad").text("Faltan: "+pares);
+					if(pares==0){
+						console.log("click escogerm");
+						$('#chose').off("click","#td");
+						$("button").prop("disabled",false);
+						$(".wrapper").css("pointer-events","auto");
+						$("#chose").remove();
+						room.send({action:"mercancias1",seleccion:seleccionR});
+						room.send({action:"showTr",data:mensaje.carta});
+					}
+					//enviar selección
+				});
+				$('#chose').on('click', '#tp', function(){
+
+					if(pares-1 >=0){
+						seleccionR[2]++;
+						pares--;
+					}
+					$("#cantidad").text("Faltan: "+pares);
+					if(pares==0){
+						console.log("click escogerm");
+						$("button").prop("disabled",false);
+						$('#chose').off("click","#tp");
+						$(".wrapper").css("pointer-events","auto");
+						$("#chose").remove();
+						room.send({action:"mercancias1",seleccion:seleccionR});
+						room.send({action:"showTr",data:mensaje.carta});
+					}
+					//enviar selección
+				});
+			}
+			else{
+				room.send({action:"showTr",data:mensaje.carta});
+			}
+
 
 		});
 	}
@@ -658,7 +776,22 @@ room.onData.add(function(mensaje){
 	if(mensaje.action=="comerciante"){
 		$(".wrapper").css("pointer-events","none");
 		$("button").prop("disabled",true);
-		var chose=
+		var chose;
+		if(mensaje.actual.efectoU[7]){
+			chose='<div id="comerc" class="row comercanteRow" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">'+
+							'<div id="tresMerca" class="meerca"></div>'+
+							'<div class="colCom"><img src="assets/img/comerciante11.gif" id="fichaCom" class="fichaComercian" style="visibility:visible;"></div>'+
+							'<div id="dosMerca" class="dosmerca"></div>'+
+							'<div id="acMerca3" class="accMerca3"><img id="selMerca3" style="visibility:hidden" src="assets/img/accMercante.png"></div>'+
+							'<div id="acMerca2" class="accMerca2"><img id="selMerca2" style="visibility:hidden" src="assets/img/accMercante.png"></div>'+
+							'<div id="cambMerca" class="cambiaMerca"><img src="assets/img/merca2.png" class="camMerca"></div>'+
+							'<div id="cobra" style="top:110px;left:10px;position:absolute;border-style:double;width:50px;height:25px;text-align:center">Cobrar</div>'+
+							'<div id="terminar" style="top:140px;left:10px;position:absolute;border-style:double;width:65px;height:25px;text-align:center">Terminar</div>'+
+					 '<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;font-size:12px;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
+					 '</div>'
+		}
+		else{
+			chose=
 				'<div id="comerc" class="row comercanteRow" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">'+
             '<div id="tresMerca" class="meerca"><img src="assets/img/orfebregde.png" class="merch3"></div>'+
             '<div class="colCom"><img src="assets/img/mercantes.jpg" id="fichaCom" class="fichaComercian"></div>'+
@@ -671,6 +804,7 @@ room.onData.add(function(mensaje){
 
 			 '<spanf id="mensajeof" style="left:50%;position: absolute;left: 50%;font-weight:bold;font-size:12px;color: red;transform: translateX(-50%)">Selecciona oferta</spanf>'+
        '</div>'
+		 }
 		$("body").append(chose);
 		$("#comerc").on("click","div",function(){
 			console.log("clicked:"+'\n');
@@ -684,7 +818,13 @@ room.onData.add(function(mensaje){
 					opciones[1]=1;
 					$("#dosMerca").children(".qpv").remove();
 					$("#cambMerca").children(".qpv").remove();
-					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/3Merca"+opciones[0] +".gif'></img>");
+					if(mensaje.actual.efectoU[7]){
+						$(this).append('<img class="qpv" style="position: absolute;z-index: 100;left: 132px;top: 0;width: 56px;height: 56px;visibility: visible;" src="assets/img/1Merca'+opciones[0]+'.jpg">');
+					}
+					else{
+						$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/3Merca"+opciones[0] +".gif'></img>");
+					}
+
 					$(".merch3").css("visibility","visible");
 					$(".selMerca3").css("visibility","visible");
 					$(".merch2").css("visibility","hidden");
@@ -697,7 +837,12 @@ room.onData.add(function(mensaje){
 					opciones[0]+=1;
 					opciones[1]=3;
 					$("#tresMerca").children(".qpv").remove();
-					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					if(mensaje.actual.efectoU[7]){
+						$(this).append('<img class="qpv" style="position: absolute;z-index: 100;left: 70px;top: 0;width: 56px;height: 56px;visibility: visible;" src="assets/img/1Merca'+opciones[0]+'.jpg">');
+					}
+					else{
+						$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/2Merca"+opciones[0] +".gif'></img>");
+					}
 					$("#cambMerca").append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+merchant +".jpg'></img>");
 					$(".merch2").css("visibility","visible");
 					$(".selMerca2").css("visibility","visible");
@@ -884,7 +1029,7 @@ room.onData.add(function(mensaje){
 					);
 				$('#choseA').on('click', '#td', function(){
 
-					if(mensaje.act[client.id].datiles-1 >0){
+					if(mensaje.act.datiles-1 >0){
 						console.log("click escogerA");
 						$('#chose').off("click","#td");
 						$(".wrapper").css("pointer-events","auto");
@@ -895,7 +1040,7 @@ room.onData.add(function(mensaje){
 
 				});
 				$('#choseA').on('click', '#ts', function(){
-					if(mensaje.act[client.id].sal-1 >0){
+					if(mensaje.act.sal-1 >0){
 						console.log("click escogerm");
 						$('#choseA').off("click","#ts");
 						$("button").prop("disabled",false);
@@ -906,7 +1051,7 @@ room.onData.add(function(mensaje){
 
 				});
 				$('#choseA').on('click', '#tp', function(){
-					if(mensaje.act[client.id].pimienta-1 >0){
+					if(mensaje.act.pimienta-1 >0){
 						console.log("click escogerm");
 						$('#choseA').off("click","#tp");
 						$(".wrapper").css("pointer-events","auto");
@@ -937,7 +1082,7 @@ room.onData.add(function(mensaje){
 					"</div>"
 					);
 				$('#choseA').on('click', '#td', function(){
-					if(mensaje.act[client.id].datiles-2 >=0){
+					if(mensaje.act.datiles-2 >=0){
 						console.log("click escogerA");
 						$('#chose').off("click","#td");
 						$(".wrapper").css("pointer-events","auto");
@@ -949,7 +1094,7 @@ room.onData.add(function(mensaje){
 					//comunicar eleccion
 				});
 				$('#choseA').on('click', '#ts', function(){
-					if(mensaje.act[client.id].sal-2 >=0){
+					if(mensaje.act.sal-2 >=0){
 						console.log("click escogerm");
 						$('#choseA').off("click","#ts");
 						$(".wrapper").css("pointer-events","auto");
@@ -961,7 +1106,7 @@ room.onData.add(function(mensaje){
 					//comunicar eleccion
 				});
 				$('#choseA').on('click', '#tp', function(){
-					if(mensaje.act[client.id].pimienta-2 >=0){
+					if(mensaje.act.pimienta-2 >=0){
 						console.log("click escogerm");
 						$('#choseA').off("click","#tp");
 						$(".wrapper").css("pointer-events","auto");
@@ -992,7 +1137,7 @@ room.onData.add(function(mensaje){
 					"</div>"
 					);
 				$('#choseA').on('click', '#td', function(){
-					if(mensaje.act[client.id].datiles-3 >=0){
+					if(mensaje.act.datiles-3 >=0){
 						console.log("click escogerA");
 						$('#chose').off("click","#td");
 						$(".wrapper").css("pointer-events","auto");
@@ -1004,7 +1149,7 @@ room.onData.add(function(mensaje){
 					//comunicar eleccion
 				});
 				$('#choseA').on('click', '#ts', function(){
-					if(mensaje.act[client.id].sal-3 >=0){
+					if(mensaje.act.sal-3 >=0){
 						console.log("click escogerm");
 						$('#choseA').off("click","#ts");
 						$(".wrapper").css("pointer-events","auto");
@@ -1017,7 +1162,7 @@ room.onData.add(function(mensaje){
 				});
 				$('#choseA').on('click', '#tp', function(){
 					console.log("click escogerm");
-					if(mensaje.act[client.id].pimienta-3 >=0){
+					if(mensaje.act.pimienta-3 >=0){
 						$('#choseA').off("click","#tp");
 						$(".wrapper").css("pointer-events","auto");
 						$("button").prop("disabled",false);
@@ -1046,7 +1191,7 @@ room.onData.add(function(mensaje){
 					"</div>"
 					);
 				$('#choseA').on('click', '#to', function(){
-					if(mensaje.act[client.id].oro-- >0){
+					if(mensaje.act.oro-- >0){
 						console.log("click escogerA");
 						$('#chose').off("click","#td");
 						$(".wrapper").css("pointer-events","auto");
@@ -1057,7 +1202,7 @@ room.onData.add(function(mensaje){
 
 				});
 				$('#choseA').on('click', '#tv', function(){
-					if(mensaje.act[client.id].puntos_v-=3 >0)
+					if(mensaje.act.puntos_v-=3 >0)
 					{
 						console.log("click escogerm");
 						$('#choseA').off("click","#ts");
@@ -1161,7 +1306,289 @@ room.onData.add(function(mensaje){
 			//enviar selección
 		});
 	}
+	if(mensaje.action=="cambio" && mensaje.totalcartas>1){
+		console.log("quiero hacer un cambio goei")
+		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
+		$("body").off("click");
+		var contador=0;
+		var veces=0;
+		var movimientos=[];
+		var cartaamover;
+		var fila;
+		var columna;
+		$("#chose").remove();
+	  // falta verificar opcion para saber que hacer en caso de escojer rechazar y poner en mano
+			$("#tableroJugador3").remove();
+			var tab = "<div id='tableroJugador3' class='row tableroJugador1' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(1.5) translate(-50%,-50%)'>"+
+								"<spanf style ='color:red;position:absolute;left:50%;translateX(-50%)'>Escoge las dos cartas que deseas mover </spanf><br>"
+			tab+= $(".row.tableroJugador1").html();
+			tab+="</div>"
+			$("body").append(tab);
+			$('body').on('click', '#tableroJugador3 > .tj1_1', function(){
+				console.log("clickclickclick");
+				clicked=this;
+				cartastj1.forEach(function(el,ino){
+					el.forEach(function(eli,ini){
+						if(clicked.id== cartastj1[ino][ini].id){
+							if( mensaje.tablero[ino][ini]!= undefined && contador==0 ){
+								movimientos.push({fila:ino,columna:ini});
+
+								cartaamover=clicked;
+								fila = movimientos[0].fila;
+								columna = movimientos[0].columna;
+
+								veces++;
+								if(veces== 2 && contador ==0){
+									//terminar todo
+									$("body").off("click");
+									$("#tableroJugador3").off("click");
+									$("button").prop("disabled",false);
+									$(".wrapper").css("pointer-events","auto");
+									$("#tableroJugador3").remove();
+									//enviar al servidor
+									room.send({action:"cambio",movimientos:movimientos});
+									console.log(movimientos);
+								}
+							}
+							else if( mensaje.tablero[ino][ini] == undefined && contador==0 && veces >=1 && (columna != 0 || mensaje.tablero[fila][columna+1]== undefined) && (ini ==0 || (mensaje.tablero[ino][ini-1]!=undefined &&mensaje.tablero[ino][ini+1]==undefined ) ) ){
+								movimientos.push({fila:ino,columna:ini});
+								$(cartaamover).removeClass("tribucT");
+								$(cartaamover).append('<img  src="assets/img/fondoTableroJ.gif">');
+								$(clicked).children().remove();
+								$(clicked).addClass("tribucT").css("background-position",cartasTT[mensaje.tablero[fila][columna]._id-1 ]);
+								mensaje.tablero[ino][ini]=mensaje.tablero[fila][columna];
+								mensaje.tablero[fila].splice(columna,1);
+								contador++;
+							}
+							else if (mensaje.tablero[ino][ini]!= undefined && contador==1){
+								movimientos.push({fila:ino,columna:ini});
+							}
+							else if( mensaje.tablero[ino][ini] == undefined  && (ini == 0 || mensaje.tablero[ino][ini-1]!= undefined) && contador==1 ){
+								movimientos.push({fila:ino,columna:ini});
+								contador++;
+								if(contador ==2){
+									//terminar todo
+									$("body").off("click");
+									$("#tableroJugador3").off("click");
+									$("button").prop("disabled",false);
+									$(".wrapper").css("pointer-events","auto");
+									$("#tableroJugador3").remove();
+									//Enviar al servidor
+									room.send({action:"cambio",movimientos:movimientos});
+									console.log(movimientos);
+								}
+							}
+							else{
+								console.log("no puedes hacer eso");
+								cartaamover=null;
+								fila=null;
+								columna=null;
+								movimientos=[];
+								contador=0;
+								veces=0;
+							}
+							console.log(ino+","+ini);
+						}
+
+
+					});
+				});
+
+			});
+
+
+	}
+	if(mensaje.action=="mercancia1" && mensaje.pares >0){
+		var seleccionR=[0,0,0];
+		var pares = mensaje.pares;
+		$("#chose").remove();
+		$("button").prop("disabled",true);
+		$(".wrapper").css("pointer-events","none");
+		$("body").append(
+			"<div id='chose' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);background-color:#f5dba3;border-radius:20px'>"+
+				"<spanf style='color:black'>Escoge tus mercancias</spanf><br>"+
+				"<spanf id='cantidad' style='color:black'>Faltan: "+pares+"</spanf><br>"+
+				"<input type='image' id='td' src='/assets/img/1Merca1.jpg' style='float:left; position:absolute; top:3em; left:1em;' ><br>"+
+				"<input type='image' id='ts' src='/assets/img/1Merca3.jpg' style='float:left; position:absolute; top:3em; left:4em;'><br>"+
+				"<input type='image' id='tp' src='/assets/img/1Merca2.jpg' style='float:left; position:absolute; top:3em; left:7em;'><br>"+
+			"</div>"
+			);
+		$('#chose').on('click', '#td', function(){
+
+
+			//enviar selección solo si ya restaste las mercancias que faltan
+
+			if(pares-1 >=0){
+				seleccionR[0]++;
+				pares--;
+			}
+
+			$("#cantidad").text("Faltan: "+pares);
+			if(pares==0){
+				console.log("click escogerm");
+				$('#chose').off("click","#td");
+				$("button").prop("disabled",false);
+				$(".wrapper").css("pointer-events","auto");
+				$("#chose").remove();
+				room.send({action:"mercancias1",seleccion:seleccionR});
+			}
+
+		});
+		$('#chose').on('click', '#ts', function(){
+
+			if(pares-1 >=0){
+				seleccionR[1]++;
+				pares--;
+			}
+
+			$("#cantidad").text("Faltan: "+pares);
+			if(pares==0){
+				console.log("click escogerm");
+				$('#chose').off("click","#td");
+				$("button").prop("disabled",false);
+				$(".wrapper").css("pointer-events","auto");
+				$("#chose").remove();
+				room.send({action:"mercancias1",seleccion:seleccionR});
+			}
+			//enviar selección
+		});
+		$('#chose').on('click', '#tp', function(){
+
+			if(pares-1 >=0){
+				seleccionR[2]++;
+				pares--;
+			}
+			$("#cantidad").text("Faltan: "+pares);
+			if(pares==0){
+				console.log("click escogerm");
+				$("button").prop("disabled",false);
+				$('#chose').off("click","#tp");
+				$(".wrapper").css("pointer-events","auto");
+				$("#chose").remove();
+				room.send({action:"mercancias1",seleccion:seleccionR});
+			}
+			//enviar selección
+		});
+	}
+	if(mensaje.action=="mercancia2"){
+		opciones=[0,0,0];
+		var merca=[0,0,0];
+		var oro =0;
+		var puntov=0;
+		var l_merca=3;
+		$(".wrapper").css("pointer-events","none");
+		$("button").prop("disabled",true);
+		var chose=
+				'<div id="comerc" class="row comercanteRow" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background-color:#f5dba3;border-radius:20px">'+
+
+
+            '<div id="cambMerca1" style="left: 2em;top: 2em;width: 3em;height: 3em;float: left;position: absolute;" ><img src="assets/img/merca2.png" class="camMerca"></div>'+
+						'<div id="cambMerca2" style="top: 2em;left: 6em;width: 3em;height: 3em;float: left;position: absolute;"><img src="assets/img/merca2.png" class="camMerca"></div>'+
+						'<div id="cambMerca3" style="top: 2em;width: 3em;height: 3em;float: left;left: 10em;position: absolute;"><img src="assets/img/merca2.png" class="camMerca"></div>'+
+						'<div id="oro" style="top: 2em;width: 3em;height: 3em;float: left;left: 14em;position: absolute;"><img src="assets/img/oro.png" class="camMerca"></div>'+
+						'<div id="puntov" style="width: 3em;height: 3em;float: left;position: absolute;top: 2em;left: 18em;"><img src="assets/img/fichaPV.gif" class="camMerca"></div>'+
+
+						'<div id="cobra" style="top:110px;left:10px;position:absolute;border-style:double;width:50px;height:25px;text-align:center">Cobrar</div>'+
+						'<div id="terminar" style="top:140px;left:10px;position:absolute;border-style:double;width:65px;height:25px;text-align:center">Terminar</div>'+
+
+			 '<spanf id="mensajeof" style="top:60%;position: absolute;left: 50%;font-weight:bold;font-size:12px;color: red;transform: translateX(-50%)">Selecciona 3 mercancias cuales quiera o una moneda de oro o un punto de victoria</spanf>'+
+       '</div>'
+		$("body").append(chose);
+		$("#comerc").on("click","div",function(){
+			console.log("clicked:"+'\n');
+			console.log(this);
+			switch(this.id){
+
+				case "oro":
+					oro=1;
+					$("#cambMerca1").children(".qpv").remove();
+					$("#cambMerca2").children(".qpv").remove();
+					$("#cambMerca3").children(".qpv").remove();
+					$("#puntov").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/accMercante.png'></img>");
+					$(".merch2").css("visibility","visible");
+					$(".selMerca2").css("visibility","visible");
+					$(".merch3").css("visibility","hidden");
+					$(".selMerca3").css("visibility","hidden");
+				break;
+				case "puntov":
+					puntov=1;
+					$("#cambMerca1").children(".qpv").remove();
+					$("#cambMerca2").children(".qpv").remove();
+					$("#cambMerca3").children(".qpv").remove();
+					$("#oro").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/accMercante.png'></img>");
+					$(".merch2").css("visibility","visible");
+					$(".selMerca2").css("visibility","visible");
+					$(".merch3").css("visibility","hidden");
+					$(".selMerca3").css("visibility","hidden");
+				break;
+				case "cambMerca1":
+					if(opciones[0]>=3){
+						opciones[0]=0;
+					}
+					opciones[0]++;
+					oro=0;
+					puntov=0;
+					$("#oro").children(".qpv").remove();
+					$("#puntov").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+opciones[0]+".jpg'></img>");
+				break;
+				case "cambMerca2":
+					if(opciones[1]>=3){
+						opciones[1]=0;
+					}
+					opciones[1]++;
+					oro=0;
+					puntov=0;
+					$("#oro").children(".qpv").remove();
+					$("#puntov").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+opciones[1]+".jpg'></img>");
+
+				break;
+				case "cambMerca3":
+					if(opciones[2]>=3){
+						opciones[2]=0;
+					}
+					opciones[2]++;
+					oro=0;
+					puntov=0;
+					$("#oro").children(".qpv").remove();
+					$("#puntov").children(".qpv").remove();
+					$(this).append("<img class='qpv' style='position:absolute;z-index:10;left:0' src='assets/img/1Merca"+opciones[2]+".jpg'></img>");
+
+				break;
+
+
+				case "cobra":
+					console.log(opciones);
+					$("#comerc").off("click");
+					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
+					$("body").children(".comercanteRow").remove();
+					if(oro ==1 || puntov==1){
+						opciones=[6,6,6]
+						room.send({action:"mercancias2",opciones:opciones,oro:oro,puntov:puntov});
+					}
+					else{
+						room.send({action:"mercancias2",opciones:opciones,oro:oro,puntov:puntov});
+					}
+
+
+				break;
+				case "terminar":
+					console.log(opciones);
+					$("#comerc").off("click");
+					$(".wrapper").css("pointer-events","auto");
+					$("button").prop("disabled",false);
+					$("body").children(".comercanteRow").remove();
+				break;
+			}
+		})
+	}
 });
+
 
 /*
 room.listen("tablero_jugador1/:fila/:columna",function(change){
@@ -1324,7 +1751,13 @@ room.listen("tableroCartas/:fila/:columna/:id",function(change){
 
 room.listen("tableroTuareg/:fila/:columna",function(change){
 		if(change.operation=="replace" && change.value!=0){
-			$(cartas[change.path.fila][change.path.columna]).append("<img id='Tuareg' class='asaltante' src='/assets/img/"+change.value+".png'></img>");
+			if($(cartas[change.path.fila][change.path.columna]).has("#Asaltante")){
+				$(cartas[change.path.fila][change.path.columna]).append("<img id='Tuareg' style='left:3em'  class='asaltante' src='/assets/img/"+change.value+".png'></img>");
+			}
+			else{
+				$(cartas[change.path.fila][change.path.columna]).append("<img id='Tuareg'  class='asaltante' src='/assets/img/"+change.value+".png'></img>");
+			}
+
 		}
 		else if (change.operation=="replace" && change.value==0){
 			$(cartas[change.path.fila][change.path.columna]).children("#Tuareg").remove();

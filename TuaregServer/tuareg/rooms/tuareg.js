@@ -3,6 +3,7 @@ var cartaTrib=require("../Model/modelousuario.js").CartasTribu;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/Tuareg";
 var shuffle = require("array-shuffle");
+
 /*
 	Cosas que se deben resetear cuando se mueva el asaltante:
 		this.state.jugadores[id].c_In
@@ -52,7 +53,7 @@ class Tuareg extends Room{
 			cartas_tribu_recicla:[],   // cartas desechadas
 			cartas_mercancia_recicla:[], //cartas desechadas
 			turno_act:0,
-			asaltante_pos:7,
+			asaltante_pos:1,
 			empate:null,
 			ganador:null,
 			estado:1,
@@ -65,6 +66,7 @@ class Tuareg extends Room{
 			excesoscobrados:0,
 			fichaInicio:null,
 			aumentadoefecto:false,
+
 		});
 
 
@@ -86,7 +88,7 @@ class Tuareg extends Room{
 
 		this.state.jugadores[client.id] ={
 			datiles:4,
-			oro:1,
+			oro:3,
 			pimienta:4,
 			sal:3,
 			puntosv:4 , //[0]= fichas 1 punto , [1]=fichas 3 puntos , [2]=fichas 5 puntos
@@ -105,12 +107,17 @@ class Tuareg extends Room{
 			efectoA:[false,false,false],
 			tablero_jugador:[[],[],[]],
 			efectoB:[false,false,false,false,false],
+			efectoC:[false,false,false,false,false,false,false],
+			efectoU:[false,false,false,false,false,false,false,false,false,false,false,false],
 			conteodePares:[0,0,0,0,0],
 			oasis:0,
 			tuareg:0,
 			tienda:0,
 			pozo:0,
-			camello:0
+			camello:0,
+			c_descuento:0,
+			desc:false,
+			reserva:0
 		};
 
 		this.state.jugadores[client.id].colorT=((this.state.jugadores[client.id].playerIndex==0)? "targiAzul":"targiGris"); // index 0 es player 1
@@ -144,8 +151,75 @@ class Tuareg extends Room{
 			}
 
 		}
+		else if(data.action=="cambio"){
+			if(data.movimientos.length ==2 ){
+			//intercambiar ambas cartas
+			var aux=this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila][data.movimientos[0].columna];
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila][data.movimientos[0].columna] = this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna];
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna]=aux;
 
-	 	else if ((client.id == this.state.turno_act || this.state.estado==5)  && this.state.ganador==null && this.state.empate==null){
+				this.broadcast({action:"refreshtj",fila:data.movimientos[0].fila,columna:data.movimientos[0].columna,clientid:client.id,cartaid:this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila][data.movimientos[0].columna]._id});
+				this.broadcast({action:"refreshtj",fila:data.movimientos[1].fila,columna:data.movimientos[1].columna,clientid:client.id,cartaid:this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna]._id});
+			}
+			else if(data.movimientos.length ==4){
+				// cambiar todas las cartas
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna]= this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila][data.movimientos[0].columna];
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[3].fila][data.movimientos[3].columna]= this.state.jugadores[client.id].tablero_jugador[data.movimientos[2].fila][data.movimientos[2].columna];
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila].splice(data.movimientos[0].columna,1);
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[2].fila].splice(data.movimientos[0].columna,1);
+				this.broadcast({action:"refreshtj",fila:data.movimientos[0].fila,columna:data.movimientos[0].columna,clientid:client.id,cartaid:60});
+				this.broadcast({action:"refreshtj",fila:data.movimientos[2].fila,columna:data.movimientos[2].columna,clientid:client.id,cartaid:60});
+				this.broadcast({action:"refreshtj",fila:data.movimientos[1].fila,columna:data.movimientos[1].columna,clientid:client.id,cartaid:this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna]._id});
+				this.broadcast({action:"refreshtj",fila:data.movimientos[3].fila,columna:data.movimientos[3].columna,clientid:client.id,cartaid:this.state.jugadores[client.id].tablero_jugador[data.movimientos[3].fila][data.movimientos[3].columna]._id});
+
+			}
+
+		}
+		else if(data.action=="mercancias1"){
+			this.state.jugadores[client.id].datiles+=data.seleccion[0];
+			this.state.jugadores[client.id].sal+=data.seleccion[1];
+			this.state.jugadores[client.id].pimienta+=data.seleccion[2];
+		}
+		else if(data.action=="mercancias2"){
+			var datiles=0;
+			var sal=0;
+			var pimienta=0;
+
+			data.opciones.forEach(function(el,indx,arr){
+				switch(el){
+					case 1:
+						datiles++;
+					break;
+					case 2:
+						pimienta++;
+					break;
+					case 3:
+						sal++;
+					break;
+				}
+			});
+			this.state.jugadores[client.id].datiles+=datiles;
+			this.state.jugadores[client.id].sal+=sal;
+			this.state.jugadores[client.id].pimienta+=pimienta;
+			this.state.jugadores[client.id].oro+=data.oro;
+			this.state.jugadores[client.id].puntosv+=data.puntov;
+		}
+		else if(data.action=="efectoU"  ){
+			if(this.state.jugadores[client.id].efectoU[5] &&estado.jugadores[client.id].tarjetaMano!=null){
+				this.send(cliente,{action:"showTr",carta:estado.jugadores[client.id].tarjetaMano,efecto:6});
+				estado.jugadores[client.id].tarjetaMano=null;
+				this.send(cliente,{action:"refreshtjm",cartaid:46,clientid:client.id});
+				this.state.jugadores[client.id].efectoU[5]=false;
+			}
+		}
+		else if(data.action=="reserva" ){
+			if(this.state.jugadores[client.id].efectoU[4] && this.state.jugadores[client.id].oro>0 && this.state.jugadores[client.id].reserva==0){
+				this.state.jugadores[client.id].oro--;
+				this.state.jugadores[client.id].reserva++;
+			}
+
+		}
+		else if ((client.id == this.state.turno_act || this.state.estado==5)  && this.state.ganador==null && this.state.empate==null){
 				//Comprobar  que es lo que actualmente se esta haciendo:
 				//1)poniendo fichas tuareg
 				//2)utilizando/comprando cartas
@@ -240,6 +314,12 @@ class Tuareg extends Room{
 					}
 
 				break;
+			}
+
+			//Aplicando efectoU 11
+			if(estado.jugadores[cliente.id].efectoU[10]){
+				estado.jugadores[cliente.id].puntosv++;
+				this.send(cliente.id,{action:"mensaje",mensaje:"Se te da 1 punto de victoria despues de cobrar el asalto."});
 			}
 			//Una vez se cobran  los 2 asaltos se cambia al estado 1
 
@@ -554,7 +634,7 @@ class Tuareg extends Room{
 					estado.jugadores[cliente.id].datiles+= -carta.costo1_d+descuento[0]; // + data.descuento
 					estado.jugadores[cliente.id].sal+= -carta.costo1_s+descuento[1]; // + data.descuento
 					estado.jugadores[cliente.id].pimienta+= -carta.costo1_p+descuento[2]; // + data.descuento
-					estado.jugadores[cliente.id].oro+= -carta.costo1_o;
+					estado.jugadores[cliente.id].oro+= -carta.costo1_o+descuento[3];
 					estado.jugadores[cliente.id].tablero_jugador[data.cartafila].push(carta); //Introducir al tablero del jugador
 					//contar tipos de cartas en tablero de jugador
 					switch(carta.tipo){
@@ -574,6 +654,7 @@ class Tuareg extends Room{
 							estado.jugadores[cliente.id].pozo++;
 						break;
 					}
+					var totalcartas =estado.jugadores[cliente.id].oasis+estado.jugadores[cliente.id].tienda+estado.jugadores[cliente.id].tuareg+estado.jugadores[cliente.id].camello+estado.jugadores[cliente.id].pozo;
 					//contar los pares
 					estado.jugadores[cliente.id].conteodePares[0]= Math.floor(estado.jugadores[cliente.id].oasis/2);
 					estado.jugadores[cliente.id].conteodePares[1]= Math.floor(estado.jugadores[cliente.id].camello/2);
@@ -581,6 +662,23 @@ class Tuareg extends Room{
 					estado.jugadores[cliente.id].conteodePares[3]= Math.floor(estado.jugadores[cliente.id].tienda/2);
 					estado.jugadores[cliente.id].conteodePares[4]= Math.floor(estado.jugadores[cliente.id].tuareg/2);
 					//si la carta es de efecto aplicar flags
+
+
+					columnaReal=estado.jugadores[cliente.id].tablero_jugador[data.cartafila].length-1; //Determinar columna de la ultima carta
+
+					if(isfromtablero){
+						console.log("es carta del tablero")
+						this.state.tableroCartas[data.fila][data.columna]= estado.cartas_mercancia_baraja.pop();
+						estado.tableroInter[data.fila][data.columna]=0;
+						estado.tableroTuareg[data.fila][data.columna]=0;
+						estado.jugadores[cliente.id].intersec--;
+						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
+					}
+					else{
+							estado.jugadores[cliente.id].cobraBorde--;
+					}
+
+					this.broadcast({action:"refreshtj",fila:data.cartafila,columna:columnaReal,clientid:cliente.id,cartaid:carta._id});
 					switch(carta.efecto[0]){
 						case "a":   // Efecto A
 							switch(carta.efecto[1]){
@@ -595,7 +693,6 @@ class Tuareg extends Room{
 								break;
 							}
 						break;
-
 						case "b":
 							switch(carta.efecto[1]){
 								case "o":
@@ -615,44 +712,218 @@ class Tuareg extends Room{
 								break;
 							}
 						break;
+						case "c":
+							switch(carta.efecto[1]){
+								case "o":
+									estado.jugadores[cliente.id].efectoC[0]=true;
+								break;
+								case "c":
+									estado.jugadores[cliente.id].efectoC[1]=true;
+								break;
+								case "p":
+									estado.jugadores[cliente.id].efectoC[2]=true;
+								break;
+								case "t":
+									estado.jugadores[cliente.id].efectoC[3]=true;
+								break;
+								case "T":
+									estado.jugadores[cliente.id].efectoC[4]=true;
+								break;
+								case "m":
+									estado.jugadores[cliente.id].efectoC[5]=true;
+								break;
+								case "d":
+									estado.jugadores[cliente.id].efectoC[6]=true;
+								break;
+							}
+						break;
+						case "d":
+							switch(carta.efecto[1]){
+								case "1":
+									this.send(cliente,{action:"cambio",tablero:estado.jugadores[cliente.id].tablero_jugador,totalcartas:totalcartas});
+									console.log("carta efecto D1")
+								break;
+								case "2":
+									this.send(cliente,{action:"mercancia1",pares:Math.floor(totalcartas/2)});
+								break;
+								case "3":
+									this.send(cliente,{action:"mercancia2"});
+								break;
+
+							}
+						break;
+						case "u":
+							switch(carta.efecto[1]){
+							case "1":
+								estado.jugadores[cliente.id].efectoU[0]=true;
+							break;
+							case "2":
+								estado.jugadores[cliente.id].efectoU[1]=true;
+							break;
+							case "3":
+								estado.jugadores[cliente.id].efectoU[2]=true;
+							break;
+							case "4":
+								estado.jugadores[cliente.id].efectoU[3]=true;
+								this.send(cliente,{action:"mercancia1",pares:Math.floor((12-totalcartas)/2)});
+							break;
+							case "5":
+								estado.jugadores[cliente.id].efectoU[4]=true;
+								this.send(cliente,{action:"mensaje",mensaje:"Pon una moneda en la reserva dando click a tu moneda de oro."});
+							break;
+							case "6":
+								estado.jugadores[cliente.id].efectoU[5]=true;
+							break;
+							case "7":
+								estado.jugadores[cliente.id].efectoU[6]=true;
+							break;
+							case "8":
+								estado.jugadores[cliente.id].efectoU[7]=true;
+							break;
+							case "9":
+								estado.jugadores[cliente.id].efectoU[8]=true;
+							break;
+							case "A":
+								estado.jugadores[cliente.id].efectoU[9]=true;
+							break;
+							case "B":
+								estado.jugadores[cliente.id].efectoU[10]=true;
+							break;
+							case "C":
+								estado.jugadores[cliente.id].efectoU[11]=true;
+							break;
+						}
+						break;
 					}
-
-					columnaReal=estado.jugadores[cliente.id].tablero_jugador[data.cartafila].length-1; //Determinar columna de la ultima carta
-
-					if(isfromtablero){
-						console.log("es carta del tablero")
-						this.state.tableroCartas[data.fila][data.columna]= estado.cartas_mercancia_baraja.pop();
-						estado.tableroInter[data.fila][data.columna]=0;
-						estado.tableroTuareg[data.fila][data.columna]=0;
-						estado.jugadores[cliente.id].intersec--;
-						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
-					}
-					else{
-							estado.jugadores[cliente.id].cobraBorde--;
-					}
-
-					this.broadcast({action:"refreshtj",fila:data.cartafila,columna:columnaReal,clientid:cliente.id,cartaid:carta._id});
-
 				break;
 				case 2:
 					console.log(data);
 					var columnaReal;
-					estado.jugadores[cliente.id].oro-= carta.costo2_o
+					if(data.reserva){
+						estado.jugadores[cliente.id].reserva=0;
+					}
+					else{
+						estado.jugadores[cliente.id].oro-= carta.costo2_o
+					}
 					estado.jugadores[cliente.id].tablero_jugador[data.cartafila].push(carta);
-					//Aplicar efecto A
-					if(carta.efecto[0]=="a"){
-						switch(carta.efecto[1]){
-							case "d":
-								estado.jugadores[cliente.id].efectoA[0]=true;
+					//Aplica efectos de cartas
+					switch(carta.efecto[0]){
+						case "a":   // Efecto A
+							switch(carta.efecto[1]){
+								case "d":
+									estado.jugadores[cliente.id].efectoA[0]=true;
+								break;
+								case "s":
+									estado.jugadores[cliente.id].efectoA[1]=true;
+								break;
+								case "p":
+									estado.jugadores[cliente.id].efectoA[2]=true;
+								break;
+							}
+						break;
+						case "b":
+							switch(carta.efecto[1]){
+								case "o":
+									estado.jugadores[cliente.id].efectoB[0]=true;
+								break;
+								case "c":
+									estado.jugadores[cliente.id].efectoB[1]=true;
+								break;
+								case "p":
+									estado.jugadores[cliente.id].efectoB[2]=true;
+								break;
+								case "t":
+									estado.jugadores[cliente.id].efectoB[3]=true;
+								break;
+								case "T":
+									estado.jugadores[cliente.id].efectoB[4]=true;
+								break;
+							}
+						break;
+						case "c":
+							switch(carta.efecto[1]){
+								case "o":
+									estado.jugadores[cliente.id].efectoC[0]=true;
+								break;
+								case "c":
+									estado.jugadores[cliente.id].efectoC[1]=true;
+								break;
+								case "p":
+									estado.jugadores[cliente.id].efectoC[2]=true;
+								break;
+								case "t":
+									estado.jugadores[cliente.id].efectoC[3]=true;
+								break;
+								case "T":
+									estado.jugadores[cliente.id].efectoC[4]=true;
+								break;
+								case "m":
+									estado.jugadores[cliente.id].efectoC[5]=true;
+								break;
+								case "d":
+									estado.jugadores[cliente.id].efectoC[6]=true;
+								break;
+							}
+						break;
+						case "d":
+							switch(carta.efecto[1]){
+								case "1":
+									this.send(cliente,{action:"cambio",tablero:estado.jugadores[cliente.id].tablero_jugador,totalcartas:totalcartas});
+									console.log("carta efecto D1")
+								break;
+								case "2":
+									this.send(cliente,{action:"mercancia1",pares:Math.floor(totalcartas/2)});
+								break;
+								case "3":
+									this.send(cliente,{action:"mercancia2"});
+								break;
+
+							}
+						break;
+						case "u":
+							switch(carta.efecto[1]){
+							case "1":
+								estado.jugadores[cliente.id].efectoU[0]=true;
 							break;
-							case "s":
-								estado.jugadores[cliente.id].efectoA[1]=true;
+							case "2":
+								estado.jugadores[cliente.id].efectoU[1]=true;
 							break;
-							case "p":
-								estado.jugadores[cliente.id].efectoA[2]=true;
+							case "3":
+								estado.jugadores[cliente.id].efectoU[2]=true;
+							break;
+							case "4":
+								estado.jugadores[cliente.id].efectoU[3]=true;
+								this.send(cliente,{action:"mercancia1",pares:1});
+							break;
+							case "5":
+								estado.jugadores[cliente.id].efectoU[4]=true;
+								this.send(cliente,{action:"mensaje",mensaje:"Pon una moneda en la reserva dando click a tu moneda de oro."});
+							break;
+							case "6":
+								estado.jugadores[cliente.id].efectoU[5]=true;
+							break;
+							case "7":
+								estado.jugadores[cliente.id].efectoU[6]=true;
+							break;
+							case "8":
+								estado.jugadores[cliente.id].efectoU[7]=true;
+							break;
+							case "9":
+								estado.jugadores[cliente.id].efectoU[8]=true;
+							break;
+							case "A":
+								estado.jugadores[cliente.id].efectoU[9]=true;
+							break;
+							case "B":
+								estado.jugadores[cliente.id].efectoU[10]=true;
+							break;
+							case "C":
+								estado.jugadores[cliente.id].efectoU[11]=true;
 							break;
 						}
+						break;
 					}
+
 					columnaReal=estado.jugadores[cliente.id].tablero_jugador[data.cartafila].length-1;
 
 					if(isfromtablero){
@@ -666,7 +937,6 @@ class Tuareg extends Room{
 						estado.jugadores[cliente.id].cobraBorde--;
 					}
 					this.broadcast({action:"refreshtj",fila:data.cartafila,columna:columnaReal,clientid:cliente.id,cartaid:carta._id});
-
 				break;
 				case 3:
 					console.log(data);
@@ -687,7 +957,6 @@ class Tuareg extends Room{
 					this.send(cliente,{action:"refreshtjm",fila:data.fila,columna:data.columna,cartaid:carta._id,clientid:cliente.id});
 
 					console.log(data);
-
 				break;
 				default:
 					console.log(data);
@@ -703,12 +972,12 @@ class Tuareg extends Room{
 					else{
 						estado.jugadores[cliente.id].cobraBorde--;
 					}
-
 				break;
-
 			}
 
 		}
+
+
 		else{
 			///Calcular si tablero de jugador tiene espacio para acomodar
 			var espacio;
@@ -722,63 +991,43 @@ class Tuareg extends Room{
 			});
 
 			///Detectar si hay descuento
-			var c_descuento=0;
-			var desc=false;
-			switch(carta.tipo){
-				case "oasis":
-					if (estado.jugadores[cliente.id].efectoB[0] && estado.jugadores[cliente.id].oasis>0){
-						c_descuento=estado.jugadores[cliente.id].oasis;
-						desc=true;
-					}
-					else{
-						desc=false;
-					}
-				break;
-				case "camello":
-					if (estado.jugadores[cliente.id].efectoB[1] && estado.jugadores[cliente.id].camello>0){
-						c_descuento=estado.jugadores[cliente.id].camello;
-						desc=true;
-					}
-					else{
-						desc=false;
-					}
-				break;
-				case "pozo":
-					if (estado.jugadores[cliente.id].efectoB[2] && estado.jugadores[cliente.id].pozo>0){
-						c_descuento=estado.jugadores[cliente.id].pozo;
-						desc=true;
-					}
-					else{
-						desc=false;
-					}
-				break;
-				case "tienda":
-					if (estado.jugadores[cliente.id].efectoB[3] && estado.jugadores[cliente.id].tienda>0){
-						c_descuento=estado.jugadores[cliente.id].tienda;
-						desc=true;
-					}
-					else{
-						desc=false;
-					}
-				break;
-				case "tuareg":
-					if (estado.jugadores[cliente.id].efectoB[4] && estado.jugadores[cliente.id].tuareg>0){
-						c_descuento=estado.jugadores[cliente.id].tuareg;
-						desc=true;
-					}
-					else{
-						desc=false;
-					}
-				break;
-			}
+			//efectos tipo b
 
+					if (estado.jugadores[cliente.id].efectoB[0] && estado.jugadores[cliente.id].oasis>0){
+						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].oasis;
+						estado.jugadores[cliente.id].desc=true;
+					}
+					if (estado.jugadores[cliente.id].efectoB[1] && estado.jugadores[cliente.id].camello>0){
+						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].camello;
+						estado.jugadores[cliente.id].desc=true;
+					}
+					if (estado.jugadores[cliente.id].efectoB[2] && estado.jugadores[cliente.id].pozo>0){
+						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].pozo;
+						estado.jugadores[cliente.id].desc=true;
+					}
+					if (estado.jugadores[cliente.id].efectoB[3] && estado.jugadores[cliente.id].tienda>0){
+						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].tienda;
+						estado.jugadores[cliente.id].desc=true;
+					}
+					if (estado.jugadores[cliente.id].efectoB[4] && estado.jugadores[cliente.id].tuareg>0){
+						estado.jugadores[cliente.id].c_descuento=estado.jugadores[cliente.id].tuareg;
+						estado.jugadores[cliente.id].desc=true;
+					}
+
+
+			// Aplicando efectoU 10
+			if(estado.jugadores[cliente.id].efectoU[9]){
+				estado.c_descuento+=1;
+				estado.jugadores[cliente.id].desc=true;
+				this.send(cliente.id,{action:"mensaje",mensaje:"Se te descuenta una mercancia menos: 'Si utilizas la acción de Nobles para poner una carta sobre la mesa, pagas 1 mercancia menos que la indicada'"})
+			}
 
 
 			///
 			console.log(espacio);
 			/////
 			this.send(cliente,{action:"choset",fila:data.fila,columna:data.columna,costo:[carta.costo1_d,carta.costo1_s,carta.costo1_o,carta.costo1_p,carta.costo2_o ],
-			descuento:desc,cantidad:c_descuento,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
+			descuento:estado.jugadores[cliente.id].desc,cantidad:estado.jugadores[cliente.id].c_descuento,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
 		}
 		//verificar si nos quedamos sin cartas
 		if(estado.cartas_mercancia_baraja.length <=0){
@@ -969,24 +1218,193 @@ class Tuareg extends Room{
 	}
 	contarPuntosTableros(estado,cliente){
 		var puntos=[0,0];
+		var contadorCartas=[0,0]
+
 		estado.jugadores[estado.players[0]].tablero_jugador.forEach(function(el,index,arr){
 			el.forEach(function(el1,index1,arr1){
-				if(el1 != null){
+				if(el1 != null && el1 != undefined ){
 					puntos[0]+=el1.puntos_v;
+					contadorCartas[0]++;
 				}
 
 			});
 		});
 		estado.jugadores[estado.players[1]].tablero_jugador.forEach(function(el,index,arr){
 			el.forEach(function(el1,index1,arr1){
-				if(el1 != null){
+				if(el1 != null && el1 != undefined ){
 					puntos[1]+=el1.puntos_v;
+					contadorCartas[1]++;
 				}
 			});
 		});
-		return puntos;
-		// contar puntos
 
+		// si todas las cartas de una fila son del mismo tipo dar 4Pv
+		estado.jugadores[estado.players[0]].tablero_jugador.forEach(function(el,index,arr){
+			var tipo=el[0].tipo
+			if(tipo==el[1].tipo && tipo==el[2].tipo && tipo==el[3].tipo){
+				puntos[0]+=4;
+				this.send(this.clients[0],{action:"mensaje",mensaje:"Los tipos de carta de la fila:"+index+" son iguales, +4 puntos de victora."})
+			}
+		});
+		estado.jugadores[estado.players[1]].tablero_jugador.forEach(function(el,index,arr){
+			var tipo=el[0].tipo
+			if(tipo==el[1].tipo && tipo==el[2].tipo && tipo==el[3].tipo){
+				puntos[1]+=4;
+				this.send(this.clients[1],{action:"mensaje",mensaje:"Los tipos de carta de la fila:"+index+" son iguales, +4 puntos de victora."})
+			}
+		});
+
+		// si todas las cartas de una fila tienen simbolo distinto dar 2pv pero si e efectoU 11 esta activado aumentar 4pv
+		estado.jugadores[estado.players[0]].tablero_jugador.forEach(function(el,index,arr){
+			var tipo=[0,0,0,0,0]; //Oasis,camello,pozo,tienda ,tuareg
+			var diferente=false;
+			var aumento =(estado.jugadores[estado.players[0]].efectoU[11]) ? 4 : 2;
+			el.forEach(function(el1,index1,arr1){
+				switch(el1.tipo){
+					case "oasis":
+						tipo[0]++;
+					break;
+					case "camello":
+						tipo[1]++;
+					break;
+					case "pozo":
+						tipo[2]++;
+					break;
+					case "tienda":
+						tipo[3]++;
+					break;
+					case "tuareg":
+						tipo[4]++;
+					break;
+				}
+			});
+			tipo.forEach(function(el,indx,arr){
+				if(el==1){
+					diferente=true;
+				}
+				else{
+					diferente=false;
+
+				}
+			});
+			if(diferente){
+				puntos[0]+=aumento;
+				if(aumento==2){
+					this.send(this.clients[0],{action:"mensaje",mensaje:"Los tipos de carta de la fila:"+index+" son de tipos distintos, +2 puntos de victora."})
+				}
+				else{
+					this.send(this.clients[0],{action:"mensaje",mensaje:"Los tipos de carta de la fila:"+index+" son de tipos distintos , +4 puntos de victora."})
+				}
+
+			}
+
+		});
+		estado.jugadores[estado.players[1]].tablero_jugador.forEach(function(el,index,arr){
+			var tipo=[0,0,0,0,0]; //Oasis,camello,pozo,tienda ,tuareg
+			var diferente=false;
+			var aumento =(estado.jugadores[estado.players[1]].efectoU[11]) ? 4 : 2;
+			el.forEach(function(el1,index1,arr1){
+				switch(el1.tipo){
+					case "oasis":
+						tipo[0]++;
+					break;
+					case "camello":
+						tipo[1]++;
+					break;
+					case "pozo":
+						tipo[2]++;
+					break;
+					case "tienda":
+						tipo[3]++;
+					break;
+					case "tuareg":
+						tipo[4]++;
+					break;
+				}
+			});
+			tipo.forEach(function(el,indx,arr){
+				if(el==1){
+					diferente=true;
+				}
+				else{
+					diferente=false;
+
+				}
+			});
+			if(diferente){
+				puntos[1]+=aumento;
+				if(aumento==2){
+					this.send(this.clients[0],{action:"mensaje",mensaje:"Los tipos de carta de la fila:"+index+" son de tipos distintos, +2 puntos de victora."})
+				}
+				else{
+					this.send(this.clients[0],{action:"mensaje",mensaje:"Los tipos de carta de la fila:"+index+" son de tipos distintos , +4 puntos de victora."})
+				}
+			}
+
+		});
+
+		//contar puntos de efecto C
+		this.state.jugadores[this.state.players[0]].efectoC.forEach(function(el,indx,arr){
+			if(el && this.state.jugadores[this.state.players[0]].conteodePares[indx]>0 && indx<5){
+				puntos[0]+=this.state.jugadores[this.state.players[0]].conteodePares[indx];
+				this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron tus puntos de victoria por carta efecto"});
+				console.log("jugador 1 se aumentaron puntos por  carta efecto");
+			}
+		});
+		if(this.state.jugadores[this.state.players[0]].efectoC[5] && contadorCartas[0]> contadorCartas[1]){
+			puntos[0]++;
+			this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron tus puntos de victoria por carta efecto , tienes mas cartas en tu tablero que el contrincante"});
+			console.log("jugador 1 tiene mas cartas en tablero que contrincante");
+		}
+		if(this.state.jugadores[this.state.players[0]].efectoC[5] && contadorCartas[0]>=10){
+			puntos[0]++;
+			this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron tus puntos de victoria por carta efecto , tienes mas de 10 cartas en tu tablero"});
+			console.log("jugador 1 tiene mas de 10 cartas tablero que contrincante");
+		}
+
+		this.state.jugadores[this.state.players[1]].efectoC.forEach(function(el,indx,arr){
+			if(el && this.state.jugadores[this.state.players[1]].conteodePares[indx]>0 && indx<5){
+				puntos[1]+=this.state.jugadores[this.state.players[1]].conteodePares[indx];
+				this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron tus puntos de victoria por carta efecto"});
+				console.log("jugador 2 se aumentaron puntos por  carta efecto");
+			}
+		});
+		if(this.state.jugadores[this.state.players[1]].efectoC[5] && contadorCartas[1]> contadorCartas[0]){
+			puntos[1]++;
+			this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron tus puntos de victoria por carta efecto , tienes mas cartas en tu tablero que el contrincante"});
+			console.log("jugador 2 tiene mas cartas en tablero que contrincante");
+		}
+		if(this.state.jugadores[this.state.players[1]].efectoC[5] && contadorCartas[1]>=10){
+			puntos[0]++;
+			this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron tus puntos de victoria por carta efecto , tienes mas de 10 cartas en tu tablero"});
+			console.log("jugador 2 tiene mas de 10 cartas tablero que contrincante");
+		}
+
+		//contar puntos de efecto U
+		//efecto 3
+		if(this.state.jugadores[this.state.players[0]].efectoU[2] ){
+
+			this.state.jugadores[this.state.players[0]].tablero_jugador.forEach(function(el,indx,arr){
+				if(el[3]._id==13){
+					puntos[0]+=2;
+					this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron en 2tus puntos de victoria por carta efecto , la carta esta situada al final de una fila completa"});
+					console.log("jugador 1 tiene la carta de efectoU _id 13 al final de una fila completa");
+				}
+			});
+
+		}
+		if(this.state.jugadores[this.state.players[1]].efectoU[2] ){
+			this.state.jugadores[this.state.players[1]].tablero_jugador.forEach(function(el,indx,arr){
+				if(el[3]._id==13){
+					puntos[0]+=2;
+					this.send(cliente,{action:"mensaje",mensaje:"Se aumentaron en 2tus puntos de victoria por carta efecto , la carta esta situada al final de una fila completa"});
+					console.log("jugador 1 tiene la carta de efectoU _id 13 al final de una fila completa");
+				}
+			});
+		}
+
+
+		return puntos;
 	}
 	isTableroLleno(estado,cliente){
 		var lleno=0;
@@ -1122,6 +1540,17 @@ class Tuareg extends Room{
 					this.state.jugadores[this.state.players[0]].pimienta++;
 					this.send(this.clients[0],{mensaje:"Adquiriste uno mas de pimienta por carta tribu camello"});
 				}
+				if(this.state.jugadores[this.state.players[0]].efectoU[0] && !this.state.jugadores[this.state.players[0]].flagMerca[0] && !this.state.jugadores[this.state.players[0]].flagMerca[1] && !this.state.jugadores[this.state.players[0]].flagMerca[2] ){
+					this.send(cliente,{action:"showC",carta:this.state.cartas_mercancia_baraja.pop(),actual:this.state.jugadores[this.state.players[0]]})
+					//verificar si nos quedamos sin cartas
+					if(this.state.cartas_mercancia_baraja.length <=0){
+						//tomar el cementerio de cartas, barajearlo y volverlo la nueva baraja
+						estado.cartas_mercancia_baraja=estado.cartas_mercancia_recicla;
+						estado.cartas_mercancia_recicla=[];
+						shuffle(estado.cartas_mercancia_baraja);
+					}
+					this.send(this.clients[1],{mensaje:"No conseguiste ninguna mercancia esta ronda, ten una carta de mercancia"});
+				}
 				if(this.state.jugadores[this.state.players[1]].efectoA[0] && this.state.jugadores[this.state.players[1]].flagMerca[0]){
 					this.state.jugadores[this.state.players[1]].datiles++;
 					this.send(this.clients[1],{mensaje:"Adquiriste uno mas de datiles por carta tribu tuareg"});
@@ -1134,6 +1563,18 @@ class Tuareg extends Room{
 					this.state.jugadores[this.state.players[1]].pimienta++;
 					this.send(this.clients[1],{mensaje:"Adquiriste uno mas de pimienta por carta tribu camello"});
 				}
+				if(this.state.jugadores[this.state.players[1]].efectoU[0] && !this.state.jugadores[this.state.players[1]].flagMerca[0] && !this.state.jugadores[this.state.players[1]].flagMerca[1] && !this.state.jugadores[this.state.players[1]].flagMerca[2] ){
+					this.send(cliente,{action:"showC",carta:this.state.cartas_mercancia_baraja.pop(),actual:this.state.jugadores[this.state.players[1]]})
+					//verificar si nos quedamos sin cartas
+					if(this.state.cartas_mercancia_baraja.length <=0){
+						//tomar el cementerio de cartas, barajearlo y volverlo la nueva baraja
+						estado.cartas_mercancia_baraja=estado.cartas_mercancia_recicla;
+						estado.cartas_mercancia_recicla=[];
+						shuffle(estado.cartas_mercancia_baraja);
+					}
+					this.send(this.clients[1],{mensaje:"No conseguiste ninguna mercancia esta ronda, ten una carta de mercancia"});
+				}
+
 				this.state.aumentadoefecto=true;
 			}
 
@@ -1168,15 +1609,38 @@ class Tuareg extends Room{
 				//Comprobar si hay asalto
 				/////////Aqui realizar asalto///
 				if(this.state.asaltante_pos==4 || this.state.asaltante_pos==8 || this.state.asaltante_pos==12 || this.state.asaltante_pos==16 ){
-					this.broadcast({action:"asalto",posicion:this.state.asaltante_pos,act: { [this.state.players[0]] : this.state.jugadores[this.state.players[0]] , [this.state.players[1]]:this.state.jugadores[this.state.players[1]]} });
+					if(!this.state.jugadores[this.state.players[0]].efectoU[1]){
+						this.send(this.clients[0],{action:"asalto",posicion:this.state.asaltante_pos,act: this.state.jugadores[this.state.players[0]]});
+					}
+					else if(!this.state.jugadores[this.state.players[1]].efectoU[1]){
+						this.send(this.clients[1],{action:"asalto",posicion:this.state.asaltante_pos,act:this.state.jugadores[this.state.players[1]]});
+					}
+
 				}
 				else{
 
 					this.broadcast({action:"refreshall"})
 					//
 					this.state.estado=1;
-					this.state.jugadores[this.state.players[0]].fichasT=3;
-					this.state.jugadores[this.state.players[1]].fichasT=3;
+
+					// Aplicando efectoU 9
+					if(this.state.jugadores[this.state.players[0]].efectoU[8]){
+						this.state.jugadores[this.state.players[0]].fichasT=3;
+						this.state.jugadores[this.state.players[1]].fichasT=2;
+						this.state.jugadores[this.state.players[0]].efectoU[8]=false;
+						this.send(this.clients[1],{action:"mensaje",mensaje:"Se te resta una ficha tuareg por carta efecto de contrincate"});
+					}
+					else if (this.state.jugadores[this.state.players[1]].efectoU[8]){
+						this.state.jugadores[this.state.players[0]].fichasT=2;
+						this.state.jugadores[this.state.players[1]].fichasT=3;
+						this.state.jugadores[this.state.players[1]].efectoU[8]=false;
+						this.send(this.clients[0],{action:"mensaje",mensaje:"Se te resta una ficha tuareg por carta efecto de contrincate"});
+					}
+					else{
+						this.state.jugadores[this.state.players[0]].fichasT=3;
+						this.state.jugadores[this.state.players[1]].fichasT=3;
+					}
+
 					this.state.fichaInicio=(this.state.fichaInicio== this.state.players[0])?this.state.players[1]:this.state.players[0];
 					this.state.turno_act=this.state.fichaInicio;
 				}
@@ -1217,7 +1681,7 @@ class Tuareg extends Room{
 
 				});
 			}
-			if(estado.jugadores[cliente].c_In.length > estado.jugadores[cliente].f_In.length ){
+			else if(estado.jugadores[cliente].c_In.length > estado.jugadores[cliente].f_In.length ){
 				estado.jugadores[cliente].c_In.forEach(function(el,ind){
 					if(estado.tableroInter[ estado.jugadores[cliente].f_In[0] ][ el ]==0){
 						estado.tableroInter[ estado.jugadores[cliente].f_In[0] ][ el ]=cliente;
@@ -1228,7 +1692,19 @@ class Tuareg extends Room{
 
 				});
 			}
+			else if(estado.jugadores[cliente].c_In.length == estado.jugadores[cliente].f_In.length ){
+				estado.jugadores[cliente].f_In.forEach(function(el,ind){
+					if(estado.tableroInter[el][estado.jugadores[cliente].c_In[0]]==0){
+						estado.tableroInter[el][estado.jugadores[cliente].c_In[0]]=cliente;
+						estado.tableroTuareg[el][estado.jugadores[cliente].c_In[0]]=estado.jugadores[cliente].colorM;
+						estado.jugadores[cliente].intersec+=1;
+						console.log(estado.tableroInter[el][estado.jugadores[cliente].c_In[0]]);
+					}
+
+				});
+			}
 		}
+
 		/*else {
 			// hacer intersección especial o continuar solo con bordes
 			//if(estado.jugadores[cliente].c_In.length>0 && (estado.jugadores[cliente].c_In[0]==estado.jugadores[cliente].c_In[1] ))
@@ -1301,7 +1777,7 @@ class Tuareg extends Room{
 		}
 	}
 	ponerFichas(data,estado,cliente){
-		if(data.action=="select" && !estado.reubica && typeof(estado.tableroInter[data.fila][data.columna])!="string" && (typeof(estado.tableroCartas[data.fila][data.columna])=="string" && estado.tableroCartas[data.fila][data.columna].indexOf("asalto")==-1)  && estado.jugadores[cliente.id].fichasT > 0 &&estado.tableroAsaltante[data.fila][data.columna]!="A" ){
+		if(data.action=="select" && !estado.reubica && typeof(estado.tableroInter[data.fila][data.columna])!="string" && (typeof(estado.tableroCartas[data.fila][data.columna])=="string" && estado.tableroCartas[data.fila][data.columna].indexOf("asalto")==-1)  && estado.jugadores[cliente.id].fichasT > 0 && (estado.jugadores[cliente.id].efectoU[6] || estado.tableroAsaltante[data.fila][data.columna]!="A") ){
 			if(this.frenteVacio(data,estado,cliente)){
 				if(data.fila ==0 || data.fila==4){
 					estado.jugadores[cliente.id].c_In.push(data.columna);
@@ -1313,7 +1789,12 @@ class Tuareg extends Room{
 				estado.tableroInter[data.fila][data.columna]=cliente.id;
 				estado.jugadores[cliente.id].fichasT--;
 				estado.jugadores[cliente.id].cobraBorde++;
-				this.cambiarTurno(cliente);
+				//posible solucion al error de las 2 fichasT
+				var jugadorcontrario= (this.clients[0].id==cliente.id) ?this.clients[1].id:this.clients[0].id;
+				if(estado.jugadores[jugadorcontrario].fichasT>0){
+					this.cambiarTurno(cliente);
+				}
+
 				console.log(data);
 			}
 		}
