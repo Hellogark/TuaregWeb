@@ -15,6 +15,48 @@
 .tribucT{
   background-image:url(/assets/img/TribuTableroJ.gif);
 }
+
+
+@media only screen and (max-width:1100px ) {
+  #j1{
+    position: absolute;
+    left: -40em;
+    width: 206px;
+    top: 40em;
+  }
+  #j2{
+    position: absolute;
+    left: -20em;
+    width: 206px;
+    top: 40em;
+  }
+  div.row.tableroJugador1{
+    width: 347px;
+    height: 168px;
+    position: relative;
+    left: 56.3em;
+    top: -33em;
+  }
+  div.row.tableroJugador2{
+    width:347px;
+    height:168px;
+    position:relative;
+    left:56.3em;
+    top:-23.7em;
+  }
+  #cartaManoJ1{
+    position: absolute;
+    top: 13em;
+    left: 0;
+  }
+  #cartaManoJ2{
+    position: absolute;
+    top: 33em;
+    left: 0;
+  }
+}
+
+
 input[type=button] {
     box-sizing: border-box;
     border: solid;
@@ -495,7 +537,7 @@ div.col-md-2.merca{
   display:inline-block;
 }
 
-div.row.tableroJugador1{
+.tableroJugador1{
   width:347px;
   height:168px;
   position:relative;
@@ -503,7 +545,7 @@ div.row.tableroJugador1{
   top:-33em;
 }
 
-div.row.tableroJugador2{
+.tableroJugador2{
   width:347px;
   height:168px;
   position:relative;
