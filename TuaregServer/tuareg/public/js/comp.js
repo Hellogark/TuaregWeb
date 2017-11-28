@@ -314,6 +314,7 @@ room.onData.add(function(mensaje){
 			else{
 				cantidad--;
 			 	mercadesc[0]++;
+				$("#comunica").text("<spanf id='comunica'style='color:red'>Descuento: "+cantidad+ "</spanf>");
 			 	$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+(mensaje.costo[2]-mercadesc[3])+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
 			}
 
@@ -329,6 +330,7 @@ room.onData.add(function(mensaje){
 			else{
 				cantidad--;
 				mercadesc[1]++;
+				$("#comunica").text("<spanf id='comunica'style='color:red'>Descuento: "+cantidad+ "</spanf>");
 				$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
 			}
 			 //Aplicar  descuento en una mercancia
@@ -344,6 +346,7 @@ room.onData.add(function(mensaje){
 				else{
 					cantidad--;
 					mercadesc[2]++;
+					$("#comunica").text("<spanf id='comunica'style='color:red'>Descuento: "+cantidad+ "</spanf>");
 					$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
 				}
 
