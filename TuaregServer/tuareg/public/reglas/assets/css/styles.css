@@ -1,0 +1,217 @@
+html{
+  font-family:sans-serif;
+  -webkit-text-size-adjust:100%;
+  -ms-text-size-adjust:100%;
+  width:1000px;
+}
+
+div.container.reglas{
+  width:720px;
+  height:6447px;
+  position:relative;
+}
+
+div.imagenHeader{
+  width:700px;
+  clear:both;
+  z-index:1;
+}
+
+img.imagenHeader{
+  width:700px;
+  height:30px;
+  position:relative;
+}
+
+header.header{
+  width:30px;
+}
+
+div.título{
+  font-family:Raleway, sans-serif;
+  font-weight:700;
+  font-size:21px;
+  position:absolute;
+  left:1em;
+  z-index:2;
+}
+
+div.row.encabezado{
+  height:30px;
+  width:700px;
+  position:relative;
+  bottom:0em;
+}
+
+div.container{
+  background-color:#d6b378;
+}
+
+div.container.menu{
+  width:150px;
+  position:fixed;
+  float:left;
+}
+
+body{
+  background-color:#d6b378;
+}
+
+li{
+  font-size:15px;
+}
+
+p.p{
+  position:relative;
+}
+
+div.figT{
+  width:112px;
+  position:relative;
+  left:4em;
+}
+
+div.figTuareg{
+  width:225px;
+}
+
+div.oro{
+  width:273px;
+  position:relative;
+  display:block;
+  bottom:6em;
+  left:19em;
+}
+
+div.oros{
+  width:150px;
+  position:relative;
+  left:23em;
+  bottom:6em;
+}
+
+div.Asalto{
+  width:40px;
+  position:relative;
+  bottom:12em;
+  left:42em;
+}
+
+div.asaltante{
+  width:150px;
+  position:relative;
+  left:39em;
+  bottom:12em;
+}
+
+div.fichasMerca{
+  width:105px;
+  position:relative;
+  bottom:11em;
+  left:4em;
+}
+
+div.figTuareg{
+  position:relative;
+  left:1.5em;
+}
+
+div.fichasMer{
+  width:169px;
+  position:relative;
+  bottom:11em;
+  left:2em;
+}
+
+div.marcT{
+  width:54px;
+  position:relative;
+  bottom:17.6em;
+  left:19em;
+}
+
+div.FichasTT{
+  position:relative;
+  bottom:17.4em;
+  left:16em;
+  width:159px;
+}
+
+div.turno{
+  width:50px;
+  position:relative;
+  bottom:24em;
+  left:33em;
+}
+
+div.muleto{
+  width:150px;
+  position:relative;
+  bottom:23.5em;
+  left:30em;
+}
+
+div.pV{
+  position:relative;
+  width:400px;
+  left:3em;
+  bottom:22em;
+}
+
+div.pvtxt{
+  position:relative;
+  bottom:22em;
+}
+
+p{
+  text-align:justify;
+}
+
+div.row.contenido{
+  height:331px;
+}
+
+img.reglas{
+  width:425px;
+  align-self:center;
+}
+
+p.pct{
+  position:relative;
+  clear:both;
+}
+
+p.sub{
+  margin-top:1em;
+  margin-bottom:1em;
+  font-weight:800;
+}
+
+#vertical-nav{
+  position:fixed;
+  top:105px;
+  width:140px;
+  height:auto;
+  margin:0;
+  padding:5px;
+  border:2px solid #c59c34;
+  border-radius:10px;
+  background:rgba(213,153,65,0.5);
+}
+
+#vertical-nav a{
+  min-width:130px;
+  font:13px 'verdana', helvetica, sans-serif;
+  color:#605a22;
+  background:#c59f56;
+  text-align:center;
+  text-decoration:none;
+  padding:5px 4px;
+  margin:2px -1px;
+  float:left;
+}
+
+#vertical-nav a:hover{
+  color:#554715;
+}
+

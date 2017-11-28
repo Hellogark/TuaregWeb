@@ -1,5 +1,5 @@
 doctype html
-html(lang='en')
+html(lang='es')
   head
     meta(charset='utf-8')
     title Tuareg - Juega Tuareg
@@ -30,50 +30,37 @@ html(lang='en')
     header#header
       .container
         #logo.pull-left
-          a(href='index.html')
-            img(src='img/logo.png', alt='', title='')
+          a(href='/')
+            img(src='img/tuareg-logo.png', alt='', title='Logo del Juego de Mesa Tuareg')
           // Uncomment below if you prefer to use a text image
           // <h1><a href="#hero">Header 1</a></h1>
         nav#nav-menu-container
           ul.nav-menu
             li.menu-active
-              a(href='index.html#hero') Inicio
+              a(href='/#hero')
+                i.fa.fa-home
+                |  Inicio
             li
-              a(href='index.html#about') Acerca de Tuareg
+              a(href='/#about')
+                i.fa.fa-info-circle
+                |  Acerca de Tuareg
             li
-              a(href='index.html#services') Instrucciones
+              a(href='/#services')
+                i.fa.fa-list-alt
+                |  Instrucciones
             li
-              a(href='index.html#portfolio') Galería
+              a(href='/#portfolio')
+                i.fa.fa-image
+                |  Galería
             li
-              a(href='index.html#testimonials') Acerca del Autor
+              a(href='/#testimonials')
+                i.fa.fa-user-circle-o
+                |  Acerca del Autor
             li
-              a(href='index.html#team') Akbar Soft
-            li.menu-has-children
-              a(href='') Drop Down
-              ul
-                li
-                  a(href='#') Drop Down 1
-                li.menu-has-children
-                  a(href='#') Drop Down 2
-                  ul
-                    li
-                      a(href='#') Deep Drop Down 1
-                    li
-                      a(href='#') Deep Drop Down 2
-                    li
-                      a(href='#') Deep Drop Down 3
-                    li
-                      a(href='#') Deep Drop Down 4
-                    li
-                      a(href='#') Deep Drop Down 5
-                li
-                  a(href='#') Drop Down 3
-                li
-                  a(href='#') Drop Down 4
-                li
-                  a(href='#') Drop Down 5
-            li
-              a(href='#contact') Contact Us
+              a(href='/#team')
+                i.fa.fa-industry
+                |  Akbar Soft
+            
         // #nav-menu-container
     // #header
     //
@@ -84,7 +71,7 @@ html(lang='en')
       .container.wow.fadeInUp
         .row
           .col-md-12
-            h3.section-title Inicia Sesión - Registrate
+            h3.section-title Inicia Sesión - Regístrate
             .section-title-divider
             p.section-description
               | Dátiles, sal, pimienta y unas monedas serán los ingredientes que te llevarán a la victoria
@@ -102,17 +89,16 @@ html(lang='en')
                   button(type='submit') Jugar
           .col-md-5.col-md-push-2
             .form
-              #sendmessage Su registro se realizó exitosamente!
+              #sendmessage ¡Su registro se realizó exitosamente!
               #errormessage
               form.registro(action='/registrar', method='post', role='form')
                 .form-group
                   input#user.form-control(type='text', name='username', placeholder='Usuario', data-rule='minlen:4', data-msg='Please enter at least 4 chars')
-                  .validation
                 .form-group
                   input#password.form-control(type='password', name='password', placeholder='Contraseña', data-rule='email', data-msg='Please enter a valid email')
                   .validation
                 .form-group
-                  input#verificacion.form-control(type='password', name='verificacion', placeholder='Contraseña x2', data-rule='minlen:4', data-msg='Please enter at least 8 chars of subject')
+                  input#verificacion.form-control(type='password', name='verificacion', placeholder='Verificación', data-rule='minlen:4', data-msg='Please enter at least 8 chars of subject')
                   .validation
                 .text-center
                   button(type='submit') Registrarse

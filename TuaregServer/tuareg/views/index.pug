@@ -1,18 +1,18 @@
 doctype html
-html(lang='en')
+html(lang='es')
   head
     meta(charset='utf-8')
     title Tuareg - Dátiles, Sal y Pimienta
     meta(content='width=device-width, initial-scale=1.0', name='viewport')
     meta(content='', name='keywords')
     meta(content='', name='description')
-    // Facebook Opengraph integration: https://developers.facebook.com/docs/sharing/opengraph
+    // Facebook Opengraph integration&#58; https&#58;//developers.facebook.com/docs/sharing/opengraph
     meta(property='og:title', content='')
     meta(property='og:image', content='')
     meta(property='og:url', content='')
     meta(property='og:site_name', content='')
     meta(property='og:description', content='')
-    // Twitter Cards integration: https://dev.twitter.com/cards/
+    // Twitter Cards integration&#58; https&#58;//dev.twitter.com/cards/
     meta(name='twitter:card', content='summary')
     meta(name='twitter:site', content='')
     meta(name='twitter:title', content='')
@@ -31,10 +31,10 @@ html(lang='en')
     link(href='css/style.css', rel='stylesheet')
     //
       =======================================================
-      Theme Name: Imperial
-      Theme URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
-      Author: BootstrapMade.com
-      Author URL: https://bootstrapmade.com
+      Theme Name&#58; Imperial
+      Theme URL&#58; https&#58;//bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
+      Author&#58; BootstrapMade.com
+      Author URL&#58; https&#58;//bootstrapmade.com
       =======================================================
   body
     #preloader
@@ -46,14 +46,14 @@ html(lang='en')
       .hero-container
         .wow.fadeIn
           .hero-logo
-            img(src='img/logo.png', alt='')
-          h1 Tuareg
+            img(src='img/tuareg-logo.png', alt='')
+          h1
           h2
             | Este juego contiene 
             span.rotating dátiles, sal, pimienta
           .actions
             a.btn-get-started(href='/login') Jugar ahora
-            a.btn-services(href='#services') Instrucciones
+            a.btn-services(href='#about') Acerca de Tuareg
     //
       ==========================
       Header Section
@@ -61,50 +61,37 @@ html(lang='en')
     header#header
       .container
         #logo.pull-left
-          a(href='index.html')
-            img(src='img/logo.png', alt='', title='')
+          a(href='/')
+            img(src='img/tuareg-logo.png', alt='', title='Logo del Juego de Mesa Tuareg')
           // Uncomment below if you prefer to use a text image
           // <h1><a href="#hero">Header 1</a></h1>
         nav#nav-menu-container
           ul.nav-menu
             li.menu-active
-              a(href='#hero') Inicio
+              a(href='#hero')
+                i.fa.fa-home
+                |  Inicio
             li
-              a(href='#about') Acerca de Tuareg
+              a(href='#about')
+                i.fa.fa-info-circle
+                |  Acerca de Tuareg
             li
-              a(href='#services') Instrucciones
+              a(href='#services')
+                i.fa.fa-list-alt
+                |  Instrucciones
             li
-              a(href='#portfolio') Galería
+              a(href='#portfolio')
+                i.fa.fa-image
+                |  Galería
             li
-              a(href='#testimonials') Acerca del Autor
+              a(href='#testimonials')
+                i.fa.fa-user-circle-o
+                |  Acerca del Autor
             li
-              a(href='#team') Akbar Soft
-            li.menu-has-children
-              a(href='') Drop Down
-              ul
-                li
-                  a(href='#') Drop Down 1
-                li.menu-has-children
-                  a(href='#') Drop Down 2
-                  ul
-                    li
-                      a(href='#') Deep Drop Down 1
-                    li
-                      a(href='#') Deep Drop Down 2
-                    li
-                      a(href='#') Deep Drop Down 3
-                    li
-                      a(href='#') Deep Drop Down 4
-                    li
-                      a(href='#') Deep Drop Down 5
-                li
-                  a(href='#') Drop Down 3
-                li
-                  a(href='#') Drop Down 4
-                li
-                  a(href='#') Drop Down 5
-            li
-              a(href='#contact') Contact Us
+              a(href='#team')
+                i.fa.fa-industry
+                |  Akbar Soft
+            
         // #nav-menu-container
     // #header
     //
@@ -124,8 +111,6 @@ html(lang='en')
           .col-md-6.col-md-push-6.about-content
             h2.about-title
               | En Tuareg, los jugadores adoptan el papel de jefes de clanes rivales que compiten por conseguir los mejores tratos en el comercio de sal, pimienta o dátiles, y los mejores enclaves para sus caravanas.
-            p.about-text
-              | En cada ronda los jugadores colocan sus 3 figuras tuareg sobre las casillas del borde de forma alterna. En cada casilla de interseccion de cada dos figuras tuareg del mismo color se coloca una ficha de tribu. Las casillas con figuras y fichas de tribu del jugador muestran las acciones posibles de cada jugador. Una hábil combinación de las casillas permitirá obtener puntos de victori en forma de cruces de plata. El juego finaliza cuando un jugador haya jugado 12 cartas de tribu o cuando el asaltante haya dado una vuelta completa a la zona de juego.
             p.about-text
               | Al contrario que otras culturas, los hombres tuareg del desierto llamados 
               i targui
@@ -149,33 +134,164 @@ html(lang='en')
         .row
           .col-md-4.service-item
             .service-icon
-              i.fa.fa-eye
-            h4.service-title
-              a(href='') Vision General del Juego
-            p.service-description
-              | En cada ronda los jugadores colocan sus 3 figuras tuareg sobre las casillas del borde de forma alterna. En cada casilla de interseccion de cada dos figuras tuareg del mismo color se coloca una ficha de tribu. Las casillas con figuras y fichas de tribu del jugador muestran las acciones posibles de cada jugador. Una hábil combinación de las casillas permitirá obtener puntos de victori en forma de cruces de plata. El juego finaliza cuando un jugador haya jugado 12 cartas de tribu o cuando el asaltante haya dado una vuelta completa a la zona de juego.
-          .col-md-4.service-item
-            .service-icon
               i.fa.fa-user-o
             h4.service-title
-              a(href='') Avanzar al asaltante una casilla
+              a(href='') Tuareg
             p.service-description
-              | Al comienzo de cada ronda el asaltante avanza una casilla en sentido horario. En la primera ronda se coloca en la casilla "Nobles". Ninguna figura tuareg puede colocarse sobre la casilla en la que se encuentra el asaltante, se produce un asalto en la que los jugadores pierden mercancías o puntos de victoria y, más adelante, también monedas de oro.
+              | Los jugadores adoptan el papel de jefes de clanes rivales que compiten por conseguir los mejores tratos en el comercio de sal, pimienta o dátiles, y los mejores enclaves para sus caravanas.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-list-ol
+            h4.service-title
+              a(href='') Ronda
+            p.service-description
+              | Fase 1: Avanzar al asaltante 1 casilla
+              br
+              | Fase 2: Colocar alternativamente las figuras Tuareg
+              br
+              | Fase 3: Colocar marcadores de tribu en las intersecciones
+              br
+              | Fase 4: Realizar acciones
+              br
+              | Fase 5: Preparación nueva ronda
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-user-circle-o
+            h4.service-title
+              a(href='') Fase 1: Avanzar al asaltante 1 casilla
+            p.service-description
+              | El asaltante avanza 1 casilla en sentido horario. 
+              br
+              | FAQ: En la primera permanece en la casilla de Nobles.
+              br
+              | Si llegó a una esquina 
+              i.fa.fa-arrow-right
+              |  Asalto Comenzando con el jugador inicial cada jugador decide si entrega lo que se indica o pierde PV. Luego el asaltante avanza una casilla.
           .col-md-4.service-item
             .service-icon
               i.fa.fa-users
             h4.service-title
-              a(href='') Colocar alternativamente las figuras Tuareg
+              a(href='') Fase 2: Colocar alternativamente las figuras Tuareg
             p.service-description
-              | Comenzando con el jugador inicial y alternándose, cada jugador coloca una figura tuareg hasta que todas las figuras estén colocadas. Cada jugador ocupa tres casillas de borde que quiera utilizarlas durante esta ronda. No se permite colocar una figura en las siguientes casillas:
+              | Comenzando por el jugador inicial los jugadores se turnan colocando uno de sus tuareg.
               br
-              |           • Sobre la casilla en la que se encuentra el asaltante.
+              | Cada figura debe quedar en una casilla diferente:
               br
-              |           • Sobre una casilla de esquina "Asalto"
+              | No puede haber figuras:
               br
-              |           • Sobre una casilla ya ocupada por otro tuareg
+              | En la misma casilla del asaltante.
               br
-              |           • Sobre una casilla enfrente de una figura tuareg del jugador contrario.
+              | En una esquina
+              br
+              | En una casilla con otro tuareg
+              br
+              | Frente a un tuareg del jugador contrario. (si se puede frente al asaltante o frente a un tuareg propio).
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-bookmark
+            h4.service-title
+              a(href='') Fase 3: Colocar marcadores de tribu en las intersecciones
+            p.service-description
+              | Traza una línea imaginaria entre cada tuareg y el extremo opuesto.
+              br
+              | Coloca un marcador de tribu en las intersecciones formadas (1 o 2).
+              br
+              | Repetir el paso anterior hasta que los dos marcadores de tribu de ambos jugadores sean colocados en el tablero.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-puzzle-piece
+            h4.service-title
+              a(href='') Fase 4: Realizar acciones
+            p.service-description
+              | Comienza el jugador inicial.
+              br
+              | Cada jugador realiza todas las acciones que permitan las casillas dónde están sus tuareg y sus marcadores de tribu.
+              br
+              | El jugador decide en que orden realiza las acciones, pero debe terminar la acción de una carta antes de comenzar la siguiente.
+              br
+              | Luego de ejecutar una casilla de borde 
+              i.fa.fa-arrow-right
+              |  Retira el Tuareg.
+              br
+              | Luego de ejecutar una acción el centro:
+              br
+              | Retira el marcador de tribu.
+              br
+              | Reemplaza la carta por una de otro tipo (boca abajo).
+              br
+              | Si un jugador renuncia a una acción 
+              i.fa.fa-arrow-right
+              |  la carta se deja dónde está.
+              //
+                <br>En cuanto se agote el mazo de mercanc&#237;as <i class="fa fa-arrow-right"></i> Baraja el descarte de inmediato.
+                <br>Cartas de mercanc&#237;a  Obtienes lo que indica.
+                <br>Cartas de tribu <i class="fa fa-arrow-right"></i> 4 alternativas:
+                <br>Paga su costo y col&#243;cala en tu zona de juego (matriz de 4x3). No es necesario completar una fila antes de iniciar la siguiente. No se pueden mover.
+                <br>El efecto de la carta comienza a regir de inmediato.
+                <br>Puedes colocarla en tu mano sin pagar su costo.
+                <br>S&#243;lo puedes tener una carta en tu mano.
+                <br>Si ya tienes una en la mano <i class="fa fa-arrow-right"></i> Debes colocar la nueva en tu &#225;rea de juego o descartarla.
+                <br>Puedes colocarla en el descarte sin pagarla.
+                <br>Puedes dejarla d&#243;nde est&#225; &#40;pasar&#41;.</p>
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-bookmark
+            h4.service-title
+              a(href='') Fase 5: Preparación nueva ronda
+            p.service-description
+              | Revela las nuevas cartas de tribu y mercancías de la zona central.
+              br
+              | El marcador de jugador inicial pasa al otro jugador.
+              br
+              | Cada jugador puede conservar como máximo 10 mercancías y 3 monedas de oro. Devuelve el exceso a la reserva.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-hourglass-end
+            h4.service-title
+              a(href='') Fin del juego
+            p.service-description
+              | Puede terminar de 2 maneras:
+              br
+              | Un jugador coloca en la mesa su 12
+              sup a
+              |  carta de tribu 
+              i.fa.fa-arrow-right
+              |  Se completa la ronda.
+              br
+              | El asaltante llega a la 4
+              sup a
+              |  casilla de asalto 
+              i.fa.fa-arrow-right
+              |  Los jugadores paga $1 o 3PV y el juego termina.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-balance-scale
+            h4.service-title
+              a(href='') Puntuación
+            p.service-description
+              | PV en forma de cruces obtenidos durante la partida
+              br
+              | PV de las cruces en sus cartas de tribu
+              br
+              | PV adicionales de sus cartas de tribu
+              br
+              | En cada fila:
+              br
+              | 4PV si todas las cartas tienen el mismo símbolo.
+              br
+              | 2PV si todas las cartas tienen distinto símbolo
+              br
+              | 0PV en otros casos.
+              br
+              | El jugador con más PV ganará.
+              br
+              | Empate 
+              i.fa.fa-arrow-right
+              |  + Oro.
+              br
+              | Empate 
+              i.fa.fa-arrow-right
+              |  Más mercancías.
     //
       ==========================
       Subscrbe Section
@@ -188,7 +304,7 @@ html(lang='en')
             p.subscribe-text
               | Los tuaregs o imuhars son un pueblo bereber de tradición nómada del desierto del Sáhara.
           .col-md-4.subscribe-btn-container
-            a.subscribe-btn(href='https://es.wikipedia.org/wiki/Tuareg') Saber mas
+            a.subscribe-btn(href='https://es.wikipedia.org/wiki/Tuareg') Saber más
     //
       ==========================
       Porfolio Section
@@ -240,7 +356,7 @@ html(lang='en')
             a.portfolio-item(style='background-image: url(img/tuareg-bg.jpg);', href='')
               .details
                 h4 Galería 8
-                span Portadadel juego de mesa
+                span Portada del juego de mesa
     //
       ==========================
       Testimonials Section
@@ -261,24 +377,7 @@ html(lang='en')
               span Autor del juego
           .col-md-9
             .quote
-              // <b><img src="img/quote_sign_left.png" alt=""></b>
               | Andreas Steiger, nació en 1973 y vive con su mujer y sus dos hijos cerca de Sttugart y trabaja como educador en una guardería. Además de los juegos de mesa, le gusta jugar juegos de computadora y hacer improvisación teatral. En cuanto a los juegos de mesa, cree que es especialmente importante que los jugadores tengan que tomar nuevas decisiones constantemente, El hecho de que prefiere juegos que funcionen muy bien a dos jugadores, le llevó a diseñar "Tuareg", su primer juego sólo para dos jugadores.
-              // <small><img src="img/quote_sign_right.png" alt=""></small>
-        //
-          <div class="row">
-          <div class="col-md-9">
-          <div class="quote">
-          <b><img src="img/quote_sign_left.png" alt=""></b> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis architecto beatae. <small><img src="img/quote_sign_right.png" alt=""></small>
-          </div>
-          </div>
-          <div class="col-md-3">
-          <div class="profile">
-          <div class="pic"><img src="img/client-2.jpg" alt=""></div>
-          <h4>Sara Wilsson</h4>
-          <span>Odeo Inc</span>
-          </div>
-          </div>
-          </div>
     //
       ==========================
       Team Section
@@ -297,7 +396,7 @@ html(lang='en')
             .member
               .pic
                 img(src='img/Braulio.jpg', alt='')
-              h4 Braulio Felix
+              h4 Braulio Félix
               span
               .social
                 a(href='')
@@ -310,7 +409,7 @@ html(lang='en')
             .member
               .pic
                 img(src='img/Dewey.jpg', alt='')
-              h4 Dewey
+              h4 Carlos Villegas
               span
               .social
                 a(href='https://twitter.com/Car10s_Villegas?lang=es')
@@ -347,65 +446,6 @@ html(lang='en')
                   i.fa.fa-google-plus
     //
       ==========================
-      Contact Section
-      ============================
-    //
-      <section id="contact">
-      <div class="container wow fadeInUp">
-      <div class="row">
-      <div class="col-md-12">
-      <h3 class="section-title">Contact Us</h3>
-      <div class="section-title-divider"></div>
-      <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
-      </div>
-      </div>
-      <div class="row">
-      <div class="col-md-3 col-md-push-2">
-      <div class="info">
-      <div>
-      <i class="fa fa-map-marker"></i>
-      <p>A108 Adam Street<br>New York, NY 535022</p>
-      </div>
-      <div>
-      <i class="fa fa-envelope"></i>
-      <p>info@example.com</p>
-      </div>
-      <div>
-      <i class="fa fa-phone"></i>
-      <p>+1 5589 55488 55s</p>
-      </div>
-      </div>
-      </div>
-      <div class="col-md-5 col-md-push-2">
-      <div class="form">
-      <div id="sendmessage">Your message has been sent. Thank you!</div>
-      <div id="errormessage"></div>
-      <form action="" method="post" role="form" class="contactForm">
-      <div class="form-group">
-      <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-      <div class="validation"></div>
-      </div>
-      <div class="form-group">
-      <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-      <div class="validation"></div>
-      </div>
-      <div class="form-group">
-      <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-      <div class="validation"></div>
-      </div>
-      <div class="form-group">
-      <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-      <div class="validation"></div>
-      </div>
-      <div class="text-center"><button type="submit">Send Message</button></div>
-      </form>
-      </div>
-      </div>
-      </div>
-      </div>
-      </section>
-    //
-      ==========================
       Footer
       ============================
     footer#footer
@@ -424,8 +464,8 @@ html(lang='en')
               //
                 All the links in the footer should remain intact.
                 You can delete the links only if you purchased the pro version.
-                Licensing information: https://bootstrapmade.com/license/
-                Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Imperial
+                Licensing information&#58; https&#58;//bootstrapmade.com/license/
+                Purchase the pro version with working PHP/AJAX contact form&#58; https&#58;//bootstrapmade.com/buy/?theme=Imperial
               // Bootstrap Themes by
               a(href='https://bootstrapmade.com/') BootstrapMade
     // #footer

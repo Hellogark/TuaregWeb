@@ -7,8 +7,6 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
-
-
 body {
   background: #fff;
   color: #666666;
@@ -16,12 +14,12 @@ body {
 }
 
 a {
-  color: #8A6D3B;
+  color: #111;
   transition: 0.5s;
 }
 
 a:hover, a:active, a:focus {
-  color: #8A5C2A; /*HOVER MAS OSCURO*/
+  color: #555; /*HOVER MAS OSCURO*/
   outline: none;
   text-decoration: none;
 }
@@ -77,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .back-to-top:hover {
-  background: #8A6D3B;
+  background: #111;
   color: #fff;
 }
 
@@ -90,6 +88,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   background: url(../img/tuareg-bg.jpg) top center fixed;
   background-size: cover;
+
 }
 
 #hero .hero-logo {
@@ -158,8 +157,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .btn-get-started {
-  background: #8A6D3B;
-  border: 2px solid #8A6D3B;
+  background: rgba(183, 163, 25, 1);
+  border: 2px solid rgba(183, 163, 25, 1);
   color: #fff;
 }
 
@@ -175,15 +174,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .btn-services:hover {
-  background: #8A6D3B;
-  border: 2px solid #8A6D3B;
+  background: rgba(183, 163, 25, 1);
+  border: 2px solid rgba(183, 163, 25, 1);
 }
 
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
 #header {
-  background: #111;
+  /*background: #111;*/
+  background: url(/img/header.gif);
+  background-size: cover;
   padding: 20px 0;
   height: 90px;
 }
@@ -227,6 +228,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .is-sticky #header {
   background: rgba(0, 0, 0, 0.85);
+  background: url(/img/header.gif);
+  background-size: cover;
 }
 
 /*--------------------------------------------------------------
@@ -308,13 +311,13 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
   color: #fff;
   font-family: 'Raleway', sans-serif;
-  font-weight: 300;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 16px;
   outline: none;
 }
 
 .nav-menu a:hover, .nav-menu li:hover > a, .nav-menu .menu-active > a {
-  color: #8A6D3B;
+  color: #111;
 }
 
 .nav-menu ul {
@@ -352,7 +355,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .row-value {
     padding-left: 10px;
-    
+
 }
 
 /* Mobile Nav Toggle */
@@ -387,7 +390,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 18px;
   bottom: 0;
   z-index: 998;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(183, 163, 25, 1);
   left: -260px;
   width: 260px;
   overflow-y: auto;
@@ -417,7 +420,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #mobile-nav ul li a:hover {
-  color: #fff;
+  color: #000;
 }
 
 #mobile-nav ul li li {
@@ -434,11 +437,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #mobile-nav ul .menu-has-children i.fa-chevron-up {
-  color: #03C4EB;
+  color: #8A6D3B;
 }
 
 #mobile-nav ul .menu-item-active {
-  color: #03C4EB;
+  color: #8A6D3B;
 }
 
 #mobile-body-overly {
@@ -486,7 +489,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 .section-title-divider {
   width: 50px;
   height: 3px;
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   margin: 0 auto;
   margin-bottom: 20px;
 }
@@ -515,12 +518,12 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #333;
   font-weight: 700;
   font-size: 28px;
-  
+
 }
 
 #about .about-text {
   line-height: 26px;
-  
+
 }
 
 #about .about-text:last-child {
@@ -541,11 +544,11 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #services .service-icon {
   float: left;
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   padding: 16px;
   border-radius: 50%;
   transition: 0.5s;
-  border: 1px solid #8A6D3B;
+  border: 1px solid rgba(183, 163, 25, 1);
 }
 
 #services .service-icon i {
@@ -558,7 +561,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #services .service-item:hover .service-icon i {
-  color: #8A6D3B;
+  color: rgba(183, 163, 25, 1);
 }
 
 #services .service-title {
@@ -580,7 +583,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* Subscribe Section
 --------------------------------*/
 #subscribe {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/desert-bg.jpg);
+  background: linear-gradient(rgba(206, 185, 40, 0.0), rgba(206, 185, 40, 0.0)), url(../img/desert-bg.jpg);
   background-size: cover;
   padding: 80px 0;
 }
@@ -616,8 +619,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #subscribe .subscribe-btn:hover {
-  background: #8A6D3B;
-  border: 2px solid #8A6D3B;
+  background: rgba(183, 163, 25, 1);
+  border: 2px solid rgba(183, 163, 25, 1);
 }
 
 /* Portfolio Section
@@ -693,7 +696,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 /*Boton Guardar*/
 #testimonials .quote button[type="submit"] {
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   border: 0;
   padding: 10px 24px;
   color: #fff;
@@ -702,7 +705,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #testimonials .quote button[type="submit"]:hover {
-  background: #8A5C2A;
+  background: rgba(183, 163, 25, 1);
 }
 
 #testimonials .profile {
@@ -799,7 +802,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #team .member .social a:hover {
-  color: #8A6D3B;
+  color: rgba(183, 163, 25, 1);
 }
 
 #team .member .social i {
@@ -830,8 +833,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .form #sendmessage {
-  color: #03C4EB;
-  border: 1px solid #03C4EB;
+  color: #8A6D3B;
+  border: 1px solid #8A6D3B;
   display: none;
   text-align: center;
   padding: 15px;
@@ -867,7 +870,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .form button[type="submit"] {
-  background: #8A6D3B;
+  background: rgba(206, 185, 40, 0.9);
   border: 0;
   padding: 10px 24px;
   color: #fff;
@@ -876,7 +879,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .form button[type="submit"]:hover {
-  background: #8A5C2A;
+  background: rgba(183, 163, 25, 1);
 }
 
 #menu {
@@ -891,19 +894,23 @@ body.mobile-nav-active #mobile-nav-toggle {
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
-#footer {
-  background: #111;
-  padding: 30px 0;
-  color: #fff;
-}
+
 
 #footer .copyright {
   text-align: center;
 }
 
-#footer .credits {
-  padding-top: 10px;
-  text-align: center;
-  font-size: 13px;
-  color: #ccc;
+
+#header {
+    /* background: #111; */
+    background: url(/img/header.gif);
+    background-size: cover;
+    padding: 20px 0;
+    height: 90px;
+}
+#footer {
+    background: url(/img/header.gif);
+    background-size: cover;
+    padding: 30px 0;
+    color: #fff;
 }
