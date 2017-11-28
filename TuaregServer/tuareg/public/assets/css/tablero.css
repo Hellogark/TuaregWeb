@@ -1,0 +1,875 @@
+div.container{
+  width:48em;
+  float:left;
+  margin-left:1em;
+}
+
+div.col-md-2{
+  width:137px;
+  height:75px;
+  float:left;
+  padding:0 0 0 0;
+}
+
+img{
+  width:100%;
+  left:8em;
+  border-radius:0.5em 0.5em 0.5em 0.5em;
+}
+
+div.row.show{
+  height:6.5em;
+}
+
+div.col-md-12{
+  height:13em;
+}
+
+span.text-muted{
+  font-size:medium;
+}
+
+img.barajaMercancia{
+  width:141px;
+  transform:rotateZ(0deg);
+  height:94px;
+  margin-top:5em;
+  margin-left:-0.5em;
+}
+
+div.col-lg-2{
+  width:12em;
+  height:9em;
+}
+
+img.barajaTribu{
+  margin-top:-6em;
+}
+
+div.row.jugadores{
+  width:234px;
+  display:block;
+  height:292px;
+  float:left;
+  position:relative;
+}
+
+div.col-lg-2.tribu{
+  width:5em;
+  position:relative;
+}
+
+div.container.tablero{
+  width:983px;
+  display:block;
+  height:459px;
+  left:4em;
+  float:left;
+  position:relative;
+}
+
+div.wrapper{
+  width:1079px;
+  height:461px;
+  display:block;
+  clear:both;
+  margin:0 auto;
+  position:absolute;
+  left:3em;
+  top:7em;
+}
+
+img.fichas{
+  width:33px;
+  white-space:nowrap;
+  position:relative;
+  left:-0.89em;
+}
+
+div.col-md-1.otrasFichas{
+  width:37px;
+  height:74px;
+  margin-left:5px;
+  left:-1px;
+  position:relative;
+  display:inline-block;
+  float:left;
+}
+
+div.col-md-1.otrasFichasT1{
+  width:37px;
+  height:44px;
+  margin-left:5px;
+  left:-28px;
+  position:relative;
+  display:inline-block;
+  float:right;
+  visibility:hidden;
+}
+
+div.col-md-1.otrasFichasT2{
+  width:37px;
+  height:44px;
+  margin-left:5px;
+  left:-28px;
+  position:relative;
+  display:inline-block;
+  float:right;
+  visibility:hidden;
+}
+
+div.col-md-1.otrasFichasOro{
+  width:37px;
+  height:81px;
+  margin-left:5px;
+  left:-1px;
+  display:inline-block;
+  position:relative;
+}
+
+div.row.fichas{
+  min-width:234px;
+  height:55px;
+  vertical-align:top;
+  margin-top:0.5em;
+  position:relative;
+}
+
+div.row.cantidad{
+  width:179px;
+  height:22px;
+  vertical-align:top;
+  margin-top:0.5em;
+  white-space:nowrap;
+  position:relative;
+  float:left;
+}
+
+div.col-md-1.cantidades{
+  width:35px;
+  height:20px;
+  margin-left:0.2em;
+  display:inline-block;
+  position:relative;
+}
+
+div.col-md-1.masUno{
+  width:60px;
+  height:20px;
+  display:inline-block;
+}
+
+span.spans{
+  position:relative;
+  display:inline-block;
+  vertical-align:top;
+  bottom:0em;
+}
+
+span.spansOro{
+  position:relative;
+  vertical-align:top;
+  bottom:3em;
+  left:1em;
+  font-size:8px;
+}
+
+div.row.mazo{
+  width:20em;
+  display:block;
+  position:absolute;
+  right:3em;
+  top:-5em;
+}
+
+div.container.cartas{
+  width:20em;
+  transform:rotateZ(-90deg);
+  display:block;
+  position:relative;
+  right:5em;
+  top:14em;
+}
+
+div.col-lg-offset-0.wrapper{
+  position:relative;
+  top:3em;
+  left:-8em;
+}
+
+img#c1J1.cartasTableroJ1{
+  width:83px;
+}
+
+div.container.mazo{
+  width:150px;
+  height:251px;
+  position:absolute;
+  display:block;
+  top:9em;
+  left:-6em;
+  float:left;
+}
+
+div.col-md-2.mazoWrapper{
+  width:150px;
+  height:200px;
+  display:inline-block;
+  top:2em;
+}
+
+div.col-md-2.tribu{
+  transform:rotateZ(-90deg);
+  white-space:nowrap;
+  margin-top:5em;
+  display:inline-block;
+}
+
+div.col-md-2.merca{
+  transform:rotateZ(-90deg);
+  display:inline-block;
+}
+
+div.row.tableroJugador1{
+  width:347px;
+  height:168px;
+  position:relative;
+  left:70.3em;
+}
+
+div.row.tableroJugador2{
+  width:347px;
+  height:168px;
+  position:relative;
+  left:70.3em;
+  top:9.3em;
+}
+
+div.col-md-2.tj1_1{
+  width:85px;
+  height:55px;
+  display:inline-block;
+  position:relative;
+  top:-33em;
+}
+
+div.col-md-2.tj2_1{
+  width:85px;
+  height:55px;
+  display:inline-block;
+  position:relative;
+  top:-33em;
+}
+
+body{
+  background-color:rgb(214,179,120);
+}
+
+#footer{
+  margin-bottom:0px;
+}
+
+div.row.opcionesTurno{
+  position:relative;
+  width:500px;
+  height:250px;
+  left:16em;
+}
+
+div.encabezado{
+  width:1355px;
+  height:30px;
+  display:block;
+}
+
+div.row.encabezado{
+  margin-left:-0.5em;
+}
+
+img#reglas{
+  width:32px;
+  position:absolute;
+  left:0;
+}
+
+span.label.label-info.label-Instrucciones{
+  position:absolute;
+  left:2em;
+  top:0.01em;
+  background-color:#969615;
+  font-size:large;
+}
+
+span.label.label-info.label-Instrucciones{
+  position:absolute;
+  left:2em;
+  top:0.01em;
+  background-color:#969615;
+  font-size:large;
+}
+
+a.instrucciones{
+  position:absolute;
+  left:51em;
+  top:0.3em;
+  height:22px;
+  font-size:large;
+  width:151px;
+  z-index:20;
+}
+
+div.reglas{
+  width:131px;
+  height:30px;
+  position:absolute;
+  left:56em;
+}
+
+div#turnoDe.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
+}
+
+div.row.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
+  top:0em;
+  left:14em;
+}
+
+span.label.label-default.jugadorTurnoLabel{
+  background-color:#b7a319;
+  font-size:large;
+  left:0em;
+  position:absolute;
+  font-size:large;
+}
+
+div.contenedorBotones{
+  width:423px;
+  position:absolute;
+  top:4em;
+}
+
+button.btn.btn-default.formatoBotones{
+  margin:0px 16px 0px 3px;
+  color:#897719;
+}
+
+.btn-default{
+  color:#dd7500;
+  background-color:#a79336;
+  border-color:#e0aa0f;
+}
+
+.btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default{
+  color:#555555;
+  background-color:#c2a845;
+  border-color:#f4ed47;
+}
+
+.btn-default:active:hover, .btn-default.active:hover, .open > .dropdown-toggle.btn-default:hover, .btn-default:active:focus, .btn-default.active:focus, .open > .dropdown-toggle.btn-default:focus, .btn-default:active.focus, .btn-default.active.focus, .open > .dropdown-toggle.btn-default.focus{
+  color:#555555;
+  background-color:#cda43b;
+  border-color:#f9e27f;
+}
+
+div.cartaMano{
+  width:150px;
+  height:100px;
+  position:relative;
+  left:1em;
+  bottom:0em;
+}
+
+div#nombreJT.mostrarNombreJT{
+  width:200px;
+  height:30px;
+  position:relative;
+  left:15em;
+}
+
+span#mostrarNombreTurno.label.label-default.jugadorTurnoLabel{
+  width:200px;
+  position:relative;
+  top:0.25em;
+  left:-0em;
+}
+
+div#imgCartaManoJ1.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#imgCartaManoJ2.cartaMano{
+  position:absolute;
+  left:0em;
+  bottom:1.2em;
+}
+
+div#pantallaGde.pantallaGde{
+  width:23px;
+  position:absolute;
+  left:63em;
+  top:0.4em;
+}
+
+div.panel-body{
+  background-color:#f5dba3;
+}
+
+.panel-default > .panel-heading{
+  color:#555555;
+  background-color:#c9a764;
+  border-color:#dddddd;
+}
+
+div.fichasTuareg{
+  width:750px;
+  height:450px;
+  position:relative;
+  display:block;
+}
+
+div.row.fichasTuareg{
+  width:750px;
+  height:450px;
+  position:relative;
+  left:2em;
+  bottom:23em;
+  display:block;
+}
+
+div#asaltante.fichasTuareg{
+  width:38px;
+  height:66px;
+  position:relative;
+  left:13em;
+  bottom:33em;
+}
+
+img#tuaregasaltante.asaltante{
+  position:absolute;
+  left:0em;
+  bottom:0em;
+}
+
+button#descarta.btn.btn-default.descarta{
+  position:relative;
+}
+
+div.colDescartarJ1{
+  width:70px;
+  height:40px;
+  bottom:5em;
+  position:relative;
+  left:13em;
+  visibility:hidden;
+  z-index:56;
+}
+
+div.colDescartarJ2{
+  width:86px;
+  height:40px;
+  bottom:7em;
+  position:relative;
+  left:13em;
+  visibility:hidden;
+}
+
+div#muestraOfebre.row.orfebre{
+  width:660px;
+  height:318px;
+  position:absolute;
+  left:13em;
+  bottom:0em;
+  visibility:hidden;
+  z-index:8;
+}
+
+img.orfebreFicha{
+  box-shadow:-5px 5px 50px 5px;
+}
+
+img.1pv{
+  width:180px;
+  height:50px;
+  position:absolute;
+}
+
+div.1pvOf{
+  width:194px;
+  height:80px;
+  position:absolute;
+}
+
+img#onepv.onePv{
+  width:59px;
+  position:absolute;
+  z-index:4;
+  left:19.4em;
+  top:0.7em;
+  visibility:hidden;
+}
+
+img#twopv.Dospv{
+  width:76px;
+  position:absolute;
+  z-index:4;
+  top:1em;
+  left:37em;
+  visibility:hidden;
+}
+
+img#threePv.tresPv{
+  width:98px;
+  position:absolute;
+  z-index:4;
+  top:7.4em;
+  left:19.6em;
+  visibility:hidden;
+}
+
+img#fourpv.cuatropv{
+  width:116px;
+  position:absolute;
+  z-index:8;
+  top:7em;
+  left:37em;
+  visibility:hidden;
+  z-index:8;
+}
+
+div.muestraCartaObt{
+  position:absolute;
+  z-index:5;
+  width:250px;
+  height:130px;
+  bottom:11em;
+  left:23em;
+}
+
+img#cartaMostrada.cartaMostrar{
+  width:240px;
+  height:145px;
+  visibility:hidden;
+}
+
+a.rules{
+  width:100px;
+  height:30px;
+}
+
+span.label.label-default.jugadorTurnoLabel.rules{
+  position:absolute;
+  left:2em;
+  top:0.2em;
+}
+
+div.descartaJ1{
+  position:relative;
+  width:83px;
+  left:14em;
+  bottom:6.8em;
+  visibility:hidden;
+}
+
+img.descartaCarta{
+  width:83px;
+}
+
+div.descartaJ2{
+  position:relative;
+  width:83px;
+  left:14em;
+  bottom:6.8em;
+  visibility:hidden;
+}
+
+div#notaVentana.nota{
+  width:300px;
+  height:250px;
+  position:relative;
+  bottom:5em;
+}
+
+textarea.ventanita{
+  position:relative;
+  display:none;
+  bottom:10em;
+  width:350px;
+  height:139px;
+  resize:none;
+  font-family:Arial;
+  border:inset;
+  border-color:#b8955c;
+}
+
+div.panel-body.Jugadores{
+  height:121px;
+}
+
+img.bordeR{
+  width:37px;
+  height:68px;
+  position:relative;
+  z-index:8;
+  left:-1em;
+  bottom:3.9em;
+  visibility:hidden;
+}
+
+img.bordeROro{
+  width:39px;
+  height:68px;
+  position:relative;
+  z-index:2;
+  left:-1.1em;
+  bottom:5.4em;
+  visibility:hidden;
+}
+
+div#fichaTurno.col-md-1.otrasFichas{
+  position:relative;
+  left:-2.2em;
+  height:40px;
+  width:33px;
+  display:inline-block;
+  float:right;
+}
+
+div.panel-body.J2{
+  height:124px;
+}
+
+div.col-md-3.jugadores{
+  position:relative;
+  left:48em;
+  bottom:37.3em;
+}
+
+div.panel.panel-default.panels1{
+  width:209px;
+  position:relative;
+}
+
+div.panel.panel-default.panels2{
+  width:209px;
+  position:relative;
+  bottom:2em;
+}
+
+div#panelJ2.panel.panel-default.panels{
+  position:relative;
+  bottom:2em;
+}
+
+img.imgMano2{
+  bottom:2em;
+  position:relative;
+  left:0em;
+}
+
+img.orf1{
+  width:112px;
+}
+
+div#s1pv{
+  width:112px;
+  position:absolute;
+  height:54px;
+  left:8.2em;
+  top:1.6em;
+  z-index:9;
+  visibility:hidden;
+}
+
+div#s2pv{
+  width:209px;
+  position:absolute;
+  height:48px;
+  left:1.12em;
+  top:8.6em;
+  z-index:9;
+  visibility:hidden;
+}
+
+img#orf2{
+  height:54px;
+}
+
+img#fichaCom.fichaComercian{
+  box-shadow:11px 9px 37px -1px black;
+}
+
+div.row.comercanteRow{
+  width:400px;
+  height:202px;
+  position:absolute;
+  bottom:12em;
+  left:22em;
+  z-index:10;
+  visibility:hidden;
+}
+
+div.colCom{
+  position:absolute;
+  width:400px;
+  height:202px;
+}
+
+img.merch3{
+  width:192px;
+  height:56px;
+  z-index:12;
+}
+
+img.merch2{
+  width:128px;
+  height:56px;
+  z-index:12;
+}
+
+div.meerca{
+  height:56px;
+  width:195px;
+  position:absolute;
+  left:1.3em;
+  top:2em;
+  z-index:11;
+  visibility:hidden;
+}
+
+div.dosmerca{
+  height:56px;
+  width:134px;
+  position:absolute;
+  left:5.7em;
+  top:9em;
+  z-index:11;
+  visibility:hidden;
+}
+
+div#acMerca3.accMerca3{
+  width:70px;
+  position:absolute;
+  z-index:10;
+  left:15.5em;
+  top:1.5em;
+  visibility:hidden;
+}
+
+div#acMerca2.accMerca2{
+  width:70px;
+  position:absolute;
+  z-index:10;
+  left:15.5em;
+  top:8.5em;
+  visibility:hidden;
+}
+
+div#cambMerca.cambiaMerca{
+  z-index:12;
+  width:57px;
+  position:absolute;
+  left:22em;
+  top:9em;
+  visibility:hidden;
+}
+
+img.mercas{
+  width:51px;
+  height:50px;
+  position:absolute;
+  left:0.5em;
+  top:0.2em;
+  visibility:hidden;
+}
+
+div.row.fichasMerca{
+  width:187px;
+  height:57px;
+  position:absolute;
+  bottom:0em;
+  left:1.1em;
+  visibility:hidden;
+}
+
+div#tMercaDos.mercas{
+  width:60px;
+  height:54px;
+  position:absolute;
+  left:4.3em;
+  visibility:hidden;
+}
+
+div#tMercaTres.mercasTres{
+  width:60px;
+  height:54px;
+  position:absolute;
+  left:9.1em;
+  visibility:hidden;
+}
+
+div#mercanciasDos.row.mercas2{
+  width:121px;
+  height:54px;
+  position:absolute;
+  visibility:hidden;
+}
+
+div#dMercasUno.mercasUno{
+  width:53px;
+  height:54px;
+  position:absolute;
+  left:5.8em;
+  top:3em;
+  visibility:hidden;
+}
+
+div#dMercasDos.mercasDos{
+  width:53px;
+  height:54px;
+  position:absolute;
+  left:10.4em;
+  top:3em;
+  visibility:hidden;
+}
+
+div#tMercaUno.mercasTres{
+  width:54px;
+  height:53px;
+  z-index:11;
+  position:absolute;
+}
+
+@media only screen and (max-width:1100px ) {
+  div.panel.panel-default.panels1{
+    top:40em;
+    left:-35em;
+    display:block;
+  }
+}
+
+@media only screen and (max-width:1100px ) {
+  div.panel.panel-default.panels2{
+    top:17em;
+    left:-15em;
+    display:block;
+  }
+}
+
+@media only screen and (max-width:1100px ) {
+  div.row.tableroJugador1{
+    left:55.3em;
+  }
+}
+
+@media only screen and (max-width:1100px ) {
+  div.row.tableroJugador2{
+    left:55.3em;
+  }
+}
+

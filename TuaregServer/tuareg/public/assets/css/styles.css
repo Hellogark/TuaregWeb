@@ -1,0 +1,713 @@
+.tribuc{
+
+  background-image:url(/assets/img/tribu.gif);
+}
+.mercac{
+  background-image:url(/assets/img/mercancias.gif);
+}
+.asaltante{
+  width: 20%;
+  position: absolute;
+  top:-10%;
+  left:50%;
+  transform: translateX(-50%);
+}
+.tribucT{
+  background-image:url(/assets/img/TribuTableroJ.gif);
+}
+
+@media only screen and (max-width:1100px ) {
+  #j1{
+    position: absolute;
+    left: -40em;
+    width: 206px;
+    top: 40em;
+  }
+  #j2{
+    position: absolute;
+    left: -20em;
+    width: 206px;
+    top: 40em;
+  }
+  div.row.tableroJugador1{
+    width: 347px;
+    height: 168px;
+    position: relative;
+    left: 56.3em;
+    top: -33em;
+  }
+  div.row.tableroJugador2{
+    width:347px;
+    height:168px;
+    position:relative;
+    left:56.3em;
+    top:-23.7em;
+  }
+  #cartaManoJ1{
+    position: absolute;
+    top: 13em;
+    left: 0;
+  }
+  #cartaManoJ2{
+    position: absolute;
+    top: 33em;
+    left: 0;
+  }
+}
+
+
+input[type=button] {
+    box-sizing: border-box;
+    border: solid;
+    border-width: thin;
+    background-color: #B5AF89;
+    color: black;
+}
+div#muestraOfebre.row.orfebre{
+  width:660px;
+  height:318px;
+  position:absolute;
+  left:13em;
+  bottom:0em;
+  z-index:8;
+}
+
+img.orfebreFicha{
+  box-shadow:-5px 5px 50px 5px;
+}
+
+img.1pv{
+  width:180px;
+  height:50px;
+  position:absolute;
+}
+
+div.1pvOf{
+  width:194px;
+  height:80px;
+  position:absolute;
+}
+
+img#onepv.onePv{
+  width:59px;
+  z-index:4;
+  left:19.4em;
+  top:0.7em;
+  visibility:hidden;
+}
+
+img#twopv.Dospv{
+  width:76px;
+  z-index:4;
+  top:1em;
+  left:37em;
+  visibility:hidden;
+}
+div.row.comercanteRow{
+  width:400px;
+  height:202px;
+  position:absolute;
+  bottom:12em;
+  left:22em;
+  z-index:10;
+
+}
+
+div.colCom{
+  position:absolute;
+  width:400px;
+  height:202px;
+}
+
+img.merch3{
+  width:192px;
+  height:56px;
+  z-index:12;
+}
+
+img.merch2{
+  width:128px;
+  height:56px;
+  z-index:12;
+}
+
+div.meerca{
+  height:56px;
+  width:195px;
+  position:absolute;
+  left:1.3em;
+  top:2em;
+  z-index:11;
+
+}
+
+div.dosmerca{
+  height:56px;
+  width:134px;
+  position:absolute;
+  left:5.7em;
+  top:9em;
+  z-index:11;
+
+}
+
+div#acMerca3.accMerca3{
+  width:70px;
+  position:absolute;
+  z-index:10;
+  left:15.5em;
+  top:1.5em;
+
+}
+
+div#acMerca2.accMerca2{
+  width:70px;
+  position:absolute;
+  z-index:10;
+  left:15.5em;
+  top:8.5em;
+
+}
+
+div#cambMerca.cambiaMerca{
+  z-index:12;
+  width:57px;
+  position:absolute;
+  left:22em;
+  top:9em;
+
+}
+
+img.mercas{
+  width:51px;
+  height:50px;
+  position:absolute;
+  left:0.5em;
+  top:0.2em;
+
+}
+
+div.row.fichasMerca{
+  width:187px;
+  height:57px;
+  position:absolute;
+  bottom:0em;
+  left:1.1em;
+
+}
+
+div#tMercaDos.mercas{
+  width:60px;
+  height:54px;
+  position:absolute;
+  left:4.3em;
+
+}
+#tMercaDos > img {
+  visibility: hidden;
+}
+div#tMercaTres.mercasTres{
+  width:60px;
+  height:54px;
+  position:absolute;
+  left:9.1em;
+
+}
+#tMercaTres > img {
+  visibility: hidden;
+}
+div#mercanciasDos.row.mercas2{
+  width:121px;
+  height:54px;
+  position:absolute;
+
+}
+#mercanciasDos > img {
+  visibility: hidden;
+}
+div#dMercasUno.mercasUno{
+  width:53px;
+  height:54px;
+  position:absolute;
+  left:5.8em;
+  top:3em;
+
+}
+#dMercasUno > img {
+  visibility: hidden;
+}
+
+div#dMercasDos.mercasDos{
+  width:53px;
+  height:54px;
+  position:absolute;
+  left:10.4em;
+  top:3em;
+
+}
+#dMercasDos > img {
+  visibility: hidden;
+}
+
+div#tMercaUno.mercasTres{
+  width:54px;
+  height:53px;
+  z-index:11;
+
+}
+#tMercaUno > img {
+visibility: hidden;
+}
+#d1Pv{
+    width: 59px;
+    height: 59px;
+    position: absolute;
+    z-index: 4;
+    left: 19.4em;
+    top: 0.7em;
+}
+#d2pv{
+    width: 76px;
+    height: 76px;
+    position: absolute;
+    z-index: 4;
+    top: 1em;
+    left: 37em;
+}
+#d3Pv{
+    width: 98px;
+    height: 98px;
+    position: absolute;
+    z-index: 4;
+    top: 7.4em;
+    left: 19.6em;
+}
+#d4Pv{
+    width: 116px;
+    height: 116px;
+    position: absolute;
+    z-index: 8;
+    top: 7em;
+    left: 37em;
+    z-index: 8;
+}
+
+img#threePv.tresPv{
+  width:98px;
+  z-index:4;
+  top:7.4em;
+  left:19.6em;
+  visibility:hidden;
+}
+
+img#fourpv.cuatropv{
+  width:116px;
+  z-index:8;
+  top:7em;
+  left:37em;
+  visibility:hidden;
+  z-index:8;
+}
+
+img.orf1{
+  width:112px;
+}
+
+
+div#s1pv{
+  width:112px;
+  position:absolute;
+  height:54px;
+  left:8.2em;
+  top:1.6em;
+  z-index:9;
+
+}
+
+div#s2pv{
+  width:209px;
+  position:absolute;
+  height:48px;
+  left:1.12em;
+  top:8.6em;
+  z-index:9;
+
+}
+
+img#orf2{
+  height:54px;
+}
+
+div.container{
+  width:48em;
+  float:left;
+  margin-left:1em;
+}
+
+div.col-md-2{
+  width:138px;
+  height:92px;
+  float:left;
+  padding:0 0 0 0;
+}
+
+img{
+  width:100%;
+  left:8em;
+  border-radius:0.5em 0.5em 0.5em 0.5em;
+}
+
+div.row.show{
+  height:6.5em;
+}
+
+div.col-md-12{
+  height:13em;
+}
+
+span.text-muted{
+  font-size:medium;
+}
+
+img.barajaMercancia{
+  width:141px;
+  transform:rotateZ(0deg);
+  height:94px;
+  margin-top:5em;
+  margin-left:-0.5em;
+}
+
+div.col-lg-2{
+  width:12em;
+  height:9em;
+}
+
+img.barajaTribu{
+  margin-top:-6em;
+}
+
+div.container-fluid.jugadores{
+  width:18em;
+  height:23em;
+}
+
+div.container.jugadores{
+  width:17em;
+  display:block;
+  height:35em;
+  float:right;
+  right:10.6em;
+  position:relative;
+}
+
+div.col-lg-2.tribu{
+  width:5em;
+  position:relative;
+}
+
+div.container.tablero{
+  width:713px;
+  display:block;
+  height:459px;
+  left:4em;
+  float:left;
+  position:relative;
+}
+
+div.wrapper{
+  width:1130px;
+  height:461px;
+  display:block;
+  clear:both;
+  margin:0 auto;
+  position:absolute;
+  left:3em;
+  top:7em;
+}
+
+img.fichas{
+  width:33px;
+  margin-left:-15px;
+  white-space:nowrap;
+}
+
+div.col-md-1.otrasFichas{
+  width:33px;
+  height:33px;
+  margin-left:5px;
+  left:-2px;
+  display:inline-block;
+  position:relative;
+}
+
+div.row.fichas{
+  width:191px;
+  height:36px;
+  vertical-align:top;
+  display:inline-block;
+  margin-top:0.5em;
+}
+
+div.row.cantidad{
+  width:179px;
+  height:22px;
+  vertical-align:top;
+  display:block;
+  margin-top:0.5em;
+  white-space:nowrap;
+  position:relative;
+  float:left;
+  vertical-align:top;
+}
+
+div.col-md-1.cantidades{
+  width:35px;
+  height:20px;
+  margin-left:0.2em;
+  display:inline-block;
+  position:relative;
+}
+
+div.col-md-1.masUno{
+  width:60px;
+  height:20px;
+  display:inline-block;
+}
+
+span.spans{
+  position:relative;
+  display:inline-block;
+  vertical-align:top;
+}
+
+div.row.mazo{
+  width:20em;
+  display:block;
+  position:absolute;
+  right:3em;
+  top:-5em;
+}
+
+div.container.cartas{
+  width:20em;
+  transform:rotateZ(-90deg);
+  display:block;
+  position:relative;
+  right:5em;
+  top:14em;
+}
+
+div.col-lg-offset-0.wrapper{
+  position:relative;
+  top:3em;
+  left:-6em;
+}
+
+img#c1J1.cartasTableroJ1{
+  width:83px;
+}
+
+div.container.mazo{
+  width:150px;
+  height:251px;
+  position:absolute;
+  display:block;
+  top:9em;
+  left:-6em;
+  float:left;
+}
+
+div.col-md-2.mazoWrapper{
+  width:150px;
+  height:200px;
+  display:inline-block;
+  top:2em;
+}
+
+div.col-md-2.tribu{
+  transform:rotateZ(-90deg);
+  white-space:nowrap;
+  margin-top:5em;
+  display:inline-block;
+}
+
+div.col-md-2.merca{
+  transform:rotateZ(-90deg);
+  display:inline-block;
+}
+
+.tableroJugador1{
+  width:347px;
+  height:168px;
+  position:relative;
+  left:70.3em;
+  top:-33em;
+}
+
+.tableroJugador2{
+  width:347px;
+  height:168px;
+  position:relative;
+  left:70.3em;
+  top:-23.7em;
+}
+
+div.col-md-2.tj1_1{
+  width:85px;
+  height:55px;
+  border-radius: 5px;
+}
+
+body{
+  height:100%;
+  background-color:rgb(214,179,120);
+}
+
+#footer{
+  margin-bottom:0px;
+}
+
+div.row.opcionesTurno{
+  position:relative;
+  width:1073px;
+  height:58px;
+}
+
+html{
+}
+
+div.encabezado{
+  width:1355px;
+  height:30px;
+  display:block;
+}
+
+div.row.encabezado{
+  margin-left:-0.5em;
+}
+
+img#reglas{
+  width:32px;
+  position:absolute;
+  left:0;
+}
+
+span.label.label-info.label-Instrucciones{
+  position:absolute;
+  left:2em;
+  top:0.01em;
+  background-color:#969615;
+  font-size:large;
+}
+
+div.reglas{
+  width:131px;
+  height:30px;
+  position:absolute;
+  left:66em;
+}
+
+div#turnoDe.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
+}
+
+div.row.jugadorTurno{
+  width:400px;
+  height:30px;
+  position:absolute;
+  top:0em;
+  left:14em;
+}
+
+span.label.label-default.jugadorTurnoLabel{
+  background-color:#b7a319;
+  font-size:large;
+  left:0em;
+  position:absolute;
+  font-size:large;
+}
+
+div.contenedorBotones{
+  width:423px;
+  position:absolute;
+  top:4em;
+  left:20em;
+}
+
+button.btn.btn-default.formatoBotones{
+  margin:0px 16px 0px 3px;
+  color:#897719;
+}
+
+.btn-default{
+  color:#dd7500;
+  background-color:#aa8e0a;
+  border-color:#e0aa0f;
+}
+
+.btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default{
+  color:#555555;
+  background-color:#a38205;
+  border-color:#f4ed47;
+}
+
+.btn-default:active:hover, .btn-default.active:hover, .open > .dropdown-toggle.btn-default:hover, .btn-default:active:focus, .btn-default.active:focus, .open > .dropdown-toggle.btn-default:focus, .btn-default:active.focus, .btn-default.active.focus, .open > .dropdown-toggle.btn-default.focus{
+  color:#555555;
+  background-color:#f9d616;
+  border-color:#f9e27f;
+}
+
+div.row.jugadores{
+  height:292px;
+}
+
+div.cartaMano{
+  width:138px;
+  height:92px;
+  position:relative;
+  border-radius: 5px
+  left:1em;
+}
+
+div#nombreJT.mostrarNombreJT{
+  width:200px;
+  height:30px;
+  position:relative;
+  left:15em;
+}
+
+span#mostrarNombreTurno.label.label-default.jugadorTurnoLabel{
+  width:200px;
+  position:relative;
+  top:0.25em;
+  left:-0em;
+}
+
+div#imgCartaManoJ1.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#imgCartaManoJ2.cartaMano{
+  position:absolute;
+  left:0em;
+}
+
+div#pantallaGde.pantallaGde{
+  width:23px;
+  position:absolute;
+  left:63em;
+  top:0.4em;
+}
+
+div.panel-body{
+  background-color:#f5dba3;
+}
+
+.panel-default > .panel-heading{
+  color:#555555;
+  background-color:#c9a764;
+  border-color:#dddddd;
+}

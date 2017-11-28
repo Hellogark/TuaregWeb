@@ -6,12 +6,22 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "acl": "^0.4.11",
+    "array-shuffle": "^1.0.1",
+    "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
+    "colyseus": "^0.5.11",
     "debug": "~2.6.9",
     "express": "~4.15.5",
-    "jade": "~1.11.0",
+    "express-session": "^1.15.6",
+    "mongodb": "^2.2.33",
+    "mongoose": "^4.13.0",
     "morgan": "~1.9.0",
+    "msgpack": "^1.0.2",
+    "msgpack-response": "^1.0.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.4",
     "serve-favicon": "~2.4.5"
   }
 }

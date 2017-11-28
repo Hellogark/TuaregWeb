@@ -1,0 +1,485 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='utf-8')
+    title Tuareg - Dátiles, Sal y Pimienta
+    meta(content='width=device-width, initial-scale=1.0', name='viewport')
+    meta(content='', name='keywords')
+    meta(content='', name='description')
+    // Facebook Opengraph integration&#58; https&#58;//developers.facebook.com/docs/sharing/opengraph
+    meta(property='og:title', content='')
+    meta(property='og:image', content='')
+    meta(property='og:url', content='')
+    meta(property='og:site_name', content='')
+    meta(property='og:description', content='')
+    // Twitter Cards integration&#58; https&#58;//dev.twitter.com/cards/
+    meta(name='twitter:card', content='summary')
+    meta(name='twitter:site', content='')
+    meta(name='twitter:title', content='')
+    meta(name='twitter:description', content='')
+    meta(name='twitter:image', content='')
+    // Place your favicon.ico and apple-touch-icon.png in the template root directory
+    link(href='img/favicon.png', rel='shortcut icon')
+    // Google Fonts
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800', rel='stylesheet')
+    // Bootstrap CSS File
+    link(href='lib/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    // Libraries CSS Files
+    link(href='lib/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(href='lib/animate-css/animate.min.css', rel='stylesheet')
+    // Main Stylesheet File
+    link(href='css/style.css', rel='stylesheet')
+    //
+      =======================================================
+      Theme Name&#58; Imperial
+      Theme URL&#58; https&#58;//bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
+      Author&#58; BootstrapMade.com
+      Author URL&#58; https&#58;//bootstrapmade.com
+      =======================================================
+  body
+    #preloader
+    //
+      ==========================
+      Hero Section
+      ============================
+    section#hero
+      .hero-container
+        .wow.fadeIn
+          .hero-logo
+            img(src='img/tuareg-logo.png', alt='')
+          h1
+          h2
+            | Este juego contiene 
+            span.rotating dátiles, sal, pimienta
+          .actions
+            a.btn-get-started(href='/login') Jugar ahora
+            a.btn-services(href='#about') Acerca de Tuareg
+    //
+      ==========================
+      Header Section
+      ============================
+    header#header
+      .container
+        #logo.pull-left
+          a(href='/')
+            img(src='img/tuareg-logo.png', alt='', title='Logo del Juego de Mesa Tuareg')
+          // Uncomment below if you prefer to use a text image
+          // <h1><a href="#hero">Header 1</a></h1>
+        nav#nav-menu-container
+          ul.nav-menu
+            li.menu-active
+              a(href='#hero')
+                i.fa.fa-home
+                |  Inicio
+            li
+              a(href='#about')
+                i.fa.fa-info-circle
+                |  Acerca de Tuareg
+            li
+              a(href='#services')
+                i.fa.fa-list-alt
+                |  Instrucciones
+            li
+              a(href='#portfolio')
+                i.fa.fa-image
+                |  Galería
+            li
+              a(href='#testimonials')
+                i.fa.fa-user-circle-o
+                |  Acerca del Autor
+            li
+              a(href='#team')
+                i.fa.fa-industry
+                |  Akbar Soft
+            
+        // #nav-menu-container
+    // #header
+    //
+      ==========================
+      About Section
+      ============================
+    section#about
+      .container.wow.fadeInUp
+        .row
+          .col-md-12
+            h3.section-title Acerca de Tuareg
+            .section-title-divider
+            p.section-description
+              | Una nueva forma de ver la gestión de recursos.... ¡en el desierto! ...Tratos entre clanes, rivalidad, todo lo que te pide el cuerpo!
+      .container.about-container.wow.fadeInUp
+        .row
+          .col-md-6.col-md-push-6.about-content
+            h2.about-title
+              | En Tuareg, los jugadores adoptan el papel de jefes de clanes rivales que compiten por conseguir los mejores tratos en el comercio de sal, pimienta o dátiles, y los mejores enclaves para sus caravanas.
+            p.about-text
+              | Al contrario que otras culturas, los hombres tuareg del desierto llamados 
+              i targui
+              | , se cubren la cabeza y el rostro mientras que las mujeres, llamadas 
+              i targuia
+              | , no llevan velo alguno. El hogar pertenece a las mujeres y son ellas las que mandan en las tiendas donde viven. Las diferentes familias se dividen en tribus, liderados por los nobles (
+              i imascheren
+              |  en lengua tuareg). Los jugadores representan lideres de tribus  tuareg que comercian con mercancías (como dátiles, sal y pimienta) y consiguen monedas de oro y ventajas para así ampliar su tribu. En cada ronda aparecen nuevas ofertas. Las cartas de mercancías son el medio para conseguir las codiciadas cartas de tribu. Estas cartas proporcionan durante el juego ventajas y puntos de victoria al final. 
+              strong El jugador con más puntos de victoria al final de la partida es el ganador.
+    //
+      ==========================
+      Services Section
+      ============================
+    section#services
+      .container.wow.fadeInUp
+        .row
+          .col-md-12
+            h3.section-title Instrucciones
+            .section-title-divider
+            p.section-description Desarrollo del juego
+        .row
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-user-o
+            h4.service-title
+              a(href='') Tuareg
+            p.service-description
+              | Los jugadores adoptan el papel de jefes de clanes rivales que compiten por conseguir los mejores tratos en el comercio de sal, pimienta o dátiles, y los mejores enclaves para sus caravanas.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-list-ol
+            h4.service-title
+              a(href='') Ronda
+            p.service-description
+              | Fase 1: Avanzar al asaltante 1 casilla
+              br
+              | Fase 2: Colocar alternativamente las figuras Tuareg
+              br
+              | Fase 3: Colocar marcadores de tribu en las intersecciones
+              br
+              | Fase 4: Realizar acciones
+              br
+              | Fase 5: Preparación nueva ronda
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-user-circle-o
+            h4.service-title
+              a(href='') Fase 1: Avanzar al asaltante 1 casilla
+            p.service-description
+              | El asaltante avanza 1 casilla en sentido horario. 
+              br
+              | FAQ: En la primera permanece en la casilla de Nobles.
+              br
+              | Si llegó a una esquina 
+              i.fa.fa-arrow-right
+              |  Asalto Comenzando con el jugador inicial cada jugador decide si entrega lo que se indica o pierde PV. Luego el asaltante avanza una casilla.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-users
+            h4.service-title
+              a(href='') Fase 2: Colocar alternativamente las figuras Tuareg
+            p.service-description
+              | Comenzando por el jugador inicial los jugadores se turnan colocando uno de sus tuareg.
+              br
+              | Cada figura debe quedar en una casilla diferente:
+              br
+              | No puede haber figuras:
+              br
+              | En la misma casilla del asaltante.
+              br
+              | En una esquina
+              br
+              | En una casilla con otro tuareg
+              br
+              | Frente a un tuareg del jugador contrario. (si se puede frente al asaltante o frente a un tuareg propio).
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-bookmark
+            h4.service-title
+              a(href='') Fase 3: Colocar marcadores de tribu en las intersecciones
+            p.service-description
+              | Traza una línea imaginaria entre cada tuareg y el extremo opuesto.
+              br
+              | Coloca un marcador de tribu en las intersecciones formadas (1 o 2).
+              br
+              | Repetir el paso anterior hasta que los dos marcadores de tribu de ambos jugadores sean colocados en el tablero.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-puzzle-piece
+            h4.service-title
+              a(href='') Fase 4: Realizar acciones
+            p.service-description
+              | Comienza el jugador inicial.
+              br
+              | Cada jugador realiza todas las acciones que permitan las casillas dónde están sus tuareg y sus marcadores de tribu.
+              br
+              | El jugador decide en que orden realiza las acciones, pero debe terminar la acción de una carta antes de comenzar la siguiente.
+              br
+              | Luego de ejecutar una casilla de borde 
+              i.fa.fa-arrow-right
+              |  Retira el Tuareg.
+              br
+              | Luego de ejecutar una acción el centro:
+              br
+              | Retira el marcador de tribu.
+              br
+              | Reemplaza la carta por una de otro tipo (boca abajo).
+              br
+              | Si un jugador renuncia a una acción 
+              i.fa.fa-arrow-right
+              |  la carta se deja dónde está.
+              //
+                <br>En cuanto se agote el mazo de mercanc&#237;as <i class="fa fa-arrow-right"></i> Baraja el descarte de inmediato.
+                <br>Cartas de mercanc&#237;a  Obtienes lo que indica.
+                <br>Cartas de tribu <i class="fa fa-arrow-right"></i> 4 alternativas:
+                <br>Paga su costo y col&#243;cala en tu zona de juego (matriz de 4x3). No es necesario completar una fila antes de iniciar la siguiente. No se pueden mover.
+                <br>El efecto de la carta comienza a regir de inmediato.
+                <br>Puedes colocarla en tu mano sin pagar su costo.
+                <br>S&#243;lo puedes tener una carta en tu mano.
+                <br>Si ya tienes una en la mano <i class="fa fa-arrow-right"></i> Debes colocar la nueva en tu &#225;rea de juego o descartarla.
+                <br>Puedes colocarla en el descarte sin pagarla.
+                <br>Puedes dejarla d&#243;nde est&#225; &#40;pasar&#41;.</p>
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-bookmark
+            h4.service-title
+              a(href='') Fase 5: Preparación nueva ronda
+            p.service-description
+              | Revela las nuevas cartas de tribu y mercancías de la zona central.
+              br
+              | El marcador de jugador inicial pasa al otro jugador.
+              br
+              | Cada jugador puede conservar como máximo 10 mercancías y 3 monedas de oro. Devuelve el exceso a la reserva.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-hourglass-end
+            h4.service-title
+              a(href='') Fin del juego
+            p.service-description
+              | Puede terminar de 2 maneras:
+              br
+              | Un jugador coloca en la mesa su 12
+              sup a
+              |  carta de tribu 
+              i.fa.fa-arrow-right
+              |  Se completa la ronda.
+              br
+              | El asaltante llega a la 4
+              sup a
+              |  casilla de asalto 
+              i.fa.fa-arrow-right
+              |  Los jugadores paga $1 o 3PV y el juego termina.
+          .col-md-4.service-item
+            .service-icon
+              i.fa.fa-balance-scale
+            h4.service-title
+              a(href='') Puntuación
+            p.service-description
+              | PV en forma de cruces obtenidos durante la partida
+              br
+              | PV de las cruces en sus cartas de tribu
+              br
+              | PV adicionales de sus cartas de tribu
+              br
+              | En cada fila:
+              br
+              | 4PV si todas las cartas tienen el mismo símbolo.
+              br
+              | 2PV si todas las cartas tienen distinto símbolo
+              br
+              | 0PV en otros casos.
+              br
+              | El jugador con más PV ganará.
+              br
+              | Empate 
+              i.fa.fa-arrow-right
+              |  + Oro.
+              br
+              | Empate 
+              i.fa.fa-arrow-right
+              |  Más mercancías.
+    //
+      ==========================
+      Subscrbe Section
+      ============================
+    section#subscribe
+      .container.wow.fadeInUp
+        .row
+          .col-md-8
+            h3.subscribe-title Conoce a los Tuaregs
+            p.subscribe-text
+              | Los tuaregs o imuhars son un pueblo bereber de tradición nómada del desierto del Sáhara.
+          .col-md-4.subscribe-btn-container
+            a.subscribe-btn(href='https://es.wikipedia.org/wiki/Tuareg') Saber más
+    //
+      ==========================
+      Porfolio Section
+      ============================
+    section#portfolio
+      .container.wow.fadeInUp
+        .row
+          .col-md-12
+            h3.section-title Galería
+            .section-title-divider
+            p.section-description
+        .row
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-1.jpg);', href='')
+              .details
+                h4 Galería 1
+                span
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-2.jpg);', href='')
+              .details
+                h4 Galería 2
+                span
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-3.jpg);', href='')
+              .details
+                h4 Galería 3
+                span
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-4.jpg);', href='')
+              .details
+                h4 Galería 4
+                span Carta de tribu
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-5.jpg);', href='')
+              .details
+                h4 Galería 5
+                span
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-6.jpg);', href='')
+              .details
+                h4 Galería 6
+                span Cartas de tribu
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/portfolio-7.jpg);', href='')
+              .details
+                h4 Galería 7
+                span Puntos de victoria
+          .col-md-3
+            a.portfolio-item(style='background-image: url(img/tuareg-bg.jpg);', href='')
+              .details
+                h4 Galería 8
+                span Portada del juego de mesa
+    //
+      ==========================
+      Testimonials Section
+      ============================
+    section#testimonials
+      .container.wow.fadeInUp
+        .row
+          .col-md-12
+            h3.section-title Acerca del Autor
+            .section-title-divider
+            p.section-description
+        .row
+          .col-md-3
+            .profile
+              .pic
+                img(src='img/AndreasSteiger.jpg', alt='Andreas Steiger autor del juego de mesa')
+              h4 Andreas Steiger
+              span Autor del juego
+          .col-md-9
+            .quote
+              | Andreas Steiger, nació en 1973 y vive con su mujer y sus dos hijos cerca de Sttugart y trabaja como educador en una guardería. Además de los juegos de mesa, le gusta jugar juegos de computadora y hacer improvisación teatral. En cuanto a los juegos de mesa, cree que es especialmente importante que los jugadores tengan que tomar nuevas decisiones constantemente, El hecho de que prefiere juegos que funcionen muy bien a dos jugadores, le llevó a diseñar "Tuareg", su primer juego sólo para dos jugadores.
+    //
+      ==========================
+      Team Section
+      ============================
+    section#team
+      .container.wow.fadeInUp
+        .row
+          .col-md-12
+            h3.section-title
+              | Akbar Soft 
+              img(src='img/favicon.png', alt='', title='')
+            .section-title-divider
+            p.section-description Desarroladores del Proyecto
+        .row
+          .col-md-3
+            .member
+              .pic
+                img(src='img/Braulio.jpg', alt='')
+              h4 Braulio Félix
+              span
+              .social
+                a(href='')
+                  i.fa.fa-twitter
+                a(href='')
+                  i.fa.fa-facebook
+                a(href='')
+                  i.fa.fa-google-plus
+          .col-md-3
+            .member
+              .pic
+                img(src='img/Dewey.jpg', alt='')
+              h4 Carlos Villegas
+              span
+              .social
+                a(href='https://twitter.com/Car10s_Villegas?lang=es')
+                  i.fa.fa-twitter
+                a(href='https://www.facebook.com/CarlosMarioVillegasAcosta')
+                  i.fa.fa-facebook
+                a(href='')
+                  i.fa.fa-google-plus
+          .col-md-3
+            .member
+              .pic
+                img(src='img/Eduardo.jpg', alt='')
+              h4 Eduardo Moreno
+              span
+              .social
+                a(href='')
+                  i.fa.fa-twitter
+                a(href='')
+                  i.fa.fa-facebook
+                a(href='')
+                  i.fa.fa-google-plus
+          .col-md-3
+            .member
+              .pic
+                img(src='img/Juvenal2.jpg', alt='')
+              h4 Juvenal Soto
+              span
+              .social
+                a(href='')
+                  i.fa.fa-twitter
+                a(href='')
+                  i.fa.fa-facebook
+                a(href='')
+                  i.fa.fa-google-plus
+    //
+      ==========================
+      Footer
+      ============================
+    footer#footer
+      .container
+        .row
+          .col-md-12
+            .copyright
+              a(href='https://github.com/Hellogark/TuaregWeb')
+                i.fa.fa-github  GitHub Project
+              |  Web Site in Development © Copyright 2017 
+              strong Akbar Soft
+              | .
+              // All Rights Reserved
+              img(src='img/favicon.png', alt='Favicon de Akbar Soft')
+            .credits
+              //
+                All the links in the footer should remain intact.
+                You can delete the links only if you purchased the pro version.
+                Licensing information&#58; https&#58;//bootstrapmade.com/license/
+                Purchase the pro version with working PHP/AJAX contact form&#58; https&#58;//bootstrapmade.com/buy/?theme=Imperial
+              // Bootstrap Themes by
+              a(href='https://bootstrapmade.com/') BootstrapMade
+    // #footer
+    a.back-to-top(href='#')
+      i.fa.fa-chevron-up
+    // Required JavaScript Libraries
+    script(src='lib/jquery/jquery.min.js')
+    script(src='lib/bootstrap/js/bootstrap.min.js')
+    script(src='lib/superfish/hoverIntent.js')
+    script(src='lib/superfish/superfish.min.js')
+    script(src='lib/morphext/morphext.min.js')
+    script(src='lib/wow/wow.min.js')
+    script(src='lib/stickyjs/sticky.js')
+    script(src='lib/easing/easing.js')
+    // Template Specisifc Custom Javascript File
+    script(src='js/custom.js')
+    script(src='contactform/contactform.js')

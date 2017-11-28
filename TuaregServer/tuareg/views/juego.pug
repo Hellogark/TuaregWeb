@@ -1,0 +1,208 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Partida Tuareg
+    link(rel='stylesheet', href='assets/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Cookie')
+    link(rel='stylesheet', href='assets/css/styles.css')
+    link(rel='stylesheet', href='assets/css/Material-Card.css')
+    link(rel='stylesheet', href='assets/css/Pretty-Header.css')
+    link(rel='stylesheet', href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css')
+    script(src='js/colyseus.js')
+    script(src='assets/js/jquery.min.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+  body
+    script(src="js/jquery.animateSprite.min.js")
+    script(src="js/comp.js")     
+    header
+      .row.encabezado
+        #pantallaGde.pantallaGde
+          img.pantalla(src='assets/img/fullscreen.png')
+        #clicreglas.reglas
+          span.label.label-info.label-Instrucciones Instrucciones 
+          img#reglas(src='assets/img/open-book-top-view.png')
+        .encabezado
+          img(src='assets/img/header.gif', alt='encabezado')
+    .row.jugadorTurno
+      #turnoDe.jugadorTurno
+        span#turnoJugadorLabel.label.label-default.jugadorTurnoLabel Es el turno del jugador:   
+    .col-lg-offset-0.wrapper
+      .container.mazo
+        .col-md-2.merca
+          img(src='assets/img/TMercancias_71.gif')
+        .col-md-2.tribu
+          img(src='assets/img/Tribu_70.gif')
+      .container.tablero
+        .row.show
+          #asalto4.col-md-2
+            img(src='assets/img/bordes_1.gif')
+          #Nobles.col-md-2
+            img(src='assets/img/bordes_2.gif')
+          #datil1Borde.col-md-2
+            img(src='assets/img/bordes_3.gif')
+          #sal1borde.col-md-2
+            img(src='assets/img/bordes_4.gif')
+          #asalto1.col-md-2
+            img(src='assets/img/bordes_5.gif')
+        .row.show
+          #sal2Borde.col-md-2
+            img(src='assets/img/bordes_16.gif')
+          #carta1.col-md-2
+          #carta2.col-md-2
+          #carta3.col-md-2
+          #comerciante.col-md-2
+            img(src='assets/img/bordes_6.gif')
+        .row.show
+          #ampTribu.col-md-2
+            img(src='assets/img/bordes_15.gif')
+          #carta4.col-md-2
+          #carta5.col-md-2
+          #carta6.col-md-2
+          #pimienta1Borde.col-md-2
+            img(src='assets/img/bordes_7.gif')
+        .row.show
+          #caravana.col-md-2
+            img(src='assets/img/bordes_14.gif')
+          #carta7.col-md-2
+          #carta8.col-md-2
+          #carta9.col-md-2
+          #datil2Borde.col-md-2
+            img(src='assets/img/bordes_8.gif')
+        .row.show
+          #asalto3.col-md-2
+            img(src='assets/img/bordes_13.gif')
+          #pimienta2Borde.col-md-2
+            img(src='assets/img/bordes_12.gif')
+          #orfebre.col-md-2
+            img(src='assets/img/bordes_11.gif')
+          #Espejismo.col-md-2
+            img(src='assets/img/bordes_10.gif')
+          #asalto2.col-md-2
+            img(src='assets/img/bordes_9.gif')
+      .container.jugadores
+        .col-md-12
+          .row.jugadores
+            div#j1
+              .panel.panel-default
+                .panel-heading
+                  h3#nombreJ1.panel-title Jugador 1
+                .panel-body
+                  .row.pts
+                    .jugadores
+                      span Puntos: 
+                      span#puntosP1 jsPuntos 
+                  .row.fichas
+                    .col-md-1.otrasFichas
+                      img#datilP1.fichas(src='assets/img/datil.jpg')
+                    .col-md-1.otrasFichas
+                      img#salP1.fichas(src='assets/img/sal.jpg')
+                    .col-md-1.otrasFichas
+                      img.fichas(src='assets/img/pimienta.jpg')
+                    .col-md-1.otrasFichas
+                      img#oroP1.fichas(src='assets/img/oro.png')
+                    #fichaTurno1.col-md-1.otrasFichas
+                      img.fichas(src='assets/img/Turno.png')
+                  #cantidades.row.cantidad
+                    .col-md-1.cantidades
+                      span#cDatilP1.spans 4 
+                    .col-md-1.cantidades
+                      span#cSalP1.spans 4 
+                    .col-md-1.cantidades
+                      span#cPimP1.spans 4 
+                    .col-md-1.masUno
+                      span#cOroyMas1P1.spans 3 
+                      span#cOroyMas2P1.spans  
+            #cartaManoJ1.cartaMano
+              #imgCartaManoJ1.cartaMano
+              img(src='assets/img/cartaMano.png')
+          .row.jugadores
+            div#j2
+              .panel.panel-default
+                .panel-heading
+                  h3#nombreJ2.panel-title Jugador 2
+                .panel-body
+                  .row
+                    .jugadores
+                      span Puntos: 
+                      span#puntosP2 jsPuntos 
+                  .row.fichas
+                    .col-md-1.otrasFichas
+                      img#datilP1.fichas(src='assets/img/datil.jpg')
+                    .col-md-1.otrasFichas
+                      img#salP1.fichas(src='assets/img/sal.jpg')
+                    .col-md-1.otrasFichas
+                      img#pimientap2.fichas(src='assets/img/pimienta.jpg')
+                    .col-md-1.otrasFichas
+                      img#oroP2.fichas(src='assets/img/oro.png')
+                    #fichaTurno2.col-md-1.otrasFichas
+                      img.fichas(src='assets/img/Turno.png')
+                  #cantidades.row.cantidad
+                    .col-md-1.cantidades
+                      span#cDatilP2.spans 4 
+                    .col-md-1.cantidades
+                      span#cSalP2.spans 4 
+                    .col-md-1.cantidades
+                      span#cPimP2.spans 4 
+                    .col-md-1.masUno
+                      span#cOroyMas1P2.spans 3 
+                      span#cOroyMas2P2.spans 
+            #cartaManoJ2.cartaMano
+              #imgCartaManoJ2.cartaMano
+              img(src='assets/img/cartaMano.png')
+      .row.tableroJugador1
+        #cartaJ1_1.col-md-2.tj1_1
+          img(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_2.col-md-2.tj1_1
+          img(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_3.col-md-2.tj1_1
+          img#cJ1_3(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_4.col-md-2.tj1_1
+          img#cJ1_4(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_5.col-md-2.tj1_1
+          img#cJ1_5(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_6.col-md-2.tj1_1
+          img#cJ1_6(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_7.col-md-2.tj1_1
+          img#cJ1_7(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_8.col-md-2.tj1_1
+          img#cJ1_8(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_9.col-md-2.tj1_1
+          img#cJ1_9(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_10.col-md-2.tj1_1
+          img#cJ1_10(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_11.col-md-2.tj1_1
+          img#cJ1_12(src='assets/img/fondoTableroJ.gif')
+        #cartaJ1_12.col-md-2.tj1_1
+          img(src='assets/img/fondoTableroJ.gif')
+      .row.tableroJugador2
+        #cartaJ2_1.col-md-2.tj1_1
+          img(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_2.col-md-2.tj1_1
+          img(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_3.col-md-2.tj1_1
+          img#cJ1_3(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_4.col-md-2.tj1_1
+          img#cJ1_4(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_5.col-md-2.tj1_1
+          img#cJ1_5(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_6.col-md-2.tj1_1
+          img#cJ1_6(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_7.col-md-2.tj1_1
+          img#cJ1_7(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_8.col-md-2.tj1_1
+          img#cJ1_8(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_9.col-md-2.tj1_1
+          img#cJ1_9(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_10.col-md-2.tj1_1
+          img#cJ1_10(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_11.col-md-2.tj1_1
+          img#cJ1_12(src='assets/img/fondoTableroJ.gif')
+        #cartaJ2_12.col-md-2.tj1_1
+          img(src='assets/img/fondoTableroJ.gif')
+    .row.opcionesTurno
+      .contenedorBotones
+        .btn-group.botones(role='group')
+          button#terminarTurno.btn.btn-default.formatoBotones(type='button') Terminar Turno
+    script(src='assets/bootstrap/js/bootstrap.min.js')

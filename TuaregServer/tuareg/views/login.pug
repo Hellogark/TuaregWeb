@@ -1,0 +1,143 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='utf-8')
+    title Tuareg - Juega Tuareg
+    // Place your favicon.ico and apple-touch-icon.png in the template root directory
+    link(href='img/favicon.png', rel='shortcut icon')
+    // Google Fonts
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800', rel='stylesheet')
+    // Bootstrap CSS File
+    link(href='lib/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    // Libraries CSS Files
+    link(href='lib/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(href='lib/animate-css/animate.min.css', rel='stylesheet')
+    // Main Stylesheet File
+    link(href='css/style.css', rel='stylesheet')
+    //
+      =======================================================
+      Theme Name: Imperial
+      Theme URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
+      Author: BootstrapMade.com
+      Author URL: https://bootstrapmade.com
+      =======================================================
+  body
+    // <div id="preloader"></div>
+    //
+      ==========================
+      Header Section
+      ============================
+    header#header
+      .container
+        #logo.pull-left
+          a(href='/')
+            img(src='img/tuareg-logo.png', alt='', title='Logo del Juego de Mesa Tuareg')
+          // Uncomment below if you prefer to use a text image
+          // <h1><a href="#hero">Header 1</a></h1>
+        nav#nav-menu-container
+          ul.nav-menu
+            li.menu-active
+              a(href='/#hero')
+                i.fa.fa-home
+                |  Inicio
+            li
+              a(href='/#about')
+                i.fa.fa-info-circle
+                |  Acerca de Tuareg
+            li
+              a(href='/#services')
+                i.fa.fa-list-alt
+                |  Instrucciones
+            li
+              a(href='/#portfolio')
+                i.fa.fa-image
+                |  Galería
+            li
+              a(href='/#testimonials')
+                i.fa.fa-user-circle-o
+                |  Acerca del Autor
+            li
+              a(href='/#team')
+                i.fa.fa-industry
+                |  Akbar Soft
+            
+        // #nav-menu-container
+    // #header
+    //
+      ==========================
+      Contact Section
+      ============================
+    section#contact
+      .container.wow.fadeInUp
+        .row
+          .col-md-12
+            h3.section-title Inicia Sesión - Regístrate
+            .section-title-divider
+            p.section-description
+              | Dátiles, sal, pimienta y unas monedas serán los ingredientes que te llevarán a la victoria
+        .row
+          .col-md-3.col-md-push-2
+            .form
+              form.contactForm(action='/login', method='post', role='form')
+                .form-group
+                  input#user.form-control(type='text', name='username', placeholder='Usuario', data-rule='minlen:6', data-msg='Ingresa un nombre con al menos 6 caracteres')
+                  .validation
+                .form-group
+                  input#password.form-control(type='password', name='password', placeholder='Contraseña', data-rule='password', data-msg='Contraseña incorrecta')
+                  .validation
+                .text-center
+                  button(type='submit') Jugar
+          .col-md-5.col-md-push-2
+            .form
+              #sendmessage ¡Su registro se realizó exitosamente!
+              #errormessage
+              form.registro(action='/registrar', method='post', role='form')
+                .form-group
+                  input#user.form-control(type='text', name='username', placeholder='Usuario', data-rule='minlen:4', data-msg='Please enter at least 4 chars')
+                .form-group
+                  input#password.form-control(type='password', name='password', placeholder='Contraseña', data-rule='email', data-msg='Please enter a valid email')
+                  .validation
+                .form-group
+                  input#verificacion.form-control(type='password', name='verificacion', placeholder='Verificación', data-rule='minlen:4', data-msg='Please enter at least 8 chars of subject')
+                  .validation
+                .text-center
+                  button(type='submit') Registrarse
+    //
+      ==========================
+      Footer
+      ============================
+    footer#footer
+      .container
+        .row
+          .col-md-12
+            .copyright
+              a(href='https://github.com/Hellogark/TuaregWeb')
+                i.fa.fa-github  GitHub Project
+              |  Web Site in Development © Copyright 2017 
+              strong Akbar Soft
+              | .
+              // All Rights Reserved
+              img(src='img/favicon.png', alt='Favicon de Akbar Soft')
+            .credits
+              //
+                All the links in the footer should remain intact.
+                You can delete the links only if you purchased the pro version.
+                Licensing information: https://bootstrapmade.com/license/
+                Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Imperial
+              // Bootstrap Themes by
+              a(href='https://bootstrapmade.com/') BootstrapMade
+    // #footer
+    a.back-to-top(href='#')
+      i.fa.fa-chevron-up
+    // Required JavaScript Libraries
+    script(src='lib/jquery/jquery.min.js')
+    script(src='lib/bootstrap/js/bootstrap.min.js')
+    script(src='lib/superfish/hoverIntent.js')
+    script(src='lib/superfish/superfish.min.js')
+    script(src='lib/morphext/morphext.min.js')
+    script(src='lib/wow/wow.min.js')
+    script(src='lib/stickyjs/sticky.js')
+    script(src='lib/easing/easing.js')
+    // Template Specisifc Custom Javascript File
+    script(src='js/custom.js')
+    script(src='contactform/contactform.js')

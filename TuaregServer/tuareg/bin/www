@@ -7,7 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('tuareg:server');
 var http = require('http');
-
+var colyseus= require("colyseus");
+var tuaregroom= require("../rooms/tuareg.js");
 /**
  * Get port from environment and store in Express.
  */
@@ -20,14 +21,15 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
+var gameServer= new colyseus.Server({server:server});
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+gameServer.register("tuareg",tuaregroom);
+gameServer.listen(port);
+
 
 /**
  * Normalize a port into a number, string, or false.
