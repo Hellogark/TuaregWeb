@@ -66,7 +66,7 @@ class Tuareg extends Room{
 			excesoscobrados:0,
 			fichaInicio:null,
 			aumentadoefecto:false,
-
+			comprando:false
 		});
 
 
@@ -87,10 +87,10 @@ class Tuareg extends Room{
 		client.playerIndex = Object.keys(this.state.jugadores).length;
 
 		this.state.jugadores[client.id] ={
-			datiles:4,
-			oro:3,
-			pimienta:4,
-			sal:3,
+			datiles:2,
+			oro:1,
+			pimienta:2,
+			sal:2,
 			puntosv:4 , //[0]= fichas 1 punto , [1]=fichas 3 puntos , [2]=fichas 5 puntos
 			playerIndex:client.playerIndex,
 			fichasT:3,
@@ -166,7 +166,7 @@ class Tuareg extends Room{
 				this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna]= this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila][data.movimientos[0].columna];
 				this.state.jugadores[client.id].tablero_jugador[data.movimientos[3].fila][data.movimientos[3].columna]= this.state.jugadores[client.id].tablero_jugador[data.movimientos[2].fila][data.movimientos[2].columna];
 				this.state.jugadores[client.id].tablero_jugador[data.movimientos[0].fila].splice(data.movimientos[0].columna,1);
-				this.state.jugadores[client.id].tablero_jugador[data.movimientos[2].fila].splice(data.movimientos[0].columna,1);
+				this.state.jugadores[client.id].tablero_jugador[data.movimientos[2].fila].splice(data.movimientos[2].columna,1);
 				this.broadcast({action:"refreshtj",fila:data.movimientos[0].fila,columna:data.movimientos[0].columna,clientid:client.id,cartaid:60});
 				this.broadcast({action:"refreshtj",fila:data.movimientos[2].fila,columna:data.movimientos[2].columna,clientid:client.id,cartaid:60});
 				this.broadcast({action:"refreshtj",fila:data.movimientos[1].fila,columna:data.movimientos[1].columna,clientid:client.id,cartaid:this.state.jugadores[client.id].tablero_jugador[data.movimientos[1].fila][data.movimientos[1].columna]._id});
@@ -204,9 +204,11 @@ class Tuareg extends Room{
 			this.state.jugadores[client.id].oro+=data.oro;
 			this.state.jugadores[client.id].puntosv+=data.puntov;
 		}
-		else if(data.action=="efectoU"  ){
+		else if(data.action=="efectoU"  ){  // efecto U de nobles
 			if(this.state.jugadores[client.id].efectoU[5] &&estado.jugadores[client.id].tarjetaMano!=null){
-				this.send(cliente,{action:"showTr",carta:estado.jugadores[client.id].tarjetaMano,efecto:6});
+				this.send(cliente,{action:"mensaje",mensaje:"Descuento de 1 mercancia al usar nobles."})
+				this.state.jugadores[client.id].c_descuento++;
+				this.send(cliente,{action:"showTr",carta:estado.jugadores[client.id].tarjetaMano});
 				estado.jugadores[client.id].tarjetaMano=null;
 				this.send(cliente,{action:"refreshtjm",cartaid:46,clientid:client.id});
 				this.state.jugadores[client.id].efectoU[5]=false;
@@ -319,7 +321,7 @@ class Tuareg extends Room{
 			//Aplicando efectoU 11
 			if(estado.jugadores[cliente.id].efectoU[10]){
 				estado.jugadores[cliente.id].puntosv++;
-				this.send(cliente.id,{action:"mensaje",mensaje:"Se te da 1 punto de victoria despues de cobrar el asalto."});
+				this.send(cliente,{action:"mensaje",mensaje:"Se te da 1 punto de victoria despues de cobrar el asalto."});
 			}
 			//Una vez se cobran  los 2 asaltos se cambia al estado 1
 
@@ -476,11 +478,12 @@ class Tuareg extends Room{
 
 		}
 		else if(data.action=="choset"){
-			if(data.columna!=null && data.fila!=null){
+			if(data.columna!=null && data.fila!=null ){
 				console.log()
 				this.cobraCartaTribu(data,estado,cliente,true);
+
 			}
-			else{
+			else {
 				this.cobraCartaTribu(data,estado,cliente,false);
 			}
 
@@ -624,7 +627,7 @@ class Tuareg extends Room{
 		console.log("Aqui andamos: "+'\n');
 		console.log(carta);
 		console.log('\n');
-		if(data.action==="choset"){
+		if(data.action==="choset" ){
 			// Mediante data.cartafila , data.cartacolumna y data.tarifa obtener la tarifa correspondiente  aplicarla y pasar la carta al tablero mediante data.fila y data.columna , luego reemplazar carta en tableroInter
 			switch(data.tarifa){
 				case 1:
@@ -636,6 +639,7 @@ class Tuareg extends Room{
 					estado.jugadores[cliente.id].pimienta+= -carta.costo1_p+descuento[2]; // + data.descuento
 					estado.jugadores[cliente.id].oro+= -carta.costo1_o+descuento[3];
 					estado.jugadores[cliente.id].tablero_jugador[data.cartafila].push(carta); //Introducir al tablero del jugador
+					this.state.comprando=false;
 					//contar tipos de cartas en tablero de jugador
 					switch(carta.tipo){
 						case "oasis":
@@ -806,6 +810,7 @@ class Tuareg extends Room{
 						estado.jugadores[cliente.id].oro-= carta.costo2_o
 					}
 					estado.jugadores[cliente.id].tablero_jugador[data.cartafila].push(carta);
+					this.state.comprando=false;
 					//Aplica efectos de cartas
 					switch(carta.efecto[0]){
 						case "a":   // Efecto A
@@ -893,7 +898,7 @@ class Tuareg extends Room{
 							break;
 							case "4":
 								estado.jugadores[cliente.id].efectoU[3]=true;
-								this.send(cliente,{action:"mercancia1",pares:1});
+								this.send(cliente,{action:"mercancia1",pares:Math.floor((12-totalcartas)/2)});
 							break;
 							case "5":
 								estado.jugadores[cliente.id].efectoU[4]=true;
@@ -940,6 +945,7 @@ class Tuareg extends Room{
 				break;
 				case 3:
 					console.log(data);
+					this.state.comprando=false;
 				break;
 				case 4:
 					if(isfromtablero){
@@ -947,6 +953,7 @@ class Tuareg extends Room{
 						estado.tableroInter[data.fila][data.columna]=0;
 						estado.tableroTuareg[data.fila][data.columna]=0;
 						estado.jugadores[cliente.id].intersec--;
+
 						this.broadcast({action:"refresh",fila:data.fila,columna:data.columna,id:estado.tableroCartas[data.fila][data.columna]._id});
 					}
 					else{
@@ -955,7 +962,7 @@ class Tuareg extends Room{
 					estado.jugadores[cliente.id].tarjetaMano=carta;
 					//this.broadcast({action:"refreshtjm",clientid:cliente.id,cartaid:carta._id});
 					this.send(cliente,{action:"refreshtjm",fila:data.fila,columna:data.columna,cartaid:carta._id,clientid:cliente.id});
-
+					this.state.comprando=false;
 					console.log(data);
 				break;
 				default:
@@ -972,6 +979,7 @@ class Tuareg extends Room{
 					else{
 						estado.jugadores[cliente.id].cobraBorde--;
 					}
+					this.state.comprando=false;
 				break;
 			}
 
@@ -995,28 +1003,34 @@ class Tuareg extends Room{
 
 					if (estado.jugadores[cliente.id].efectoB[0] && estado.jugadores[cliente.id].oasis>0){
 						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].oasis;
+						estado.jugadores[cliente.id].efectoB[0]=false;
 						estado.jugadores[cliente.id].desc=true;
 					}
 					if (estado.jugadores[cliente.id].efectoB[1] && estado.jugadores[cliente.id].camello>0){
 						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].camello;
+						estado.jugadores[cliente.id].efectoB[1]=false;
 						estado.jugadores[cliente.id].desc=true;
 					}
 					if (estado.jugadores[cliente.id].efectoB[2] && estado.jugadores[cliente.id].pozo>0){
 						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].pozo;
+						estado.jugadores[cliente.id].efectoB[2]=false;
 						estado.jugadores[cliente.id].desc=true;
 					}
 					if (estado.jugadores[cliente.id].efectoB[3] && estado.jugadores[cliente.id].tienda>0){
 						estado.jugadores[cliente.id].c_descuento+=estado.jugadores[cliente.id].tienda;
+						estado.jugadores[cliente.id].efectoB[3]=false;
 						estado.jugadores[cliente.id].desc=true;
 					}
 					if (estado.jugadores[cliente.id].efectoB[4] && estado.jugadores[cliente.id].tuareg>0){
 						estado.jugadores[cliente.id].c_descuento=estado.jugadores[cliente.id].tuareg;
+						estado.jugadores[cliente.id].efectoB[4]=false;
 						estado.jugadores[cliente.id].desc=true;
 					}
 
 
 			// Aplicando efectoU 10
 			if(estado.jugadores[cliente.id].efectoU[9]){
+				estado.jugadores[cliente.id].efectoU[9]=false;
 				estado.c_descuento+=1;
 				estado.jugadores[cliente.id].desc=true;
 				this.send(cliente.id,{action:"mensaje",mensaje:"Se te descuenta una mercancia menos: 'Si utilizas la acción de Nobles para poner una carta sobre la mesa, pagas 1 mercancia menos que la indicada'"})
@@ -1026,9 +1040,14 @@ class Tuareg extends Room{
 			///
 			console.log(espacio);
 			/////
-			this.send(cliente,{action:"choset",fila:data.fila,columna:data.columna,costo:[carta.costo1_d,carta.costo1_s,carta.costo1_o,carta.costo1_p,carta.costo2_o ],
-			descuento:estado.jugadores[cliente.id].desc,cantidad:estado.jugadores[cliente.id].c_descuento,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
-		}
+
+			if(!this.state.comprando){
+				this.send(cliente,{action:"choset",fila:data.fila,columna:data.columna,costo:[carta.costo1_d,carta.costo1_s,carta.costo1_o,carta.costo1_p,carta.costo2_o ],
+				descuento:estado.jugadores[cliente.id].desc,cantidad:estado.jugadores[cliente.id].c_descuento,tarjetaMano:(estado.jugadores[cliente.id].tarjetaMano===null ?true :false),data:carta,isfromtablero:isfromtablero,actual:estado.jugadores[cliente.id],espacio:espacio});
+				this.state.comprando=true;
+			}
+			}
+
 		//verificar si nos quedamos sin cartas
 		if(estado.cartas_mercancia_baraja.length <=0){
 			//tomar el cementerio de cartas, barajearlo y volverlo la nueva baraja
@@ -1541,7 +1560,7 @@ class Tuareg extends Room{
 					this.send(this.clients[0],{mensaje:"Adquiriste uno mas de pimienta por carta tribu camello"});
 				}
 				if(this.state.jugadores[this.state.players[0]].efectoU[0] && !this.state.jugadores[this.state.players[0]].flagMerca[0] && !this.state.jugadores[this.state.players[0]].flagMerca[1] && !this.state.jugadores[this.state.players[0]].flagMerca[2] ){
-					this.send(cliente,{action:"showC",carta:this.state.cartas_mercancia_baraja.pop(),actual:this.state.jugadores[this.state.players[0]]})
+					this.send(this.clients[0],{action:"showC",carta:this.state.cartas_mercancia_baraja.pop(),actual:this.state.jugadores[this.state.players[0]]})
 					//verificar si nos quedamos sin cartas
 					if(this.state.cartas_mercancia_baraja.length <=0){
 						//tomar el cementerio de cartas, barajearlo y volverlo la nueva baraja
@@ -1549,7 +1568,7 @@ class Tuareg extends Room{
 						estado.cartas_mercancia_recicla=[];
 						shuffle(estado.cartas_mercancia_baraja);
 					}
-					this.send(this.clients[1],{mensaje:"No conseguiste ninguna mercancia esta ronda, ten una carta de mercancia"});
+					this.send(this.clients[0],{mensaje:"No conseguiste ninguna mercancia esta ronda, ten una carta de mercancia"});
 				}
 				if(this.state.jugadores[this.state.players[1]].efectoA[0] && this.state.jugadores[this.state.players[1]].flagMerca[0]){
 					this.state.jugadores[this.state.players[1]].datiles++;
@@ -1564,7 +1583,7 @@ class Tuareg extends Room{
 					this.send(this.clients[1],{mensaje:"Adquiriste uno mas de pimienta por carta tribu camello"});
 				}
 				if(this.state.jugadores[this.state.players[1]].efectoU[0] && !this.state.jugadores[this.state.players[1]].flagMerca[0] && !this.state.jugadores[this.state.players[1]].flagMerca[1] && !this.state.jugadores[this.state.players[1]].flagMerca[2] ){
-					this.send(cliente,{action:"showC",carta:this.state.cartas_mercancia_baraja.pop(),actual:this.state.jugadores[this.state.players[1]]})
+					this.send(this.clients[1],{action:"showC",carta:this.state.cartas_mercancia_baraja.pop(),actual:this.state.jugadores[this.state.players[1]]})
 					//verificar si nos quedamos sin cartas
 					if(this.state.cartas_mercancia_baraja.length <=0){
 						//tomar el cementerio de cartas, barajearlo y volverlo la nueva baraja
@@ -1612,8 +1631,14 @@ class Tuareg extends Room{
 					if(!this.state.jugadores[this.state.players[0]].efectoU[1]){
 						this.send(this.clients[0],{action:"asalto",posicion:this.state.asaltante_pos,act: this.state.jugadores[this.state.players[0]]});
 					}
-					else if(!this.state.jugadores[this.state.players[1]].efectoU[1]){
+					else{
+						this.state.asaltoscobrados++;
+					}
+					if(!this.state.jugadores[this.state.players[1]].efectoU[1]){
 						this.send(this.clients[1],{action:"asalto",posicion:this.state.asaltante_pos,act:this.state.jugadores[this.state.players[1]]});
+					}
+					else{
+						this.state.asaltoscobrados++;
 					}
 
 				}

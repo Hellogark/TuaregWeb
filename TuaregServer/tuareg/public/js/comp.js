@@ -223,6 +223,7 @@ room.onData.add(function(mensaje){
 		var mercadesc=[0,0,0,0];
 		$(".wrapper").css("pointer-events","none");
 		$("button").prop("disabled",true);
+		$("#chose").remove();
 		if(mensaje.isfromtablero){
 			$("#showTr").remove();
 			var chose="<div id='showTr' style='position:fixed;z-index:50;width:138px;height:92px;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);border-style:double'></div>";
@@ -230,18 +231,17 @@ room.onData.add(function(mensaje){
 			$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.data._id-1]);
 		}
 
-
 		////////////////////NOTA: Se usan inputs y eventos on click por la necesidad de pasar objetos como argumentos/////////////////
 		var chose="<div id='chose' style='position:absolute;z-index:100;left:50%;text-align:center;transform:translateX(-50%);top:7em'>";
 		if(mensaje.actual.datiles>=mensaje.costo[0] && mensaje.actual.sal>=mensaje.costo[1] && mensaje.actual.oro>= mensaje.costo[2]&& mensaje.actual.pimienta>=mensaje.costo[3] && mensaje.espacio ){
 			chose+="<input id='t1' type='button' value='Tarifa 1: "+mensaje.costo[0]+" xDatiles "+mensaje.costo[1]+" xSal "+mensaje.costo[2]+" xOro "+mensaje.costo[3]+" xPimienta"+"'>";
 		}
-		if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio){
+		/*if(mensaje.costo[4]>0 && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio){
 			chose+= "<br><input type='button' id='t2' value='tarifa 2 :1 X Oro' >";
 		}
 		if((mensaje.costo[4]>0 ||mensaje.costo[2]>0) && mensaje.actual.oro >= mensaje.costo[4]  && mensaje.espacio && mensaje.actual.efectoU[4]){
 			chose+= "<br><input type='button' id='tr' value='Pagar con reserva' >";
-		}
+		}*/
 		if(mensaje.descuento){
 			chose+=	"<spanf id='comunica'style='color:red'>Descuento: "+mensaje.cantidad+ "</spanf>";
 			if(mensaje.costo[0]>0){
@@ -262,8 +262,9 @@ room.onData.add(function(mensaje){
 			chose+="<br><input id='t5' type='button' value='Rechazar'>";
 			chose+= "</div>";
 		$("#showTr").append(chose);
+		$("#showTr").off("click");
 		/////////////////////////Eventos para los input/////////////////////////////////////////////////////////////////////////////
-		$('#showTr').on('click', '#t1', function(){
+		$('#chose').on('click', '#t1', function(){
 			console.log("click");
 			$('#showTr').off("click","#t1");
 			$('#showTr').off("click","#tr");
@@ -273,7 +274,7 @@ room.onData.add(function(mensaje){
 			$("#showTr").remove();
 			escogert(1,mensaje.fila,mensaje.columna,mensaje.data,mensaje.actual.tablero_jugador,mercadesc);
 		});
-		$('#showTr').on('click', '#t2', function(){
+		$('#chose').on('click', '#t2', function(){
 			console.log("click");
 			$('#showTr').off("click","#t2");
 			$('#showTr').off("click","#tr");
@@ -285,16 +286,17 @@ room.onData.add(function(mensaje){
 
 
 		});
-		$('#showTr').on('click', '#tr', function(){
+		$('#chose').on('click', '#tr', function(){
 			console.log("click");
-			$('#showTr').off("click","#t2");
-			$('#showTr').off("click","#tr");
-			$('#showTr').off("click","#t31");
-			$('#showTr').off("click","#t32");
-			$('#showTr').off("click","#t33");
-			$("#showTr").remove();
+
 			if(mensaje.costo[4]>0){
 				escogert(2,mensaje.fila,mensaje.columna,mensaje.data,mensaje.actual.tablero_jugador,true);
+				$('#showTr').off("click","#t2");
+				$('#showTr').off("click","#tr");
+				$('#showTr').off("click","#t31");
+				$('#showTr').off("click","#t32");
+				$('#showTr').off("click","#t33");
+				$("#showTr").remove();
 			}
 			else if(mensaje.costo[2]>0){
 				mercadesc[3]=1;
@@ -304,9 +306,8 @@ room.onData.add(function(mensaje){
 
 
 		});
-		$('#showTr').on('click', '#t31', function(){
+		$('#chose').on('click', '#t31', function(){
 			console.log("click");
-
 			if(cantidad==0){
 				$("#comunica").text("Se agotó el descuento");
 			}
@@ -319,8 +320,9 @@ room.onData.add(function(mensaje){
 			 //Aplicar  descuento en una mercancia
 
 		});
-		$('#showTr').on('click', '#t32', function(){
+		$('#chose').on('click', '#t32', function(){
 			console.log("click");
+
 			if(cantidad==0){
 				$("#comunica").text("Se agotó el descuento");
 			}
@@ -332,20 +334,24 @@ room.onData.add(function(mensaje){
 			 //Aplicar  descuento en una mercancia
 
 		});
-		$('#showTr').on('click', '#t33', function(){
+		$('#chose').on('click', '#t33', function(){
 			console.log("click");
-			if(cantidad==0){
-				$("#comunica").text("Se agotó el descuento");
-			}
-			else{
-				cantidad--;
-				mercadesc[2]++;
-				$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
-			}
+
+
+				if(cantidad==0){
+					$("#comunica").text("Se agotó el descuento");
+				}
+				else{
+					cantidad--;
+					mercadesc[2]++;
+					$("#t1").val("Tarifa 1: "+(mensaje.costo[0]-mercadesc[0])+" xDatiles "+(mensaje.costo[1]-mercadesc[1])+" xSal "+mensaje.costo[2]+" xOro "+(mensaje.costo[3]-mercadesc[2])+" xPimienta");
+				}
+
+
 			 //Aplicar  descuento en una mercancia
 
 		});
-		$('#showTr').on('click', '#t4', function(){
+		$('#chose').on('click', '#t4', function(){
 			console.log("click");
 			$('#showTr').off("click","#t4");
 			$('#showTr').off("click","#tr");
@@ -359,7 +365,7 @@ room.onData.add(function(mensaje){
 
 
 		});
-		$('#showTr').on('click', '#t5', function(){
+		$('#chose').on('click', '#t5', function(){
 			console.log("click");
 			$('#showTr').off("click","#t5");
 			$('#showTr').off("click","#tr");
@@ -459,80 +465,8 @@ room.onData.add(function(mensaje){
 		$("body").append(chose);
 		$("#showTr").addClass("tribuc").css("background-position",cartasT[mensaje.carta._id-1]);
 		$('body').on('click', '#showTr', function(){
-			if(mensaje.efecto ==6){
-				var seleccionR=[0,0,0];
-				var pares = 1;
-				$("#chose").remove();
-				$("button").prop("disabled",true);
-				$(".wrapper").css("pointer-events","none");
-				$("body").append(
-					"<div id='chose' style='position:fixed;z-index:100;top:50%;left:50%;transform:scale(2) translate(-50%,-50%);background-color:#f5dba3;border-radius:20px'>"+
-						"<spanf style='color:black'>Escoge tus mercancias</spanf><br>"+
-						"<spanf id='cantidad' style='color:black'>Faltan: "+pares+"</spanf><br>"+
-						"<input type='image' id='td' src='/assets/img/1Merca1.jpg' style='float:left; position:absolute; top:3em; left:1em;' ><br>"+
-						"<input type='image' id='ts' src='/assets/img/1Merca3.jpg' style='float:left; position:absolute; top:3em; left:4em;'><br>"+
-						"<input type='image' id='tp' src='/assets/img/1Merca2.jpg' style='float:left; position:absolute; top:3em; left:7em;'><br>"+
-					"</div>"
-					);
-				$('#chose').on('click', '#td', function(){
-					//enviar selección solo si ya restaste las mercancias que faltan
-					if(pares-1 >=0){
-						seleccionR[0]++;
-						pares--;
-					}
-					$("#cantidad").text("Faltan: "+pares);
-					if(pares==0){
-								console.log("click escogerm");
-								$('#chose').off("click","#td");
-								$("button").prop("disabled",false);
-								$(".wrapper").css("pointer-events","auto");
-								$("#chose").remove();
-								room.send({action:"mercancias1",seleccion:seleccionR});
-								room.send({action:"showTr",data:mensaje.carta});
-					}
-				});
-				$('#chose').on('click', '#ts', function(){
-
-					if(pares-1 >=0){
-						seleccionR[1]++;
-						pares--;
-					}
-
-					$("#cantidad").text("Faltan: "+pares);
-					if(pares==0){
-						console.log("click escogerm");
-						$('#chose').off("click","#td");
-						$("button").prop("disabled",false);
-						$(".wrapper").css("pointer-events","auto");
-						$("#chose").remove();
-						room.send({action:"mercancias1",seleccion:seleccionR});
-						room.send({action:"showTr",data:mensaje.carta});
-					}
-					//enviar selección
-				});
-				$('#chose').on('click', '#tp', function(){
-
-					if(pares-1 >=0){
-						seleccionR[2]++;
-						pares--;
-					}
-					$("#cantidad").text("Faltan: "+pares);
-					if(pares==0){
-						console.log("click escogerm");
-						$("button").prop("disabled",false);
-						$('#chose').off("click","#tp");
-						$(".wrapper").css("pointer-events","auto");
-						$("#chose").remove();
-						room.send({action:"mercancias1",seleccion:seleccionR});
-						room.send({action:"showTr",data:mensaje.carta});
-					}
-					//enviar selección
-				});
-			}
-			else{
-				room.send({action:"showTr",data:mensaje.carta});
-			}
-
+			$("#showTr").off("click");
+			room.send({action:"showTr",data:mensaje.carta});
 
 		});
 	}
