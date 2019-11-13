@@ -15,7 +15,7 @@
     "express": "~4.15.5",
     "express-session": "^1.15.6",
     "mongodb": "^2.2.33",
-    "mongoose": "^4.13.0",
+    "mongoose": "^5.7.5",
     "morgan": "~1.9.0",
     "msgpack": "^1.0.2",
     "msgpack-response": "^1.0.2",
